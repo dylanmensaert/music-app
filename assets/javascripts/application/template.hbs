@@ -1,0 +1,57 @@
+{{#if isLoading}}
+    <div class="progress progress-striped active loading-bar">
+      <div class="progress-bar progress-bar-info" style="width: inherit;">
+      </div>
+    </div>
+{{/if}}
+
+{{#if error}}
+    <div class="alert alert-danger alert-dismissable">
+        <button type="button" class="close" aria-hidden="true" {{action 'dismissAlert'}}>&times;</button>
+        <strong>Error:</strong> {{{error.message}}}
+    </div>
+{{/if}}
+
+{{outlet}}
+
+<div class="audio-bar">
+    <div {{bind-attr visibility='audio.isPlayable:visible:hidden'}}>
+        {{view slider-component slider=slider}}
+    </div>
+
+    <div class="container">
+        <div class="row text-small">
+            <div class="col-xs-2">
+                {{time slider.value}}
+            </div>
+
+            <div class="col-xs-2 col-xs-offset-8 text-right">
+                {{time slider.max}}
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-10">
+                {{audio.snippet.title}}
+            </div>
+
+            <div class="col-xs-2">
+                {{#if audio.error}}
+                    <i class="fa fa-exclamation"></i>
+                {{else}}
+                    {{#if audio.isLoading}}
+                        <i class="fa fa-circle-o-notch fa-spin"></i>
+                    {{else}}
+                        {{#if audio.isPlaying}}
+                            <i class="fa fa-pause" {{action 'pause'}}></i>
+                        {{else}}
+                            <i class="fa fa-play" {{action 'play'}}></i>
+                        {{/if}}
+                    {{/if}}
+                {{/if}}
+            </div>
+        </div>
+    </div>
+</div>
+
+{{view audio-component audio=audio}}

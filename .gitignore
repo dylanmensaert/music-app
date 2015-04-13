@@ -1,0 +1,10 @@
+config/local.js
+assets/javascripts/meta/data.js
+assets/javascripts/meta/data.prod.js
+
+node_modules/
+assets/bower_components/
+
+.tmp/
+
+*.sublime-*

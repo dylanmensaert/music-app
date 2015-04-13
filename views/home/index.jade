@@ -1,0 +1,26 @@
+doctype html
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(name="fragment", content="!")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+
+        title mobileapp - loading
+
+        link(rel="stylesheet", href="stylesheets/main.css")
+
+        if environment === "development"
+            script(src="bower_components/requirejs-bower/require.js")
+            script(src="http://localhost:35729/livereload.js")
+        else if environment === "production"
+            script(src="phonegap.js")
+            script(src="cordova_plugins.js")
+            script(src="childbrowser.js")
+            script(src="barcodescanner.js")
+
+        script(async="async", src="javascripts/main.js")
+
+    body
+
+        .progress.progress-striped.active.my-loading-bar
+            .progress-bar.progress-bar-info(style="width: inherit;")

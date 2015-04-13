@@ -1,0 +1,21 @@
+<div class="input-group">
+  {{input value=query class='form-control' placeholder='Search'}}
+  <span {{action 'search'}} class="input-group-addon">
+      <i class="fa fa-search"></i>
+  </span>
+</div>
+
+<div class="list-group">
+    {{#each snippet in snippets}}
+        <div {{action 'load' snippet}} class="media">
+            <div class="media-left media-middle">
+                <a href="#">
+                    <img class="media-object" {{bind-attr src=snippet.thumbnail}} />
+                </a>
+            </div>
+            <div class="media-body">
+                {{snippet.title}}
+            </div>
+        </div>
+    {{/each}}
+</div>
