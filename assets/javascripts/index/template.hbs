@@ -1,23 +1,36 @@
-<div class="input-group">
-  <span {{action 'search'}} class="input-group-btn">
-     <button class="btn btn-default" type="button">
-        <i class="fa fa-search"></i>
-     </button>
-  </span>
-  {{input value=query class='form-control' placeholder='Search'}}
+<div class="container">
+    <div class="input-group">
+        {{#if query}}
+            <span class="input-group-btn">
+                <div {{action 'clear'}} class="btn btn-default">
+                    <i class="fa fa-times"></i>
+                </div>
+            </span>
+        {{/if}}
+
+        {{focus-input value=query class='form-control input-search' placeholder='Search' insert-newline='search'}}
+
+        <span class="input-group-btn">
+            <button {{action 'search'}} class="btn btn-primary">
+                <i class="fa fa-search"></i>
+            </button>
+        </span>
+    </div>
 </div>
 
-<div class="list-group">
+<div class="list-group result">
     {{#each snippet in snippets}}
-        <div {{action 'load' snippet}} class="media">
-            <div class="media-left media-middle">
-                <a href="#">
-                    <img class="media-object" {{bind-attr src=snippet.thumbnail}} />
-                </a>
+        <a {{action 'load' snippet}} class="media list-group-item">
+            <div class="media-left">
+                <div class="outer-image">
+                    <img class="media-object inner-image" {{bind-attr src=snippet.thumbnail}} />
+                </div>
             </div>
             <div class="media-body">
-                {{snippet.title}}
+                <h4>
+                    {{snippet.title}}
+                </h4>
             </div>
-        </div>
+        </a>
     {{/each}}
 </div>

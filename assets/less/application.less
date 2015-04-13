@@ -1,3 +1,5 @@
+@import 'bootstrap/less/bootstrap';
+
 .bar {
     position: fixed;
     width: 100%;
@@ -6,34 +8,57 @@
 .loading-bar {
     .bar;
 
-    height: 3px;
+    height: 4px;
     margin: 0;
+}
+
+.inner-image {
+    width: 120px;
+    height: 90px;
+
+    top: -11px;
+    position: absolute;
+}
+
+.outer-image {
+    overflow: hidden;
+    position: relative;
+    width: 120px;
+    height: 68px;
 }
 
 .audio-bar {
     .bar;
 
-    font-size: 28px;
     bottom: 0;
-    height: 150px;
+    height: 100px;
+    background: white;
 }
 
-.text-small {
+.text-timer {
     font-size: 12px;
 }
 
 .slider-selection {
-    background: blue;
+    .btn-info;
+
+    background-image: none;
 }
 
 .slider-track-high {
-    background: red;
+    background: gray;
 }
 
 .slider-handle {
-    background: green;
+    background: white;
+    border: 6px solid black;
+    border-radius: 50%;
 }
 
 .slider.slider-horizontal {
     width: 100%;
+}
+
+.result {
+    margin-top: 40px;
 }

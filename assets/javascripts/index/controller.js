@@ -5,7 +5,7 @@ define(function(require) {
         metaData = require('meta-data');
 
     return Ember.Controller.extend({
-        query: null,
+        query: '',
         snippets: null,
         actions: {
             search: function() {
@@ -30,6 +30,9 @@ define(function(require) {
             },
             load: function(snippet) {
                 this.get('audio').load(snippet);
+            },
+            clear: function() {
+                this.set('query', '');
             }
         }
     });
