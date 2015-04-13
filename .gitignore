@@ -1,4 +1,5 @@
 config/local.js
+assets/javascripts/init/templates.js
 assets/javascripts/meta/data.js
 assets/javascripts/meta/data.prod.js
 

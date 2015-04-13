@@ -627,19 +627,27 @@ Ember.TEMPLATES["index"] = Ember.HTMLBars.template((function() {
       dom.setAttribute(el1,"class","input-group");
       var el2 = dom.createTextNode(" ");
       dom.appendChild(el1, el2);
-      var el2 = dom.createComment("");
+      var el2 = dom.createElement("span");
+      dom.setAttribute(el2,"class","input-group-btn");
+      var el3 = dom.createTextNode(" ");
+      dom.appendChild(el2, el3);
+      var el3 = dom.createElement("button");
+      dom.setAttribute(el3,"class","btn btn-default");
+      dom.setAttribute(el3,"type","button");
+      var el4 = dom.createTextNode(" ");
+      dom.appendChild(el3, el4);
+      var el4 = dom.createElement("i");
+      dom.setAttribute(el4,"class","fa fa-search");
+      dom.appendChild(el3, el4);
+      var el4 = dom.createTextNode(" ");
+      dom.appendChild(el3, el4);
+      dom.appendChild(el2, el3);
+      var el3 = dom.createTextNode(" ");
+      dom.appendChild(el2, el3);
       dom.appendChild(el1, el2);
       var el2 = dom.createTextNode(" ");
       dom.appendChild(el1, el2);
-      var el2 = dom.createElement("span");
-      dom.setAttribute(el2,"class","input-group-addon");
-      var el3 = dom.createTextNode(" ");
-      dom.appendChild(el2, el3);
-      var el3 = dom.createElement("i");
-      dom.setAttribute(el3,"class","fa fa-search");
-      dom.appendChild(el2, el3);
-      var el3 = dom.createTextNode(" ");
-      dom.appendChild(el2, el3);
+      var el2 = dom.createComment("");
       dom.appendChild(el1, el2);
       var el2 = dom.createTextNode(" ");
       dom.appendChild(el1, el2);
@@ -661,7 +669,7 @@ Ember.TEMPLATES["index"] = Ember.HTMLBars.template((function() {
     },
     render: function render(context, env, contextualElement) {
       var dom = env.dom;
-      var hooks = env.hooks, get = hooks.get, inline = hooks.inline, element = hooks.element, block = hooks.block;
+      var hooks = env.hooks, element = hooks.element, get = hooks.get, inline = hooks.inline, block = hooks.block;
       dom.detectNamespace(contextualElement);
       var fragment;
       if (env.useFragmentCache && dom.canClone) {
@@ -680,11 +688,11 @@ Ember.TEMPLATES["index"] = Ember.HTMLBars.template((function() {
         fragment = this.build(dom);
       }
       var element2 = dom.childAt(fragment, [0]);
-      var element3 = dom.childAt(element2, [3]);
-      var morph0 = dom.createMorphAt(element2,1,1);
+      var element3 = dom.childAt(element2, [1]);
+      var morph0 = dom.createMorphAt(element2,3,3);
       var morph1 = dom.createMorphAt(dom.childAt(fragment, [2]),1,1);
-      inline(env, morph0, context, "input", [], {"value": get(env, context, "query"), "class": "form-control", "placeholder": "Search"});
       element(env, element3, context, "action", ["search"], {});
+      inline(env, morph0, context, "input", [], {"value": get(env, context, "query"), "class": "form-control", "placeholder": "Search"});
       block(env, morph1, context, "each", [get(env, context, "snippets")], {"keyword": "snippet"}, child0, null);
       return fragment;
     }
