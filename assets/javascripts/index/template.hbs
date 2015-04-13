@@ -21,7 +21,7 @@
 <div class="list-group result">
     {{#each snippet in snippets}}
         <a {{action 'load' snippet}} class="media list-group-item">
-            <div class="media-left">
+            <div class="media-left media-middle">
                 <div class="outer-image">
                     <img class="media-object inner-image" {{bind-attr src=snippet.thumbnail}} />
                 </div>
