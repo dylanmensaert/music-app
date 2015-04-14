@@ -1,8 +1,17 @@
 @import 'bootstrap/less/bootstrap';
 
+@audio-height: 50px;
+
 .bar {
     position: fixed;
     width: 100%;
+    z-index: 3;
+}
+
+.error-bar {
+    .bar;
+
+    top: 0;
 }
 
 .loading-bar {
@@ -27,25 +36,50 @@
     height: 68px;
 }
 
+.audio-slider {
+    .bar;
+
+    bottom: @audio-height - 5px;
+    z-index: 4;
+}
+
 .audio-bar {
     .bar;
 
     bottom: 0;
-    height: 100px;
+    height: @audio-height;
     background: white;
 }
 
-.text-timer {
+.audio-title, .audio-icon {
+    line-height: @audio-height;
+}
+
+.audio-title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 18px;
+    white-space: nowrap;
+}
+
+.audio-icon {
+    font-size: 34px;
+}
+
+.audio-timer {
+    padding-top: 8px;
     font-size: 12px;
 }
 
 .slider-selection {
     .btn-info;
 
+    border-radius: initial;
     background-image: none;
 }
 
 .slider-track-high {
+    border-radius: initial;
     background: gray;
 }
 
@@ -59,6 +93,7 @@
     width: 100%;
 }
 
-.result {
-    margin-top: 40px;
+.search-labels {
+    margin: 10px;
+    float: right;
 }
