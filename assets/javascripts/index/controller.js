@@ -7,12 +7,11 @@ define(function(require) {
     return Ember.Controller.extend({
         query: '',
         snippets: null,
-        musicOnly: true,
         search: function() {
             var url = metaData.searchHost + '/youtube/v3/search?part=snippet&order=viewCount&type=video';
 
             // TODO: implement in settings page?
-            if (this.get('musicOnly')) {
+            if (this.get('session.model.musicOnly')) {
                 url += '&videoCategoryId=10';
             }
 
@@ -45,7 +44,7 @@ define(function(require) {
                 this.set('query', '');
             },
             toggleMusicOnly: function() {
-                this.toggleProperty('musicOnly');
+                this.toggleProperty('session.model.musicOnly');
 
                 this.search();
             }

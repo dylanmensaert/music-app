@@ -33,11 +33,8 @@ define(function(require) {
                 }));
             });
 
-            element.addEventListener('stalled', function(event) {
-                audio.set('error', Ember.Object.create({
-                    type: event.type,
-                    message: 'The browser is trying to get media data, but data is not available.'
-                }));
+            element.addEventListener('stalled', function() {
+                audio.set('isLoading', true);
             });
 
             element.addEventListener('loadstart', function() {

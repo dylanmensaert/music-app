@@ -7,21 +7,23 @@ define(function(require) {
 
     return Ember.Route.extend(require('helpers/update-title'), {
         title: 'music',
-        // TODO: Implement session support.
-        // beforeModel: function() {
-        //     return this.store.find('session', 'session').then(function(session) {
-        //         if (session.get('isEmpty')) {
-        //             session = this.store.createRecord('session').save().then(function(session) {
-        //                 session.set('id', 'session');
-        //                 return session.save();
-        //             });
-        //         }
-        //         return session;
-        //     }.bind(this)).then(function(session) {
-        //         this.set('session.instance', session);
-        //         return session;
-        //     }.bind(this));
-        // },
+        beforeModel: function() {
+            return this.store.find('session', 'session').then(function(session) {
+                if (session.get('isEmpty')) {
+                    session = this.get('store').createRecord('session').save().then(function(session) {
+                        session.set('id', 'session');
+
+                        return session.save();
+                    });
+                }
+
+                return session;
+            }.bind(this)).then(function(session) {
+                this.set('session.model', session);
+
+                return session;
+            }.bind(this));
+        },
         setupController: function(controller, model) {
             var audio = this.get('audio'),
                 slider;

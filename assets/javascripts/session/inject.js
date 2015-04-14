@@ -6,7 +6,7 @@ define(function() {
             name: 'session',
             initialize: function(container, application) {
                 application.register('session:main', {
-                    instance: null
+                    model: null
                 }, {
                     singleton: false,
                     instantiate: false
@@ -14,6 +14,7 @@ define(function() {
 
                 application.inject('route', 'session', 'session:main');
                 application.inject('controller', 'session', 'session:main');
+                application.inject('adapter', 'session', 'session:main');
             }
         });
     };
