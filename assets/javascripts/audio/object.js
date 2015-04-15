@@ -21,16 +21,24 @@ define(function(require) {
         hasEnded: false,
         isLoading: false,
         isPlaying: false,
-        updateError: function() {
-            if (this.get('isLoading') || this.get('isPlaying')) {
-                this.set('error', null);
-            }
-        }.observes('isLoading', 'isPlaying'),
-        updateIsLoading: function() {
-            if (this.get('isPlaying')) {
-                this.set('isLoading', false);
-            }
-        }.observes('isPlaying'),
+        setError: function(error) {
+            this.set('error', error);
+
+            this.set('isLoading', false);
+            this.set('isPlaying', false);
+        },
+        setLoading: function(isLoading) {
+            this.set('isLoading', isLoading);
+
+            this.set('error', null);
+            this.set('isPlaying', false);
+        },
+        setPlaying: function(isPlaying) {
+            this.set('isPlaying', isPlaying);
+
+            this.set('error', null);
+            this.set('isLoading', false);
+        },
         setCurrentTime: function(currentTime) {
             this.get('element').currentTime = currentTime;
         },
