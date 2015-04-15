@@ -230,10 +230,6 @@ module.exports = function(grunt) {
                 files: ['<%= sources.javascriptsAndJson %>'],
                 tasks: ['jsbeautifier:all']
             },
-            // csscomb: {
-            //     files: ['<%= sources.less %>'],
-            //     tasks: ['csscomb:all']
-            // },
             index: {
                 files: ['<%= paths.indexJade %>'],
                 tasks: ['jade:development']

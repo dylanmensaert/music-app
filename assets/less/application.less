@@ -1,6 +1,3 @@
-@import 'bootstrap/less/bootstrap';
-@import 'typeahead.js-bootstrap3.less/typeahead';
-
 @audio-height: 50px;
 
 .bar {
@@ -40,8 +37,8 @@
 .audio-slider {
     .bar;
 
-    bottom: @audio-height - 5px;
     z-index: 4;
+    bottom: @audio-height - 5px;
 }
 
 .audio-bar {
@@ -73,14 +70,14 @@
 }
 
 .slider-selection {
-    .btn-info;
-
-    border-radius: initial;
+    background-color: #5bc0de;
+    border-color: #46b8da;
+    border-radius: 0;
     background-image: none;
 }
 
 .slider-track-high {
-    border-radius: initial;
+    border-radius: 0;
     background: gray;
 }
 
@@ -90,8 +87,10 @@
     border-radius: 50%;
 }
 
-.slider.slider-horizontal {
-    width: 100%;
+.audio-slider {
+    .slider-horizontal {
+        width: 100%;
+    }
 }
 
 .search-bar {
@@ -103,8 +102,6 @@
 }
 
 .search {
-    .jumbotron;
-
     margin-bottom: 10px;
 
     @media screen and (min-width: 768px) {

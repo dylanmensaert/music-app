@@ -7,7 +7,7 @@ define(function(require) {
         fetchSuggestions;
 
     fetchSuggestions = function(query, callback) {
-        var url = metaData.suggestHost + '/complete/search?client=firefox',
+        var url = metaData.suggestHost + '/complete/search?client=firefox&ds=yt',
             suggestions;
 
         url += '&q=' + query;
