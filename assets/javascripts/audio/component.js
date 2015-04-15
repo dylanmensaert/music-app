@@ -7,7 +7,7 @@ define(function(require) {
     errors.set(1, 'Fetching process aborted by user');
     errors.set(2, 'Error occurred when downloading');
     errors.set(3, 'Error occurred when decoding');
-    errors.set(4, 'Audio/video not supported');
+    errors.set(4, 'Audio not supported');
 
     return Ember.Component.extend({
         tagName: 'audio',
