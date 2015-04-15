@@ -30,14 +30,9 @@
     "disallowSpaceAfterObjectKeys": true,
     "requireCommaBeforeLineBreak": true,
     "requireOperatorBeforeLineBreak": ["?", "+", "-", "/", "*", "=", "==", "===", "!=", "!==", ">", ">=", "<", "<="],
-    "disallowLeftStickedOperators": ["?", "+", "-", "/", "*", "=", "==", "===", "!=", "!==", ">", ">=", "<", "<="],
-    "requireRightStickedOperators": ["!"],
-    "disallowRightStickedOperators": ["?", "+", "/", "*", ":", "=", "==", "===", "!=", "!==", ">", ">=", "<", "<="],
-    "requireLeftStickedOperators": [","],
     "disallowSpaceAfterPrefixUnaryOperators": ["++", "--", "+", "-", "~", "!"],
     "disallowSpaceBeforePostfixUnaryOperators": ["++", "--"],
     "requireSpaceBeforeBinaryOperators": ["+", "-", "/", "*", "=", "==", "===", "!=", "!=="],
-    "requireSpaceAfterBinaryOperators": ["+", "-", "/", "*", "=", "==", "===", "!=", "!=="],
     "disallowImplicitTypeConversion": ["numeric", "boolean", "binary", "string"],
     "disallowMultipleLineStrings": true,
     "disallowMultipleLineBreaks": true,
@@ -56,5 +51,6 @@
         "checkParamNames": true,
         "checkRedundantParams": true,
         "requireParamTypes": true
-    }
+    },
+    "requireSpacesInConditionalExpression": true
 }

@@ -32,7 +32,8 @@ define(function(require) {
         },
         didInsertElement: function() {
             this.$().typeahead({
-                highlight: true
+                highlight: true,
+                hint: false
             }, {
                 source: fetchSuggestions
             });
