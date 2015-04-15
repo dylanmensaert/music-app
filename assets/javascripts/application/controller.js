@@ -6,6 +6,7 @@ define(function(require) {
     return Ember.Controller.extend({
         'audio-component': require('audio/component'),
         'slider-component': require('slider/component'),
+        slider: null,
         updateError: function() {
             this.set('error', this.get('audio.error'));
         }.observes('audio.error'),
