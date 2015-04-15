@@ -1,29 +1,31 @@
-<div class="container">
-    <div class="input-group">
-        {{#if query}}
-            <div class="input-group-btn">
-                <div {{action 'clear'}} class="btn btn-default">
-                    <i class="fa fa-times"></i>
+<div class="search">
+    <div class="container">
+        <div class="input-group">
+            {{#if query}}
+                <div class="input-group-btn">
+                    <div {{action 'clear'}} class="btn btn-default">
+                        <i class="fa fa-times"></i>
+                    </div>
                 </div>
-            </div>
-        {{/if}}
-
-        {{focus-input value=query class='form-control' placeholder='Search' insert-newline='search'}}
-
-        <div class="input-group-btn">
-            <button {{action 'search'}} class="btn btn-primary">
-                <i class="fa fa-search"></i>
-            </button>
-        </div>
-    </div>
-
-    <div class="search-bar text-right">
-        <div {{action 'toggleMusicOnly'}} {{bind-attr class=':label session.model.musicOnly:label-primary:label-default'}}>
-            {{#if session.model.musicOnly}}
-                <i class="fa fa-check" ></i>
             {{/if}}
 
-            music only
+            {{focus-input value=query class='form-control' placeholder='Search' insert-newline='search'}}
+
+            <div class="input-group-btn">
+                <button {{action 'search'}} class="btn btn-primary">
+                    <i class="fa fa-search"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="search-bar text-right">
+            <div {{action 'toggleMusicOnly'}} {{bind-attr class=':label session.model.musicOnly:label-primary:label-default'}}>
+                {{#if session.model.musicOnly}}
+                    <i class="fa fa-check" ></i>
+                {{/if}}
+
+                music only
+            </div>
         </div>
     </div>
 </div>
@@ -37,9 +39,13 @@
                 </div>
             </div>
             <div class="media-body">
-                <h5>
+                <h4 class="list-group-item-heading">
                     {{snippet.title}}
-                </h5>
+                </h4>
+
+                <p class="list-group-item-text">
+                    {{snippet.title}}
+                </p>
             </div>
         </a>
     {{/each}}

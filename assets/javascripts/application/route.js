@@ -15,7 +15,7 @@ define(function(require) {
 
                     return session.save();
                 });
-            }.bind(this)).then(function(session) {
+            }).then(function(session) {
                 this.set('session.model', session);
             }.bind(this));
         },

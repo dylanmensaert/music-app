@@ -11,49 +11,49 @@
     </div>
 {{/if}}
 
-<div class="jumbotron">
-    {{outlet}}
-</div>
+{{outlet}}
 
-<div class="audio-slider" {{bind-attr visibility='audio.isPlayable:visible:hidden'}}>
-    {{view slider-component slider=slider}}
-</div>
+<div {{bind-attr visibility='audio.snippet:visible:hidden'}}>
+    <div class="audio-slider">
+        {{view slider-component slider=slider}}
+    </div>
 
-<div class="container audio-bar" {{bind-attr visibility='audio.snippet:visible:hidden'}}>
-    <div class="row">
-        <div class="col-xs-2">
-            <div class="audio-timer">
-                {{time slider.value}}
+    <div class="container audio-bar">
+        <div class="row">
+            <div class="col-xs-2">
+                <div class="audio-timer">
+                    {{time slider.value}}
+                </div>
             </div>
-        </div>
 
-        <div class="col-xs-6">
-            <div class="audio-title">
-                {{audio.snippet.title}}
+            <div class="col-xs-6">
+                <div class="audio-title">
+                    {{audio.snippet.title}}
+                </div>
             </div>
-        </div>
 
-        <div class="col-xs-2">
-            <div class="audio-icon">
-                {{#if audio.error}}
-                    <i class="fa fa-exclamation"></i>
-                {{else}}
-                    {{#if audio.isLoading}}
-                        <i class="fa fa-circle-o-notch fa-spin"></i>
+            <div class="col-xs-2">
+                <div class="audio-icon">
+                    {{#if audio.error}}
+                        <i class="fa fa-exclamation"></i>
                     {{else}}
-                        {{#if audio.isPlaying}}
-                            <i class="fa fa-pause" {{action 'pause'}}></i>
+                        {{#if audio.isLoading}}
+                            <i class="fa fa-circle-o-notch fa-spin"></i>
                         {{else}}
-                            <i class="fa fa-play" {{action 'play'}}></i>
+                            {{#if audio.isPlaying}}
+                                <i class="fa fa-pause" {{action 'pause'}}></i>
+                            {{else}}
+                                <i class="fa fa-play" {{action 'play'}}></i>
+                            {{/if}}
                         {{/if}}
                     {{/if}}
-                {{/if}}
+                </div>
             </div>
-        </div>
 
-        <div class="col-xs-2">
-            <div class="audio-timer text-right">
-                {{time slider.max}}
+            <div class="col-xs-2">
+                <div class="audio-timer text-right">
+                    {{time slider.max}}
+                </div>
             </div>
         </div>
     </div>
