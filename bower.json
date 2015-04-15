@@ -12,7 +12,9 @@
         "seiyria-bootstrap-slider": "4.7.4",
         "handlebars": "2.0.0",
         "fontawesome": "4.3.0",
-        "momentjs": "2.10.2"
+        "momentjs": "2.10.2",
+        "typeahead.js": "0.10.5",
+        "typeahead.js-bootstrap3.less": "0.2.3"
     },
     "devDependencies": {
         "almond": "0.2.9"

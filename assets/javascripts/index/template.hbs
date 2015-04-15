@@ -9,10 +9,10 @@
                 </div>
             {{/if}}
 
-            {{focus-input value=query class='form-control' placeholder='Search' insert-newline='search'}}
+            {{search-input value=query insert-newline='search'}}
 
             <div class="input-group-btn">
-                <button {{action 'search'}} class="btn btn-primary">
+                <button {{action 'search'}} class="btn btn-primary btn-search">
                     <i class="fa fa-search"></i>
                 </button>
             </div>

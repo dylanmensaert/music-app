@@ -1,12 +1,14 @@
 define(function(require) {
     'use strict';
 
-    var App = require('init/app'),
-        Ember = require('ember'),
+    var Ember = require('ember'),
         moment = require('moment');
 
     require('bootstrap');
     require('bootstrap-slider');
+    require('typeahead');
+
+    require('components/init');
 
     Ember.TextSupport.reopen({
         classNames: ['form-control']
@@ -14,12 +16,6 @@ define(function(require) {
 
     Ember.Select.reopen({
         classNames: ['form-control']
-    });
-
-    App.FocusInputComponent = Ember.TextField.extend({
-        becomeFocused: function() {
-            this.$().focus();
-        }.on('didInsertElement')
     });
 
     Ember.Handlebars.registerBoundHelper('time', function(seconds) {

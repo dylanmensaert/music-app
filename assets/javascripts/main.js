@@ -14,6 +14,7 @@
             bootstrap: '../bower_components/bootstrap/dist/js/bootstrap',
             'bootstrap-slider': '../bower_components/seiyria-bootstrap-slider/js/bootstrap-slider',
             moment: '../bower_components/momentjs/moment',
+            typeahead: '../bower_components/typeahead.js/dist/typeahead.jquery',
             'meta-data': 'meta/data'
         },
         map: {
@@ -51,6 +52,10 @@
                 exports: 'jQuery'
             },
             'bootstrap-slider': {
+                deps: ['jquery'],
+                exports: 'jQuery'
+            },
+            typeahead: {
                 deps: ['jquery'],
                 exports: 'jQuery'
             }

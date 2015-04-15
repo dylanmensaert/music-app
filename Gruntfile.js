@@ -282,6 +282,11 @@ module.exports = function(grunt) {
                     port: 443,
                     https: true,
                     changeOrigin: true
+                },
+                {
+                    context: ['/complete/search'],
+                    host: 'suggestqueries.google.com',
+                    changeOrigin: true
                 }]
             }
         },
