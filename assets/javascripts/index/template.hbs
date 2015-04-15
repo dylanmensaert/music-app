@@ -17,9 +17,9 @@
         </div>
     </div>
 
-    <div class="search-labels">
+    <div class="search-bar text-right">
         <div {{action 'toggleMusicOnly'}} {{bind-attr class=':label session.model.musicOnly:label-primary:label-default'}}>
-            {{#if musicOnly}}
+            {{#if session.model.musicOnly}}
                 <i class="fa fa-check" ></i>
             {{/if}}
 
@@ -30,7 +30,7 @@
 
 <div class="list-group">
     {{#each snippet in snippets}}
-        <a {{action 'load' snippet}} class="list-group-item">
+        <a {{action 'load' snippet}} class="list-group-item audio-list">
             <div class="media-left media-middle">
                 <div class="outer-image">
                     <img class="media-object inner-image" {{bind-attr src=snippet.thumbnail}} />
