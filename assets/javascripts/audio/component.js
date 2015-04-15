@@ -1,7 +1,13 @@
 define(function(require) {
     'use strict';
 
-    var Ember = require('ember');
+    var Ember = require('ember'),
+        errors = Ember.Map.create();
+
+    errors.set(1, 'Fetching process aborted by user');
+    errors.set(2, 'Error occurred when downloading');
+    errors.set(3, 'Error occurred when decoding');
+    errors.set(4, 'Audio/video not supported');
 
     return Ember.Component.extend({
         tagName: 'audio',
@@ -19,17 +25,22 @@ define(function(require) {
             });
 
             element.addEventListener('abort', function(event) {
+                var code = event.target.error.code;
+
                 audio.set('error', Ember.Object.create({
                     type: event.type,
-                    message: 'The media data download has been aborted.'
+                    code: code,
+                    message: errors.get(code)
                 }));
             });
 
             element.addEventListener('error', function(event) {
-                // TODO: implement event.target.error?
+                var code = event.target.error.code;
+
                 audio.set('error', Ember.Object.create({
                     type: event.type,
-                    message: 'An error occurred while loading the media data.'
+                    code: code,
+                    message: errors.get(code)
                 }));
             });
 
