@@ -22,10 +22,10 @@ define(function(require) {
         isLoading: false,
         isPlaying: false,
         isPlayable: function() {
-            return Ember.isEmpty(this.get('error')) && !this.get('isLoading');
-        }.property('error', 'isLoading'),
+            return Ember.isEmpty(this.get('snippet')) && Ember.isEmpty(this.get('error')) && !this.get('isLoading');
+        }.property('snippet', 'error', 'isLoading'),
         updateError: function() {
-            if (!Ember.isEmpty(this.get('error')) && this.get('isLoading') || this.get('isPlaying')) {
+            if (!Ember.isEmpty(this.get('error')) && (this.get('isLoading') || this.get('isPlaying'))) {
                 this.set('error', null);
             }
         }.observes('isLoading', 'isPlaying'),
