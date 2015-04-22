@@ -5,4 +5,5 @@ define(function(require) {
 
     App.IndexRoute = require('index/route');
     App.IndexController = require('index/controller');
+    App.IndexView = require('index/view');
 });

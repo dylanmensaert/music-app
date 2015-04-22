@@ -7,8 +7,28 @@ define(function(require) {
     return Ember.Controller.extend({
         query: '',
         snippets: null,
-        search: function() {
-            var url = metaData.searchHost + '/youtube/v3/search?part=snippet&order=viewCount&type=video';
+        // TODO: nextPageToken op session niveau bewaren?
+        nextPageToken: null,
+        search: function(url, save) {
+            var snippets;
+
+            Ember.$.getJSON(url).then(function(response) {
+                snippets = response.items.map(function(item) {
+                    return Ember.Object.create({
+                        videoId: item.id.videoId,
+                        title: item.snippet.title,
+                        thumbnail: item.snippet.thumbnails.high.url
+                    });
+                });
+
+                this.set('nextPageToken', response.nextPageToken);
+
+                save(snippets);
+            }.bind(this));
+        },
+        searchUrl: function() {
+            var url = metaData.searchHost + '/youtube/v3/search?part=snippet&order=viewCount&type=video&maxResults=50';
+            // TODO: url += '&relatedToVideoId=' + this.get('videoId');
 
             // TODO: implement in settings page?
             if (this.get('session.model.musicOnly')) {
@@ -18,23 +38,31 @@ define(function(require) {
             url += '&key=' + metaData.key;
             url += '&q=' + this.get('query');
 
-            // TODO: url += '&relatedToVideoId=' + this.get('videoId');
-
-            Ember.$.getJSON(url).then(function(response) {
-                var snippets = response.items.map(function(item) {
-                    return Ember.Object.create({
-                        videoId: item.id.videoId,
-                        title: item.snippet.title,
-                        thumbnail: item.snippet.thumbnails.high.url
-                    });
-                });
-
+            return url;
+        }.property('session.model.musicOnly', 'query'),
+        searchNew: function() {
+            this.search(this.get('searchUrl'), function(snippets) {
                 this.set('snippets', snippets);
             }.bind(this));
         },
+        searchNext: function() {
+            var nextPageToken = this.get('nextPageToken'),
+                url;
+
+            if (nextPageToken) {
+                url = this.get('searchUrl');
+                url += '&pageToken=' + nextPageToken;
+
+                this.search(url, function(snippets) {
+                    this.get('snippets').pushObjects(snippets);
+                }.bind(this));
+
+                this.set('nextPageToken', null);
+            }
+        },
         actions: {
             search: function() {
-                this.search();
+                this.searchNew();
             },
             // TODO: set class 'active' on currently playing
             load: function(snippet) {
@@ -46,7 +74,7 @@ define(function(require) {
             toggleMusicOnly: function() {
                 this.toggleProperty('session.model.musicOnly');
 
-                this.search();
+                this.searchNew();
             }
         }
     });
