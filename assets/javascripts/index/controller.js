@@ -7,7 +7,6 @@ define(function(require) {
     return Ember.Controller.extend({
         query: '',
         snippets: null,
-        // TODO: nextPageToken op session niveau bewaren?
         nextPageToken: null,
         search: function(url, save) {
             var snippets;
