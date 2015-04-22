@@ -66,16 +66,21 @@ define(function(require) {
                 audio.set('status', 'idle');
             });
 
-            // TODO: Implement events: seekable, played.
-
             audio.set('element', element);
         },
         willDestroyElement: function() {
             var element = this.get('element');
 
-            element.removeEventListener('canplay');
             element.removeEventListener('durationchange');
             element.removeEventListener('timeupdate');
+            element.removeEventListener('abort');
+            element.removeEventListener('error');
+            element.removeEventListener('stalled');
+            element.removeEventListener('loadstart');
+            element.removeEventListener('canplay');
+            element.removeEventListener('waiting');
+            element.removeEventListener('pause');
+            element.removeEventListener('playing');
             element.removeEventListener('ended');
 
             this.set('audio.element', null);

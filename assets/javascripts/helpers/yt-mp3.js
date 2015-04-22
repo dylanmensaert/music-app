@@ -165,8 +165,6 @@ define(function() {
         return escape(b)
     };
 
-    window.sig_url = sig_url;
-
     return {
         createSignature: function(url) {
             return sig_url(url);

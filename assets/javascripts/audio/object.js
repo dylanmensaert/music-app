@@ -43,6 +43,7 @@ define(function(require) {
                 videoUrl = 'http://www.youtube.com/watch?v=' + snippet.videoId,
                 url;
 
+            this.set('status', 'loading');
             this.set('snippet', snippet);
 
             url = '/a/pushItem/?';
