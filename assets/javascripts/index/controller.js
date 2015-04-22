@@ -53,11 +53,11 @@ define(function(require) {
                 url = this.get('searchUrl');
                 url += '&pageToken=' + nextPageToken;
 
+                this.set('nextPageToken', null);
+
                 this.search(url, function(snippets) {
                     this.get('snippets').pushObjects(snippets);
                 }.bind(this));
-
-                this.set('nextPageToken', null);
             }
         },
         actions: {
