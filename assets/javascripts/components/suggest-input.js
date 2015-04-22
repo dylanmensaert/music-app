@@ -3,7 +3,6 @@ define(function(require) {
 
     var Ember = require('ember'),
         metaData = require('meta-data'),
-        focusInputComponent = require('components/focus-input'),
         fetchSuggestions;
 
     fetchSuggestions = function(query, callback) {
@@ -23,7 +22,7 @@ define(function(require) {
         });
     };
 
-    return focusInputComponent.extend({
+    return Ember.TextField.extend({
         classNames: ['form-control'],
         attributeBindings: ['placeholder'],
         placeholder: 'Search',

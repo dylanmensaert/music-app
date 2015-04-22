@@ -34,18 +34,16 @@
 
             <div class="col-xs-2">
                 <div class="audio-icon">
-                    {{#if audio.error}}
-                        <i class="fa fa-exclamation"></i>
-                    {{else}}
-                        {{#if audio.isLoading}}
-                            <i class="fa fa-circle-o-notch fa-spin"></i>
-                        {{else}}
-                            {{#if audio.isPlaying}}
-                                <i class="fa fa-pause" {{action 'pause'}}></i>
-                            {{else}}
-                                <i class="fa fa-play" {{action 'play'}}></i>
-                            {{/if}}
-                        {{/if}}
+                    {{#if audio.isLoading}}
+                        <i class="fa fa-circle-o-notch fa-spin"></i>
+                    {{/if}}
+
+                    {{#if audio.isPlaying}}
+                        <i class="fa fa-pause" {{action 'pause'}}></i>
+                    {{/if}}
+
+                    {{#if audio.isIdle}}
+                        <i class="fa fa-play" {{action 'play'}}></i>
                     {{/if}}
                 </div>
             </div>

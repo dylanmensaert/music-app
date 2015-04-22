@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = function(grunt) {
+module.exports = function (grunt) {
     var paths,
         sources;
 
@@ -109,14 +109,14 @@ module.exports = function(grunt) {
                     templateBasePath: '<%= paths.javascripts %>/',
                     templateCompilerPath: 'assets/bower_components/ember/ember-template-compiler.js',
                     handlebarsPath: 'assets/bower_components/handlebars/handlebars.js',
-                    templateName: function(sourceFile) {
+                    templateName: function (sourceFile) {
                         var templateName = sourceFile;
 
                         templateName = templateName.replace('/template', '');
 
                         return templateName;
                     },
-                    preprocess: function(source) {
+                    preprocess: function (source) {
                         return source.replace(/\s+/g, ' ');
                     }
                 },
@@ -250,8 +250,8 @@ module.exports = function(grunt) {
                     port: 9000,
                     hostname: 'localhost',
                     base: '<%= paths.tmpPublic %>',
-                    middleware: function(connect, options) {
-                       var proxy = require('grunt-connect-proxy/lib/utils').proxyRequest;
+                    middleware: function (connect, options) {
+                        var proxy = require('grunt-connect-proxy/lib/utils').proxyRequest;
                         return [
                             // Include the proxy first
                             proxy,
@@ -266,22 +266,31 @@ module.exports = function(grunt) {
                     context: ['/fetch', '/download/?video'],
                     host: 'youtubeinmp3.com',
                     changeOrigin: true
-                },
-                {
+                }, {
                     context: ['/download/grabber'],
                     host: 'w5.youtubeinmp3.com',
                     changeOrigin: true
-                },
-                {
+                }, {
                     context: ['/youtube/v3/search'],
                     host: 'www.googleapis.com',
                     port: 443,
                     https: true,
                     changeOrigin: true
-                },
-                {
+                }, {
                     context: ['/complete/search'],
                     host: 'suggestqueries.google.com',
+                    changeOrigin: true
+                }, {
+                    context: ['/a/pushItem/?item'],
+                    host: 'www.youtube-mp3.org',
+                    changeOrigin: true
+                }, {
+                    context: ['/a/itemInfo/?video_id'],
+                    host: 'www.youtube-mp3.org',
+                    changeOrigin: true
+                }, {
+                    context: ['/get?video_id'],
+                    host: 'www.youtube-mp3.org',
                     changeOrigin: true
                 }]
             }

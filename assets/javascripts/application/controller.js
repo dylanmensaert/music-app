@@ -7,9 +7,6 @@ define(function(require) {
         'audio-component': require('audio/component'),
         'slider-component': require('slider/component'),
         slider: null,
-        updateError: function() {
-            this.set('error', this.get('audio.error'));
-        }.observes('audio.error'),
         isLoading: false,
         actions: {
             dismissAlert: function() {

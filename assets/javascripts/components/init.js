@@ -4,5 +4,5 @@ define(function(require) {
     var App = require('init/app');
 
     App.FocusInputComponent = require('components/focus-input');
-    App.SearchInputComponent = require('components/search-input');
+    App.SuggestInputComponent = require('components/suggest-input');
 });

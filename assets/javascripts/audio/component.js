@@ -25,51 +25,45 @@ define(function(require) {
             });
 
             element.addEventListener('abort', function(event) {
-                var code = event.target.error.code;
+                Ember.RSVP.reject(errors.get(event.target.error.code));
 
-                audio.set('error', Ember.Object.create({
-                    type: event.type,
-                    code: code,
-                    message: errors.get(code)
-                }));
+                audio.set('status', 'idle');
             });
 
             element.addEventListener('error', function(event) {
-                var code = event.target.error.code;
+                Ember.RSVP.reject(errors.get(event.target.error.code));
 
-                audio.set('error', Ember.Object.create({
-                    type: event.type,
-                    code: code,
-                    message: errors.get(code)
-                }));
+                audio.set('status', 'idle');
             });
 
             element.addEventListener('stalled', function() {
-                audio.setLoading(true);
+                audio.set('status', 'loading');
             });
 
             element.addEventListener('loadstart', function() {
-                audio.setLoading(true);
+                audio.set('status', 'loading');
             });
 
             element.addEventListener('canplay', function() {
-                audio.setLoading(false);
+                audio.set('status', 'idle');
             });
 
             element.addEventListener('waiting', function() {
-                audio.setLoading(true);
+                audio.set('status', 'loading');
             });
 
             element.addEventListener('pause', function() {
-                audio.setPlaying(false);
+                audio.set('status', 'idle');
             });
 
             element.addEventListener('playing', function() {
-                audio.setPlaying(true);
+                audio.set('status', 'playing');
             });
 
             element.addEventListener('ended', function() {
                 audio.set('hasEnded', true);
+
+                audio.set('status', 'idle');
             });
 
             // TODO: Implement events: seekable, played.
