@@ -5,4 +5,5 @@ define(function(require) {
 
     App.FocusInputComponent = require('components/focus-input');
     App.SuggestInputComponent = require('components/suggest-input');
+    App.FileInputComponent = require('components/file-input');
 });

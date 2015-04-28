@@ -19,6 +19,13 @@ define(function(require) {
                 this.set('session.model', session);
             }.bind(this));
         },
+        afterModel: function() {
+            if (Ember.isEmpty(this.get('session.model.fileSystem'))) {
+                window.webkitRequestFileSystem(window.PERSISTENT, function(fileSystem) {
+                    this.set('session.model.fileSystem', fileSystem);
+                }.bind(this), null);
+            }
+        },
         setupController: function(controller, model) {
             var audio = this.get('audio'),
                 slider;

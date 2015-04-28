@@ -4,6 +4,7 @@ define(function(require) {
     var DS = require('ember-data');
 
     return DS.Model.extend({
-        musicOnly: true
+        musicOnly: true,
+        fileSystem
     });
 });
