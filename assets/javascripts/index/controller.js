@@ -13,28 +13,30 @@ define(function(require) {
             var snippets,
                 nextPageToken;
 
-            this.set('isLoading', true);
+            if (!this.get('isLoading')) {
+                this.set('isLoading', true);
 
-            Ember.$.getJSON(url).then(function(response) {
-                snippets = response.items.map(function(item) {
-                    return Ember.Object.create({
-                        videoId: item.id.videoId,
-                        title: item.snippet.title,
-                        thumbnail: item.snippet.thumbnails.high.url
+                Ember.$.getJSON(url).then(function(response) {
+                    snippets = response.items.map(function(item) {
+                        return Ember.Object.create({
+                            videoId: item.id.videoId,
+                            title: item.snippet.title,
+                            thumbnail: item.snippet.thumbnails.high.url
+                        });
                     });
-                });
 
-                if (Ember.isEmpty(response.nextPageToken)) {
-                    nextPageToken = null;
-                } else {
-                    nextPageToken = response.nextPageToken;
-                }
+                    if (Ember.isEmpty(response.nextPageToken)) {
+                        nextPageToken = null;
+                    } else {
+                        nextPageToken = response.nextPageToken;
+                    }
 
-                this.set('nextPageToken', nextPageToken);
-                this.set('isLoading', false);
+                    this.set('nextPageToken', nextPageToken);
+                    this.set('isLoading', false);
 
-                save(snippets);
-            }.bind(this));
+                    save(snippets);
+                }.bind(this));
+            }
         },
         searchUrl: function() {
             var url = metaData.searchHost + '/youtube/v3/search?part=snippet&order=viewCount&type=video&maxResults=50';
@@ -59,7 +61,7 @@ define(function(require) {
             var nextPageToken = this.get('nextPageToken'),
                 url;
 
-            if (nextPageToken && !this.get('isLoading')) {
+            if (nextPageToken) {
                 url = this.get('searchUrl');
                 url += '&pageToken=' + nextPageToken;
 

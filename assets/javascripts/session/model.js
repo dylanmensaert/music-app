@@ -5,6 +5,6 @@ define(function(require) {
 
     return DS.Model.extend({
         musicOnly: true,
-        fileSystem
+        fileSystem: null
     });
 });

@@ -1,3 +1,4 @@
+/* global window: true */
 /* global document: true */
 define(function(require) {
     'use strict';
@@ -21,9 +22,24 @@ define(function(require) {
         },
         afterModel: function() {
             if (Ember.isEmpty(this.get('session.model.fileSystem'))) {
-                window.webkitRequestFileSystem(window.PERSISTENT, function(fileSystem) {
+                window.webkitRequestFileSystem(window.PERSISTENT, 0, function(fileSystem) {
+                    fileSystem.root.getDirectory('music', {
+                        create: true,
+                        exclusive: true
+                    }, function(directoryEntry) {
+                        directoryEntry.root.getDirectory('local', {
+                            create: true,
+                            exclusive: true
+                        });
+
+                        directoryEntry.root.getDirectory('youtube', {
+                            create: true,
+                            exclusive: true
+                        });
+                    });
+
                     this.set('session.model.fileSystem', fileSystem);
-                }.bind(this), null);
+                }.bind(this));
             }
         },
         setupController: function(controller, model) {
