@@ -8,8 +8,12 @@ define(function(require) {
         query: '',
         snippets: null,
         nextPageToken: null,
+        isLoading: false,
         search: function(url, save) {
-            var snippets;
+            var snippets,
+                nextPageToken;
+
+            this.set('isLoading', true);
 
             Ember.$.getJSON(url).then(function(response) {
                 snippets = response.items.map(function(item) {
@@ -20,7 +24,14 @@ define(function(require) {
                     });
                 });
 
-                this.set('nextPageToken', response.nextPageToken);
+                if (Ember.isEmpty(response.nextPageToken)) {
+                    nextPageToken = null;
+                } else {
+                    nextPageToken = response.nextPageToken;
+                }
+
+                this.set('nextPageToken', nextPageToken);
+                this.set('isLoading', false);
 
                 save(snippets);
             }.bind(this));
@@ -48,11 +59,9 @@ define(function(require) {
             var nextPageToken = this.get('nextPageToken'),
                 url;
 
-            if (nextPageToken) {
+            if (nextPageToken && !this.get('isLoading')) {
                 url = this.get('searchUrl');
                 url += '&pageToken=' + nextPageToken;
-
-                this.set('nextPageToken', null);
 
                 this.search(url, function(snippets) {
                     this.get('snippets').pushObjects(snippets);
