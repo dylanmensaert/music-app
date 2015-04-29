@@ -4,7 +4,8 @@ define(function(require) {
     var Ember = require('ember');
 
     return Ember.TextField.extend({
-        attributeBindings: ['type', 'multiple', 'accept'],
+        attributeBindings: ['type', 'multiple', 'accept', 'title'],
+        title: ' ',
         type: 'file',
         multiple: 'multiple',
         accept: 'audio/*,video/*',
