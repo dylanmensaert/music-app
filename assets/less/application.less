@@ -113,3 +113,20 @@
 .highlight {
     color: #ef6c00;
 }
+
+.btn-file {
+    position: relative;
+    overflow: hidden;
+
+    input[type=file] {
+        position: absolute;
+        top: 0;
+        left: 0;
+        opacity: 0;
+        cursor: inherit;
+
+        &::-webkit-file-upload-button {
+            display: none;
+        }
+    }
+}
