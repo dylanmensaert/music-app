@@ -128,7 +128,7 @@ define(function(require) {
                     });
                 });
 
-                source = 'audio/' + snippet.get('videoId') + '.mp3';
+                source = 'audio/' + snippet.get('id') + '.mp3';
 
                 directoryEntry.getFile(source, {
                     create: true
