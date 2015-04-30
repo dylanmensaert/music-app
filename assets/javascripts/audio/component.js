@@ -66,6 +66,12 @@ define(function(require) {
                 audio.set('status', 'idle');
             });
 
+            element.addEventListener('canplaythrough', function() {
+                if (!audio.get('snippet.isLocal')) {
+                    audio.save();
+                }
+            });
+
             audio.set('element', element);
         },
         willDestroyElement: function() {
@@ -82,6 +88,7 @@ define(function(require) {
             element.removeEventListener('pause');
             element.removeEventListener('playing');
             element.removeEventListener('ended');
+            element.removeEventListener('canplaythrough');
 
             this.set('audio.element', null);
         }

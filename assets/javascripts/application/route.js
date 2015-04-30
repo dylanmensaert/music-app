@@ -23,19 +23,16 @@ define(function(require) {
         afterModel: function() {
             if (Ember.isEmpty(this.get('session.model.fileSystem'))) {
                 window.webkitRequestFileSystem(window.PERSISTENT, 0, function(fileSystem) {
-                    fileSystem.root.getDirectory('music', {
+                    // TODO: Directories should only be created when used.
+
+                    fileSystem.root.getDirectory('thumbnails', {
                         create: true,
                         exclusive: true
-                    }, function(directoryEntry) {
-                        directoryEntry.root.getDirectory('local', {
-                            create: true,
-                            exclusive: true
-                        });
+                    });
 
-                        directoryEntry.root.getDirectory('youtube', {
-                            create: true,
-                            exclusive: true
-                        });
+                    fileSystem.root.getDirectory('audio', {
+                        create: true,
+                        exclusive: true
                     });
 
                     this.set('session.model.fileSystem', fileSystem);

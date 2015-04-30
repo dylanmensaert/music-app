@@ -2,7 +2,8 @@ define(function(require) {
     'use strict';
 
     var Ember = require('ember'),
-        metaData = require('meta-data');
+        metaData = require('meta-data'),
+        Snippet = require('helpers/snippet');
 
     return Ember.Controller.extend({
         query: '',
@@ -18,10 +19,11 @@ define(function(require) {
 
                 Ember.$.getJSON(url).then(function(response) {
                     snippets = response.items.map(function(item) {
-                        return Ember.Object.create({
-                            videoId: item.id.videoId,
+                        return Snippet.create({
+                            id: item.id.videoId,
                             title: item.snippet.title,
-                            thumbnail: item.snippet.thumbnails.high.url
+                            thumbnail: item.snippet.thumbnails.high.url,
+                            labels: ['youtube']
                         });
                     });
 
