@@ -22,6 +22,7 @@ define(function(require) {
                         return Snippet.create({
                             id: item.id.videoId,
                             title: item.snippet.title,
+                            extension: '.mp3',
                             thumbnail: item.snippet.thumbnails.high.url,
                             labels: ['youtube']
                         });

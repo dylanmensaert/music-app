@@ -23,8 +23,6 @@ define(function(require) {
         afterModel: function() {
             if (Ember.isEmpty(this.get('session.model.fileSystem'))) {
                 window.webkitRequestFileSystem(window.PERSISTENT, 0, function(fileSystem) {
-                    // TODO: Directories should only be created when used.
-
                     fileSystem.root.getDirectory('thumbnails', {
                         create: true,
                         exclusive: true

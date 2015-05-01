@@ -6,7 +6,10 @@ define(function(require) {
     return Ember.Object.extend({
         id: null,
         title: null,
-        source: null,
+        extension: null,
+        source: function() {
+            return 'filesystem:http://www.example.com/audio/' + this.get('id') + this.get('extension');
+        }.property('id', 'extension'),
         thumbnail: null,
         labels: [],
         isLocal: function() {

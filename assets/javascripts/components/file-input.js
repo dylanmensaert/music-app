@@ -3,7 +3,8 @@ define(function(require) {
 
     var Ember = require('ember'),
         Snippet = require('helpers/snippet'),
-        write;
+        write,
+        removeExtension;
 
     write = function(fileEntry, snippets, meta) {
         fileEntry.createWriter(function(fileWriter) {
@@ -15,6 +16,15 @@ define(function(require) {
         });
     };
 
+    createFileMeta = function(fileName) {
+        var lastIndex = fileName.lastIndexOf('.');
+
+        return {
+            name: fileName.substr(0, lastIndex),
+            extension: fileName.substr(lastIndex, fileName.length)
+        };
+    };
+
     return Ember.TextField.extend({
         attributeBindings: ['type', 'multiple', 'accept', 'title'],
         title: ' ',
@@ -24,26 +34,19 @@ define(function(require) {
         didInsertElement: function() {
             var fileSystem = this.get('session.model.fileSystem'),
                 files,
-                snippets;
+                snippets,
+                fileMeta;
 
             this.$().onchange = function() {
                 files = this.files;
 
-                files.forEach(function(file) {
-                    fileSystem.root.getFile(file.name, {
-                        create: true,
-                        exclusive: true
-                    }, function(fileEntry) {
-                        fileEntry.createWriter(function(fileWriter) {
-                            fileWriter.write(file);
-                        });
-                    });
-                });
-
                 snippets = files.map(function(file) {
+                    fileMeta = createFileMeta(file.name);
+
                     return Snippet.create({
-                        id: file.name,
-                        title: file.name,
+                        id: fileMeta.name,
+                        extension: fileMeta.extension,
+                        title: fileMeta.name,
                         labels: ['local']
                     });
                 });
@@ -52,7 +55,9 @@ define(function(require) {
                     create: true,
                     exclusive: true
                 }, function(fileEntry) {
-                    write(fileEntry, snippets, Ember.Object.create({}));
+                    write(fileEntry, snippets, Ember.Object.create({
+                        snippets: []
+                    }));
                 }, function(fileEntry) {
                     // TODO: Check if this returns fileEntry as parameter and not error
 
@@ -64,6 +69,16 @@ define(function(require) {
                         };
 
                         reader.readAsText(file);
+                    });
+                });
+
+                files.forEach(function(file) {
+                    fileSystem.root.getFile(file.name, {
+                        create: true
+                    }, function(fileEntry) {
+                        fileEntry.createWriter(function(fileWriter) {
+                            fileWriter.write(file);
+                        });
                     });
                 });
             };

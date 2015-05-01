@@ -38,12 +38,6 @@ define(function(require) {
         pause: function() {
             this.get('element').pause();
         },
-        start: function(source) {
-            element.src = source;
-            element.load();
-
-            this.play();
-        },
         load: function(snippet) {
             var snippet = this.get('snippet'),
                 element = this.get('element');
@@ -88,52 +82,70 @@ define(function(require) {
                 });
             });
         },
-        write: function(fileEntry, snippets) {
+        start: function(source) {
+            element.src = source;
+            element.load();
+
+            this.play();
+        },
+        write: function(fileEntry, meta) {
             var snippet = this.get('snippet');
 
             snippet.get('labels').pushObject('local');
 
             fileEntry.createWriter(function(fileWriter) {
-                snippets.pushObject(snippet);
+                meta.get('snippets').pushObject(snippet);
 
-                fileWriter.write(new Blob(JSON.stringify(snippets), {
+                fileWriter.write(new Blob(JSON.stringify(meta), {
                     type: 'application/json'
                 }));
             });
         },
         save: function() {
-            var write = this.write.bind(this),
+            var fileSystem = this.get('session.model.fileSystem'),
+                write = this.write.bind(this),
                 snippet = this.get('snippet'),
                 currentSrc = this.get('element').currentSrc,
                 source,
                 reader;
 
-            this.get('session.model.fileSystem').root.getDirectory('youtube', function(directoryEntry) {
-                directoryEntry.getFile('meta.json', {
-                    create: true,
-                    exclusive: true
-                }, function(fileEntry) {
-                    write(fileEntry, Ember.Object.create({}));
-                }, function(fileEntry) {
-                    // TODO: Check if this returns fileEntry as parameter and not error
+            fileSystem.root.getFile('meta.json', {
+                create: true,
+                exclusive: true
+            }, function(fileEntry) {
+                write(fileEntry, Ember.Object.create({
+                    snippets: []
+                }));
+            }, function(fileEntry) {
+                // TODO: Check if this returns fileEntry as parameter and not error
 
-                    fileEntry.file(function(file) {
-                        reader = new FileReader();
+                fileEntry.file(function(file) {
+                    reader = new FileReader();
 
-                        reader.onloadend = function() {
-                            write(fileEntry, JSON.parse(this.result));
-                        };
+                    reader.onloadend = function() {
+                        write(fileEntry, JSON.parse(this.result));
+                    };
 
-                        reader.readAsText(file);
-                    });
+                    reader.readAsText(file);
                 });
+            });
 
-                source = 'audio/' + snippet.get('id') + '.mp3';
-
-                directoryEntry.getFile(source, {
+            fileSystem.root.getDirectory('audio', function(directoryEntry) {
+                directoryEntry.getFile(snippet.get('source'), {
                     create: true
                 }, function(fileEntry) {
                     fileEntry.createWriter(function(fileWriter) {
+                        // TODO: Write currentSrc to fileEntry
+                    });
+                });
+            });
+
+            fileSystem.root.getDirectory('thumbnails', function(directoryEntry) {
+                directoryEntry.getFile(snippet.get('id') + '.jpg', {
+                    create: true
+                }, function(fileEntry) {
+                    fileEntry.createWriter(function(fileWriter) {
+                        snippet.get('thumbnail');
                         // TODO: Write currentSrc to fileEntry
                     });
                 });
