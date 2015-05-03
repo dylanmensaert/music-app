@@ -68,7 +68,7 @@ define(function(require) {
 
             element.addEventListener('canplaythrough', function() {
                 if (!audio.get('snippet.isLocal')) {
-                    audio.save();
+                    audio.get('snippet').save(element.currentSrc);
                 }
             });
 

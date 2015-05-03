@@ -2,11 +2,11 @@ define(function(require) {
     'use strict';
 
     var Ember = require('ember'),
-        metaData = require('meta-data'),
+        meta = require('meta-data'),
         fetchSuggestions;
 
     fetchSuggestions = function(query, callback) {
-        var url = metaData.suggestHost + '/complete/search?client=firefox&ds=yt',
+        var url = meta.suggestHost + '/complete/search?client=firefox&ds=yt',
             suggestions;
 
         url += '&q=' + query;

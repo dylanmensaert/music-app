@@ -2,8 +2,13 @@ define(function(require) {
     'use strict';
 
     var Ember = require('ember'),
-        metaData = require('meta-data'),
-        Snippet = require('helpers/snippet');
+        meta = require('meta-data'),
+        Snippet = require('helpers/snippet'),
+        extractExtension;
+
+    extractExtension = function(source) {
+        return source.substr(source.lastIndexOf('.'), source.length);
+    };
 
     return Ember.Controller.extend({
         query: '',
@@ -12,18 +17,26 @@ define(function(require) {
         isLoading: false,
         search: function(url, save) {
             var snippets,
-                nextPageToken;
+                nextPageToken,
+                source;
 
             if (!this.get('isLoading')) {
                 this.set('isLoading', true);
 
                 Ember.$.getJSON(url).then(function(response) {
                     snippets = response.items.map(function(item) {
+                        source = item.snippet.thumbnails.high.url;
+
                         return Snippet.create({
                             id: item.id.videoId,
                             title: item.snippet.title,
-                            extension: '.mp3',
-                            thumbnail: item.snippet.thumbnails.high.url,
+                            audio: {
+                                extension: '.mp3'
+                            },
+                            thumbnail: {
+                                extension: extractExtension(source),
+                                source: source
+                            },
                             labels: ['youtube']
                         });
                     });
@@ -42,7 +55,7 @@ define(function(require) {
             }
         },
         searchUrl: function() {
-            var url = metaData.searchHost + '/youtube/v3/search?part=snippet&order=viewCount&type=video&maxResults=50';
+            var url = meta.searchHost + '/youtube/v3/search?part=snippet&order=viewCount&type=video&maxResults=50';
             // TODO: url += '&relatedToVideoId=' + this.get('videoId');
 
             // TODO: implement in settings page?
@@ -50,7 +63,7 @@ define(function(require) {
                 url += '&videoCategoryId=10';
             }
 
-            url += '&key=' + metaData.key;
+            url += '&key=' + meta.key;
             url += '&q=' + this.get('query');
 
             return url;

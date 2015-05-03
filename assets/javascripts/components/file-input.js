@@ -4,23 +4,23 @@ define(function(require) {
     var Ember = require('ember'),
         Snippet = require('helpers/snippet'),
         write,
-        removeExtension;
+        split;
 
-    write = function(fileEntry, snippets, meta) {
+    write = function(fileEntry, snippets, data) {
         fileEntry.createWriter(function(fileWriter) {
-            meta.get('snippets').pushObjects(snippets);
+            data.get('snippets').pushObjects(snippets);
 
-            fileWriter.write(new Blob(JSON.stringify(meta), {
+            fileWriter.write(new Blob(JSON.stringify(data), {
                 type: 'application/json'
             }));
         });
     };
 
-    createFileMeta = function(fileName) {
+    split = function(fileName) {
         var lastIndex = fileName.lastIndexOf('.');
 
         return {
-            name: fileName.substr(0, lastIndex),
+            title: fileName.substr(0, lastIndex),
             extension: fileName.substr(lastIndex, fileName.length)
         };
     };
@@ -35,23 +35,25 @@ define(function(require) {
             var fileSystem = this.get('session.model.fileSystem'),
                 files,
                 snippets,
-                fileMeta;
+                fileName;
 
             this.$().onchange = function() {
                 files = this.files;
 
                 snippets = files.map(function(file) {
-                    fileMeta = createFileMeta(file.name);
+                    fileName = split(file.name);
 
                     return Snippet.create({
-                        id: fileMeta.name,
-                        extension: fileMeta.extension,
-                        title: fileMeta.name,
+                        id: fileName.title,
+                        title: fileName.title,
+                        audio: {
+                            extension: fileName.extension
+                        },
                         labels: ['local']
                     });
                 });
 
-                fileSystem.root.getFile('meta.json', {
+                fileSystem.root.getFile('data.json', {
                     create: true,
                     exclusive: true
                 }, function(fileEntry) {

@@ -23,6 +23,11 @@ define(function(require) {
         afterModel: function() {
             if (Ember.isEmpty(this.get('session.model.fileSystem'))) {
                 window.webkitRequestFileSystem(window.PERSISTENT, 0, function(fileSystem) {
+                    fileSystem.root.getFile('data.json', {
+                        create: true,
+                        exclusive: true
+                    });
+
                     fileSystem.root.getDirectory('thumbnails', {
                         create: true,
                         exclusive: true
