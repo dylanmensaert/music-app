@@ -20,11 +20,9 @@ define(function(require) {
                 Ember.$.getJSON(url).then(function(response) {
                     snippets = response.items.map(function(item) {
                         return Snippet.create({
-                            init: function() {
-                                this._super('mp3');
-                            },
                             id: item.id.videoId,
                             title: item.snippet.title,
+                            extension: 'mp3',
                             thumbnail: item.snippet.thumbnails.high.url,
                             labels: ['youtube']
                         });

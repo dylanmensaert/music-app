@@ -31,11 +31,9 @@ define(function(require) {
                     fileName = split(file.name);
 
                     return Snippet.create({
-                        init: function() {
-                            this._super(fileName.extension);
-                        },
                         id: fileName.title,
                         title: fileName.title,
+                        extension: fileName.extension,
                         labels: ['local']
                     });
                 });

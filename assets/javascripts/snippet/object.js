@@ -19,13 +19,14 @@ define(function(require) {
     };
 
     return Ember.Object.extend({
-        init: function(extension) {
+        init: function() {
             this._super();
 
-            this.setLocal('audio', extension);
+            this.setLocal('audio', this.get('extension'));
         },
         id: null,
         title: null,
+        extension: null,
         labels: [],
         isLocal: function() {
             return this.get('labels').contains('local');
