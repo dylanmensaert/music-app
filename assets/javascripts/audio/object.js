@@ -1,16 +1,7 @@
 define(function(require) {
     'use strict';
 
-    var Ember = require('ember'),
-        meta = require('meta-data'),
-        ytMp3 = require('helpers/yt-mp3'),
-        signateUrl;
-
-    signateUrl = function(url) {
-        var host = 'http://www.youtube-mp3.org';
-
-        return meta.downloadHost + url + '&s=' + ytMp3.createSignature(host + url);
-    };
+    var Ember = require('ember');
 
     return Ember.Object.extend({
         element: null,
@@ -39,9 +30,6 @@ define(function(require) {
             this.get('element').pause();
         },
         load: function(snippet) {
-            var snippet = this.get('snippet'),
-                element = this.get('element');
-
             this.set('status', 'loading');
             this.set('snippet', snippet);
 
@@ -50,10 +38,12 @@ define(function(require) {
                     this.start(url);
                 }.bind(this));
             } else {
-                this.start(snippet.get('source'));
+                this.start(snippet.get('audio'));
             }
         },
         start: function(source) {
+            var element = this.get('element');
+
             element.src = source;
             element.load();
 

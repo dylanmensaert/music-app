@@ -2,26 +2,16 @@ define(function(require) {
     'use strict';
 
     var Ember = require('ember'),
-        Snippet = require('helpers/snippet'),
-        write,
+        Snippet = require('snippet/object'),
+        writer = require('snippet/writer'),
         split;
-
-    write = function(fileEntry, snippets, data) {
-        fileEntry.createWriter(function(fileWriter) {
-            data.get('snippets').pushObjects(snippets);
-
-            fileWriter.write(new Blob(JSON.stringify(data), {
-                type: 'application/json'
-            }));
-        });
-    };
 
     split = function(fileName) {
         var lastIndex = fileName.lastIndexOf('.');
 
         return {
             title: fileName.substr(0, lastIndex),
-            extension: fileName.substr(lastIndex, fileName.length)
+            extension: fileName.substr(lastIndex + 1, fileName.length)
         };
     };
 
@@ -33,48 +23,26 @@ define(function(require) {
         accept: 'audio/*,video/*',
         didInsertElement: function() {
             var fileSystem = this.get('session.model.fileSystem'),
-                files,
                 snippets,
                 fileName;
 
             this.$().onchange = function() {
-                files = this.files;
-
-                snippets = files.map(function(file) {
+                snippets = this.files.map(function(file) {
                     fileName = split(file.name);
 
                     return Snippet.create({
+                        init: function() {
+                            this._super(fileName.extension);
+                        },
                         id: fileName.title,
                         title: fileName.title,
-                        audio: {
-                            extension: fileName.extension
-                        },
                         labels: ['local']
                     });
                 });
 
-                fileSystem.root.getFile('data.json', {
-                    create: true,
-                    exclusive: true
-                }, function(fileEntry) {
-                    write(fileEntry, snippets, Ember.Object.create({
-                        snippets: []
-                    }));
-                }, function(fileEntry) {
-                    // TODO: Check if this returns fileEntry as parameter and not error
+                writer.pushSnippets(snippets);
 
-                    fileEntry.file(function(file) {
-                        reader = new FileReader();
-
-                        reader.onloadend = function() {
-                            write(fileEntry, snippets, JSON.parse(this.result));
-                        };
-
-                        reader.readAsText(file);
-                    });
-                });
-
-                files.forEach(function(file) {
+                this.files.forEach(function(file) {
                     fileSystem.root.getFile(file.name, {
                         create: true
                     }, function(fileEntry) {

@@ -1,3 +1,4 @@
+/* global window: true */
 define(function(require) {
     'use strict';
 

@@ -1,5 +1,4 @@
-/* global window: true */
-/* global document: true */
+/* global window: true, document: true */
 define(function(require) {
     'use strict';
 

@@ -3,12 +3,7 @@ define(function(require) {
 
     var Ember = require('ember'),
         meta = require('meta-data'),
-        Snippet = require('helpers/snippet'),
-        extractExtension;
-
-    extractExtension = function(source) {
-        return source.substr(source.lastIndexOf('.'), source.length);
-    };
+        Snippet = require('snippet/object');
 
     return Ember.Controller.extend({
         query: '',
@@ -17,26 +12,20 @@ define(function(require) {
         isLoading: false,
         search: function(url, save) {
             var snippets,
-                nextPageToken,
-                source;
+                nextPageToken;
 
             if (!this.get('isLoading')) {
                 this.set('isLoading', true);
 
                 Ember.$.getJSON(url).then(function(response) {
                     snippets = response.items.map(function(item) {
-                        source = item.snippet.thumbnails.high.url;
-
                         return Snippet.create({
+                            init: function() {
+                                this._super('mp3');
+                            },
                             id: item.id.videoId,
                             title: item.snippet.title,
-                            audio: {
-                                extension: '.mp3'
-                            },
-                            thumbnail: {
-                                extension: extractExtension(source),
-                                source: source
-                            },
+                            thumbnail: item.snippet.thumbnails.high.url,
                             labels: ['youtube']
                         });
                     });
