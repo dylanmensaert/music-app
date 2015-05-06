@@ -1,5 +1,7 @@
 'use strict';
 
+var _ = require('underscore.string');
+
 module.exports = function (grunt) {
     var paths,
         sources;
@@ -110,7 +112,12 @@ module.exports = function (grunt) {
                     templateCompilerPath: 'assets/bower_components/ember/ember-template-compiler.js',
                     handlebarsPath: 'assets/bower_components/handlebars/handlebars.js',
                     templateName: function (sourceFile) {
-                        return sourceFile.replace('/template', '');
+                        var templateName;
+
+                        templateName = sourceFile.replace('/template', '');
+                        templateName = _.camelize(templateName);
+
+                        return templateName;
                     },
                     preprocess: function (source) {
                         return source.replace(/\s+/g, ' ');
