@@ -75,7 +75,7 @@ define(function(require) {
             var oldThumbnail = this.get('thumbnail');
 
             this.get('labels').pushObject('local');
-            this.get('session.model').pushSnippets([this]);
+            this.get('fileSystem').pushSnippet(this.toJSON());
 
             this.download('audio', source);
 
@@ -83,7 +83,7 @@ define(function(require) {
             this.download('thumbnail', oldThumbnail);
         },
         download: function(type, url) {
-            var fileSystem = this.get('session.model.fileSystem'),
+            var fileSystem = this.get('fileSystem'),
                 source = this.get(type),
                 xhr = new XMLHttpRequest();
 
@@ -91,7 +91,7 @@ define(function(require) {
             xhr.responseType = 'arraybuffer';
 
             xhr.onload = function() {
-                fileSystem.root.getFile(source, {
+                fileSystem.get('instance').root.getFile(source, {
                     create: true
                 }, function(fileEntry) {
                     fileEntry.createWriter(function(fileWriter) {

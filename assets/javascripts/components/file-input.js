@@ -3,7 +3,6 @@ define(function(require) {
 
     var Ember = require('ember'),
         Snippet = require('snippet/object'),
-        writer = require('snippet/writer'),
         split;
 
     split = function(fileName) {
@@ -22,7 +21,7 @@ define(function(require) {
         multiple: 'multiple',
         accept: 'audio/*,video/*',
         didInsertElement: function() {
-            var fileSystem = this.get('session.model.fileSystem'),
+            var fileSystem = this.get('fileSystem'),
                 snippets,
                 fileName;
 
@@ -30,18 +29,18 @@ define(function(require) {
                 snippets = this.files.map(function(file) {
                     fileName = split(file.name);
 
-                    return Snippet.create({
+                    return {
                         id: fileName.title,
                         title: fileName.title,
                         extension: fileName.extension,
                         labels: ['local']
-                    });
+                    };
                 });
 
-                writer.pushSnippets(snippets);
+                fileSystem.pushSnippets(snippets);
 
                 this.files.forEach(function(file) {
-                    fileSystem.root.getFile(file.name, {
+                    fileSystem.get('instance').root.getFile(file.name, {
                         create: true
                     }, function(fileEntry) {
                         fileEntry.createWriter(function(fileWriter) {

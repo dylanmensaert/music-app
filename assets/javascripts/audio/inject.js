@@ -7,7 +7,7 @@ define(function(require) {
         Application.initializer({
             name: 'audio',
             // TODO: remove registerComponentLookup?
-            before: 'registerComponentLookup',
+            /*before: 'registerComponentLookup',*/
             initialize: function(container, application) {
                 application.register('audio:main', audio);
 

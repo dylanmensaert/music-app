@@ -7,7 +7,7 @@ define(function(require) {
 
     write = function(fileEntry, snippets, data) {
         fileEntry.createWriter(function(fileWriter) {
-            data.get('snippets').pushObjects(snippets);
+            data.snippets.pushObjects(snippets);
 
             fileWriter.onwriteend = function() {
                 if (!fileWriter.length) {
@@ -45,16 +45,19 @@ define(function(require) {
             }.bind(this));
         },
         instance: null,
+        pushSnippet: function(snippet) {
+            this.pushSnippets([snippet]);
+        },
         pushSnippets: function(snippets) {
             var reader;
 
-            this.get('fileSystem').root.getFile('data.json', {
+            this.get('instance').root.getFile('data.json', {
                 create: true,
                 exclusive: true
             }, function(fileEntry) {
-                write(fileEntry, snippets, Ember.Object.create({
+                write(fileEntry, snippets, {
                     snippets: []
-                }));
+                });
             }, function(fileEntry) {
                 // TODO: Check if this returns fileEntry as parameter and not error
 
