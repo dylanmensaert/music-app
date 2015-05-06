@@ -10,35 +10,50 @@ define(function(require) {
         snippets: null,
         nextPageToken: null,
         isLoading: false,
-        search: function(url, save) {
-            var snippets,
+        filters: [],
+        search: function(url, load) {
+            var fileSystem = this.get('fileSystem'),
+                snippets = [],
+                id,
                 nextPageToken;
 
             if (!this.get('isLoading')) {
                 this.set('isLoading', true);
 
-                Ember.$.getJSON(url).then(function(response) {
-                    snippets = response.items.map(function(item) {
-                        return Snippet.create({
-                            id: item.id.videoId,
+                if (this.get('filters').contains('local')) {
+                    this.get('fileSystem').fetchData().then(function(data) {
+                        snippets.pushObjects(data.get('snippets'));
+                    });
+                }
+
+                if (this.get('filters').contains('youtube')) {
+                    Ember.$.getJSON(url).then(function(response) {
+                        id = item.id.videoId;
+
+                        // TODO: Implement correctly
+                        /*if (!data.contains('id', id)) {*/
+                        snippets.pushObject(Snippet.create({
+                            id: id,
                             title: item.snippet.title,
                             extension: 'mp3',
                             thumbnail: item.snippet.thumbnails.high.url,
-                            labels: ['youtube']
-                        });
-                    });
+                            labels: ['youtube'],
+                            fileSystem: fileSystem
+                        }));
+                        /*}*/
 
-                    if (Ember.isEmpty(response.nextPageToken)) {
-                        nextPageToken = null;
-                    } else {
-                        nextPageToken = response.nextPageToken;
-                    }
+                        if (Ember.isEmpty(response.nextPageToken)) {
+                            nextPageToken = null;
+                        } else {
+                            nextPageToken = response.nextPageToken;
+                        }
 
-                    this.set('nextPageToken', nextPageToken);
-                    this.set('isLoading', false);
+                        this.set('nextPageToken', nextPageToken);
+                        this.set('isLoading', false);
 
-                    save(snippets);
-                }.bind(this));
+                        load(snippets);
+                    }.bind(this));
+                }
             }
         },
         searchUrl: function() {

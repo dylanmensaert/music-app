@@ -31,6 +31,7 @@ define(function(require) {
         extension: null,
         labels: [],
         thumbnail: null,
+        fileSystem: null,
         isLocal: function() {
             return this.get('labels').contains('local');
         }.property('labels.@each'),

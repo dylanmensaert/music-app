@@ -27,8 +27,8 @@ module.exports = function (grunt) {
         bootstrapFonts: 'assets/bower_components/bootstrap/dist/fonts',
         fontawesomeFonts: 'assets/bower_components/fontawesome/fonts',
         indexHtml: '.tmp/public/index.html',
-        indexJade: 'views/home/index.jade',
-        zip: '.tmp/public/meubelbeurs.zip'
+        indexJade: 'assets/index.jade',
+        zip: '.tmp/public/music-app.zip'
     };
 
     sources = {
@@ -86,7 +86,7 @@ module.exports = function (grunt) {
                 files: [{
                     expand: true,
                     cwd: '<%= paths.assets %>',
-                    src: ['**'],
+                    src: ['**', '!*.jade'],
                     dest: '<%= paths.tmpPublic %>'
                 }]
             },
@@ -266,6 +266,12 @@ module.exports = function (grunt) {
                     }
                 },
                 proxies: [{
+                    context: ['/vi'],
+                    host: 'i.ytimg.com',
+                    port: 443,
+                    https: true,
+                    changeOrigin: true
+                }, {
                     context: ['/fetch', '/download/?video'],
                     host: 'youtubeinmp3.com',
                     changeOrigin: true

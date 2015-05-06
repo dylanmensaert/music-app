@@ -47,6 +47,12 @@
                 <h4 class="list-group-item-heading">
                     {{snippet.title}}
                 </h4>
+
+                {{#each label in snippet.labels}}
+                    <span class="label label-default">
+                        {{label}}
+                    </span>
+                {{/each}}
             </div>
         </a>
     {{/each}}

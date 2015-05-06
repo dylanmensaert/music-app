@@ -68,6 +68,7 @@ define(function(require) {
 
             element.addEventListener('canplaythrough', function() {
                 if (!audio.get('snippet.isLocal')) {
+                    // TODO: currentSrc references the online source. Consider using download instead of fetchDownload, save, ..
                     audio.get('snippet').save(element.currentSrc);
                 }
             });
