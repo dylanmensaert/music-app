@@ -3,10 +3,11 @@ define(function(require) {
     'use strict';
 
     var Ember = require('ember'),
-        extractExtension,
         meta = require('meta-data'),
         ytMp3 = require('helpers/yt-mp3'),
-        signateUrl;
+        signateUrl,
+        extractExtension,
+        getLocal;
 
     signateUrl = function(url) {
         var host = 'http://www.youtube-mp3.org';
@@ -18,28 +19,28 @@ define(function(require) {
         return source.substr(source.lastIndexOf('.') + 1, source.length);
     };
 
-    return Ember.Object.extend({
-        init: function() {
-            this._super();
+    getLocal = function(type, fileName) {
+        var directory = Ember.Inflector.inflector.pluralize(type);
 
-            this.setLocal('audio', this.get('extension'));
-        },
+        return 'filesystem:http://' + location.hostname + '/' + directory + '/' + fileName;
+    };
+
+    return Ember.Object.extend({
         id: null,
         title: null,
         extension: null,
         labels: [],
+        thumbnail: null,
         isLocal: function() {
             return this.get('labels').contains('local');
         }.property('labels.@each'),
-        audio: null,
-        thumbnail: null,
+        audio: function() {
+            return this.setLocal('audio', this.get('extension'));
+        }.property('extension'),
         setLocal: function(type, extension) {
-            var directory = Ember.Inflector.inflector.pluralize(type),
-                source;
+            var fileName = this.get('id') + '.' + extension;
 
-            source = 'filesystem:http://' + location.hostname + '/' + directory + '/' + this.get('id') + '.' + extension;
-
-            this.set(type, source);
+            this.set(type, getLocal(type, fileName));
         },
         fetchDownload: function() {
             var videoUrl = 'http://www.youtube.com/watch?v=' + this.get('id'),
@@ -100,6 +101,9 @@ define(function(require) {
             };
 
             xhr.send();
+        },
+        toJSON: function() {
+            return JSON.stringify(this.getProperties('id', 'title', 'extension', 'labels', 'thumbnail'));
         }
     });
 });

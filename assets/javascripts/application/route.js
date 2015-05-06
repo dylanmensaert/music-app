@@ -19,28 +19,6 @@ define(function(require) {
                 this.set('session.model', session);
             }.bind(this));
         },
-        afterModel: function() {
-            if (Ember.isEmpty(this.get('session.model.fileSystem'))) {
-                window.webkitRequestFileSystem(window.PERSISTENT, 0, function(fileSystem) {
-                    fileSystem.root.getFile('data.json', {
-                        create: true,
-                        exclusive: true
-                    });
-
-                    fileSystem.root.getDirectory('thumbnails', {
-                        create: true,
-                        exclusive: true
-                    });
-
-                    fileSystem.root.getDirectory('audio', {
-                        create: true,
-                        exclusive: true
-                    });
-
-                    this.set('session.model.fileSystem', fileSystem);
-                }.bind(this));
-            }
-        },
         setupController: function(controller, model) {
             var audio = this.get('audio'),
                 slider;
