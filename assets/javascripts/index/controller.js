@@ -34,18 +34,21 @@ define(function(require) {
 
                 if (filters.contains('youtube')) {
                     promises.push(Ember.$.getJSON(url).then(function(response) {
-                        id = item.id.videoId;
 
-                        if (!fileSystem.contains('id', id)) {
-                            snippets.pushObject(Snippet.create({
-                                id: id,
-                                title: item.snippet.title,
-                                extension: 'mp3',
-                                thumbnail: item.snippet.thumbnails.high.url,
-                                labels: ['youtube'],
-                                fileSystem: fileSystem
-                            }));
-                        }
+                        response.items.forEach(function(item) {
+                            id = item.id.videoId;
+
+                            if (!fileSystem.contains('id', id)) {
+                                snippets.pushObject(Snippet.create({
+                                    id: id,
+                                    title: item.snippet.title,
+                                    extension: 'mp3',
+                                    thumbnail: item.snippet.thumbnails.high.url,
+                                    labels: ['youtube'],
+                                    fileSystem: fileSystem
+                                }));
+                            }
+                        });
 
                         if (Ember.isEmpty(response.nextPageToken)) {
                             nextPageToken = null;
@@ -92,6 +95,9 @@ define(function(require) {
             }
         },
         actions: {
+            search: function() {
+                this.debounceSearchNew();
+            },
             // TODO: set class 'active' on currently playing
             load: function(snippet) {
                 this.get('audio').load(snippet);

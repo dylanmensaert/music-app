@@ -27,6 +27,9 @@ define(function(require) {
         classNames: ['form-control'],
         attributeBindings: ['placeholder'],
         placeholder: 'Search',
+        insertNewline: function() {
+            this.sendAction('insert-newline');
+        },
         didInsertElement: function() {
             this.$().typeahead({
                 highlight: true,
