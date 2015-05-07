@@ -4,31 +4,26 @@ define(function(require) {
     var Ember = require('ember'),
         meta = require('meta-data'),
         Snippet = require('snippet/object'),
-        searchNew;
-
-    searchNew = function() {
-        this.set('snippets', []);
-
-        this.search(this.get('searchUrl'));
-    };
+        lastUrl,
+        nextPageToken;
 
     return Ember.Controller.extend({
         query: '',
         snippets: null,
-        nextPageToken: null,
         isLoading: false,
+        // TODO: Force search and discard old search requests. Rework searchNew logic.
         search: function(url) {
             var fileSystem = this.get('fileSystem'),
                 filters = this.get('session.model.filters'),
                 promises = [],
                 snippets = [],
-                id,
-                nextPageToken;
+                id;
 
-            if (!this.get('isLoading')) {
+            return new Ember.RSVP.Promise(function(resolve) {
                 this.set('isLoading', true);
 
                 if (filters.contains('local')) {
+                    // TODO: Implement local suggestions + results for query..
                     snippets.pushObjects(fileSystem.get('snippets'));
                 }
 
@@ -55,8 +50,6 @@ define(function(require) {
                         } else {
                             nextPageToken = response.nextPageToken;
                         }
-
-                        this.set('nextPageToken', nextPageToken);
                     }.bind(this)));
                 }
 
@@ -64,8 +57,10 @@ define(function(require) {
                     this.get('snippets').pushObjects(snippets);
 
                     this.set('isLoading', false);
+
+                    resolve(snippets);
                 }.bind(this));
-            }
+            }.bind(this));
         },
         searchUrl: function() {
             var url = meta.searchHost + '/youtube/v3/search?part=snippet&order=viewCount&type=video&maxResults=50';
@@ -80,14 +75,24 @@ define(function(require) {
 
             return url;
         }.property('session.model.filters.@each', 'query'),
-        debounceSearchNew: function() {
-            Ember.run.debounce(this, searchNew, 100, true);
+        // TODO: Only starts after first submit
+        searchNew: function() {
+            if (!this.get('isLoading')) {
+                lastUrl = this.get('searchUrl');
+
+                this.set('snippets', []);
+
+                this.search(lastUrl).then(function() {
+                    if (!this.get('isLoading') && this.get('searchUrl') !== lastUrl) {
+                        this.search(url);
+                    }
+                }.bind(this));
+            }
         }.observes('searchUrl'),
         searchNext: function() {
-            var nextPageToken = this.get('nextPageToken'),
-                url;
+            var url;
 
-            if (nextPageToken) {
+            if (!this.get('isLoading') && nextPageToken) {
                 url = this.get('searchUrl');
                 url += '&pageToken=' + nextPageToken;
 
@@ -96,7 +101,7 @@ define(function(require) {
         },
         actions: {
             search: function() {
-                this.debounceSearchNew();
+                this.searchNew();
             },
             // TODO: set class 'active' on currently playing
             load: function(snippet) {
@@ -108,7 +113,7 @@ define(function(require) {
             toggleMusicOnly: function() {
                 this.toggleProperty('session.model.musicOnly');
 
-                this.debounceSearchNew();
+                this.searchNew();
             }
         }
     });
