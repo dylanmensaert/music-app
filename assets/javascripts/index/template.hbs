@@ -9,23 +9,15 @@
                 </div>
             {{/if}}
 
-            {{suggest-input value=query insert-newline='search'}}
+            {{suggest-input value=query}}
 
             <div class="input-group-btn">
                 <button {{action 'search'}} class="btn btn-primary btn-search">
                     <i class="fa fa-search"></i>
                 </button>
             </div>
-        </div>
 
-        <div class="search-bar text-right">
-            <div {{action 'toggleMusicOnly'}} {{bind-attr class=':label session.model.musicOnly:label-primary:label-default'}}>
-                {{#if session.model.musicOnly}}
-                    <i class="fa fa-check" ></i>
-                {{/if}}
-
-                music only
-            </div>
+            <!-- TODO: Implement session.model.filters based on fileSystem.model.labels -->
         </div>
     </div>
 </div>

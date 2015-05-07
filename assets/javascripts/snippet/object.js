@@ -76,7 +76,7 @@ define(function(require) {
             var oldThumbnail = this.get('thumbnail');
 
             this.get('labels').pushObject('local');
-            this.get('fileSystem').pushSnippet(this.toJSON());
+            this.get('fileSystem.snippets').pushObject(this);
 
             this.download('audio', source);
 

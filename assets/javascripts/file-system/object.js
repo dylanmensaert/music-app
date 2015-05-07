@@ -1,117 +1,114 @@
-/* global window: true, Blob: true, FileReader: true */
+/* global window: true, Blob: true, FileReader: true, PERSISTENT: true, Number: true */
 define(function(require) {
     'use strict';
 
     var Ember = require('ember'),
-        read,
         write,
-        Data;
+        createFiles;
 
-    read = function(fileEntry) {
-        var reader;
+    write = function(fileSystem, json) {
+        var json = this.toJSON();
 
-        return new Ember.RSVP.Promise(function(resolve) {
+        this.get('instance').root.getFile('data.json', function(fileEntry) {
+            fileEntry.createWriter(function(fileWriter) {
+                fileWriter.onwriteend = function() {
+                    if (!fileWriter.length) {
+                        fileWriter.write(new Blob(json, {
+                            type: 'application/json'
+                        }));
+                    }
+                };
+
+                fileWriter.truncate(0);
+            });
+        });
+    };
+
+    createFiles = function(instance) {
+        var fileSystem = this,
+            reader;
+
+        instance.root.getFile('data.json', function(fileEntry) {
             fileEntry.file(function(file) {
                 reader = new FileReader();
 
                 reader.onloadend = function() {
-                    resolve(JSON.parse(this.result));
+                    fileSystem.setProperties(JSON.parse(this.result));
                 };
 
                 reader.readAsText(file);
             });
-        });
-    };
-
-    write = function(fileEntry, snippets, modify) {
-        fileEntry.createWriter(function(fileWriter) {
-            modify();
-            data.snippets.pushObjects(snippets);
-
-            fileWriter.onwriteend = function() {
-                if (!fileWriter.length) {
-                    fileWriter.write(new Blob(JSON.stringify(data), {
-                        type: 'application/json'
-                    }));
-                }
-            };
-
-            fileWriter.truncate(0);
-        });
-    };
-
-    Data = Ember.Object.extend({
-        snippets: null,
-        contains: function(property, value) {
-            this.get('snippets').any(function(snippet) {
-                return snippet.get(property) === value;
+        }, function() {
+            instance.root.getFile('data.json', {
+                create: true
             });
-        }
-    });
+        });
+
+        instance.root.getDirectory('thumbnails', {
+            create: true
+        });
+
+        instance.root.getDirectory('audio', {
+            create: true
+        });
+    };
 
     return Ember.Object.extend({
         init: function() {
             this._super();
 
-            window.webkitRequestFileSystem(window.PERSISTENT, 0, function(fileSystem) {
-                fileSystem.root.getFile('data.json', {
-                    create: true,
-                    exclusive: true
-                });
-
-                fileSystem.root.getDirectory('thumbnails', {
-                    create: true,
-                    exclusive: true
-                });
-
-                fileSystem.root.getDirectory('audio', {
-                    create: true,
-                    exclusive: true
-                });
-
-                this.set('instance', fileSystem);
-            }.bind(this));
+            this.forge();
         },
         instance: null,
-        fetchData: function() {
-            return new Ember.RSVP.Promise(function(resolve) {
-                this.get('instance').root.getFile('data.json', function(fileEntry) {
-                    read(fileEntry).then(function(data) {
-                        resolve(Data.create(data));
-                    });
-                });
+        labels: [],
+        snippets: [],
+        // TODO: http://stackoverflow.com/questions/30109066/html-5-file-system-how-to-increase-persistent-storage
+        forge: function() {
+            var createFiles = createFiles.bind(this);
+
+            this.fetchUsageAndQuota().then(function(usage, quota) {
+                if (quota > usage) {
+                    this.create(quota).then(createFiles);
+                } else {
+                    this.increaseQuota().then(createFiles);
+                }
             }.bind(this));
         },
-        pushSnippet: function(snippet) {
-            this.pushSnippets([snippet]);
+        fetchUsageAndQuota: function() {
+            return Ember.RSVP.denodeify(navigator.webkitPersistentStorage.queryUsageAndQuota);
         },
-        pushSnippets: function(snippets) {
-            this.get('instance').root.getFile('data.json', {
-                create: true,
-                exclusive: true
-            }, function(fileEntry) {
-                write(fileEntry, {
-                    snippets: snippets
-                });
-            }, function(fileEntry) {
-                // TODO: Check if this returns fileEntry as parameter and not error
+        increaseQuota: function() {
+            return Ember.RSVP.Promise(function(resolve) {
+                navigator.webkitPersistentStorage.requestQuota(Number.MAX_SAFE_INTEGER, function(bytes) {
+                    this.create(bytes).then(resolve);
+                }.bind(this));
+            }.bind(this));
+        },
+        create: function(bytes) {
+            return Ember.RSVP.Promise(function(resolve) {
+                webkitRequestFileSystem(PERSISTENT, bytes, function(fileSystem) {
+                    this.set('instance', fileSystem);
 
-                read(fileEntry).then(function(data) {
-                    data.snippets.pushObjects(snippets);
-
-                    write(fileEntry, data);
-                });
+                    resolve(fileSystem);
+                }.bind(this));
+            }.bind(this));
+        },
+        debounceWrite: function() {
+            Ember.run.debounce(this, write, 100);
+        }.observes('labels.@each', 'snippets.@each'),
+        contains: function(property, value) {
+            this.get('snippets').any(function(snippet) {
+                return snippet.get(property) === value;
             });
         },
-        removeSnippet: function(snippet) {
-            this.get('instance').root.getFile('data.json', function(fileEntry) {
-                read(fileEntry).then(function(data) {
-                    // Check if this removes the correct object
-                    data.snippets.removeObject(snippet);
+        toJSON: function() {
+            var json = this.getProperties('labels');
 
-                    write(fileEntry, data);
-                });
+            json.snippets = this.get('snippets').map(function(snippet) {
+                return snippet.toJSON();
             });
+
+            return JSON.stringify(json);
         }
     });
 });

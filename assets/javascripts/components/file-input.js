@@ -37,7 +37,7 @@ define(function(require) {
                     };
                 });
 
-                fileSystem.pushSnippets(snippets);
+                fileSystem.pushObjects(snippets);
 
                 this.files.forEach(function(file) {
                     fileSystem.get('instance').root.getFile(file.name, {
