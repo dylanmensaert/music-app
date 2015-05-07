@@ -64,28 +64,23 @@ define(function(require) {
         snippets: [],
         // TODO: http://stackoverflow.com/questions/30109066/html-5-file-system-how-to-increase-persistent-storage
         forge: function() {
-            var createFiles = createFiles.bind(this);
-
-            this.fetchUsageAndQuota().then(function(usage, quota) {
+            navigator.webkitPersistentStorage.queryUsageAndQuota(function(usage, quota) {
                 if (quota > usage) {
-                    this.create(quota).then(createFiles);
+                    this.create(quota).then(createFiles.bind(this));
                 } else {
-                    this.increaseQuota().then(createFiles);
+                    this.increaseQuota().then(createFiles.bind(this));
                 }
             }.bind(this));
         },
-        fetchUsageAndQuota: function() {
-            return Ember.RSVP.denodeify(navigator.webkitPersistentStorage.queryUsageAndQuota);
-        },
         increaseQuota: function() {
-            return Ember.RSVP.Promise(function(resolve) {
+            return new Ember.RSVP.Promise(function(resolve) {
                 navigator.webkitPersistentStorage.requestQuota(Number.MAX_SAFE_INTEGER, function(bytes) {
                     this.create(bytes).then(resolve);
                 }.bind(this));
             }.bind(this));
         },
         create: function(bytes) {
-            return Ember.RSVP.Promise(function(resolve) {
+            return new Ember.RSVP.Promise(function(resolve) {
                 webkitRequestFileSystem(PERSISTENT, bytes, function(fileSystem) {
                     this.set('instance', fileSystem);
 
