@@ -29,12 +29,12 @@ define(function(require) {
                 snippets = this.files.map(function(file) {
                     fileName = split(file.name);
 
-                    return {
+                    return Snippet.create({
                         id: fileName.title,
                         title: fileName.title,
                         extension: fileName.extension,
                         labels: ['local']
-                    };
+                    });
                 });
 
                 fileSystem.pushObjects(snippets);
