@@ -5,13 +5,20 @@ define(function(require) {
         meta = require('meta-data'),
         Snippet = require('snippet/object'),
         lastUrl,
-        nextPageToken;
+        nextPageToken,
+        searchNew;
+
+    searchNew = function() {
+        this.set('snippets', []);
+
+        this.search(this.get('searchUrl'));
+    };
 
     return Ember.Controller.extend({
         query: '',
         snippets: null,
         isLoading: false,
-        // TODO: Force search and discard old search requests. Rework searchNew logic.
+        // TODO: Latest search is not showing (stays some characters behind when typing fast)
         search: function(url) {
             var fileSystem = this.get('fileSystem'),
                 filters = this.get('session.model.filters'),
@@ -19,47 +26,47 @@ define(function(require) {
                 snippets = [],
                 id;
 
-            return new Ember.RSVP.Promise(function(resolve) {
-                this.set('isLoading', true);
+            lastUrl = url;
 
-                if (filters.contains('local')) {
-                    // TODO: Implement local suggestions + results for query..
-                    snippets.pushObjects(fileSystem.get('snippets'));
-                }
+            this.set('isLoading', true);
 
-                if (filters.contains('youtube')) {
-                    promises.push(Ember.$.getJSON(url).then(function(response) {
+            if (filters.contains('local')) {
+                // TODO: Implement local suggestions + results for query..
+                snippets.pushObjects(fileSystem.get('snippets'));
+            }
 
-                        response.items.forEach(function(item) {
-                            id = item.id.videoId;
+            if (filters.contains('youtube')) {
+                promises.push(Ember.$.getJSON(url).then(function(response) {
 
-                            if (!fileSystem.contains('id', id)) {
-                                snippets.pushObject(Snippet.create({
-                                    id: id,
-                                    title: item.snippet.title,
-                                    extension: 'mp3',
-                                    thumbnail: item.snippet.thumbnails.high.url,
-                                    labels: ['youtube'],
-                                    fileSystem: fileSystem
-                                }));
-                            }
-                        });
+                    response.items.forEach(function(item) {
+                        id = item.id.videoId;
 
-                        if (Ember.isEmpty(response.nextPageToken)) {
-                            nextPageToken = null;
-                        } else {
-                            nextPageToken = response.nextPageToken;
+                        if (!fileSystem.contains('id', id)) {
+                            snippets.pushObject(Snippet.create({
+                                id: id,
+                                title: item.snippet.title,
+                                extension: 'mp3',
+                                thumbnail: item.snippet.thumbnails.high.url,
+                                labels: ['youtube'],
+                                fileSystem: fileSystem
+                            }));
                         }
-                    }.bind(this)));
-                }
+                    });
 
-                Ember.RSVP.Promise.all(promises).then(function() {
+                    if (Ember.isEmpty(response.nextPageToken)) {
+                        nextPageToken = null;
+                    } else {
+                        nextPageToken = response.nextPageToken;
+                    }
+                }.bind(this)));
+            }
+
+            Ember.RSVP.Promise.all(promises).then(function() {
+                if (lastUrl === url) {
                     this.get('snippets').pushObjects(snippets);
 
                     this.set('isLoading', false);
-
-                    resolve(snippets);
-                }.bind(this));
+                }
             }.bind(this));
         },
         searchUrl: function() {
@@ -77,22 +84,12 @@ define(function(require) {
         }.property('session.model.filters.@each', 'query'),
         // TODO: Only starts after first submit
         searchNew: function() {
-            if (!this.get('isLoading')) {
-                lastUrl = this.get('searchUrl');
-
-                this.set('snippets', []);
-
-                this.search(lastUrl).then(function() {
-                    if (!this.get('isLoading') && this.get('searchUrl') !== lastUrl) {
-                        this.search(url);
-                    }
-                }.bind(this));
-            }
+            Ember.run.debounce(this, searchNew, 100, true);
         }.observes('searchUrl'),
         searchNext: function() {
             var url;
 
-            if (!this.get('isLoading') && nextPageToken) {
+            if (nextPageToken) {
                 url = this.get('searchUrl');
                 url += '&pageToken=' + nextPageToken;
 

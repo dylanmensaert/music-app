@@ -97,13 +97,13 @@ define(function(require) {
             });
         },
         toJSON: function() {
-            var json = this.getProperties('labels');
+            var data = this.getProperties('labels');
 
-            json.snippets = this.get('snippets').map(function(snippet) {
+            data.snippets = this.get('snippets').map(function(snippet) {
                 return snippet.toJSON();
             });
 
-            return JSON.stringify(json);
+            return JSON.stringify(data);
         }
     });
 });
