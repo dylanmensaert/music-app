@@ -37,8 +37,6 @@ define(function(require) {
             }, {
                 source: fetchSuggestions
             });
-
-            this.insertNewline();
         },
         willDestroyElement: function() {
             this.$().typeahead('destroy');
