@@ -5,20 +5,12 @@ define(function(require) {
         meta = require('meta-data'),
         Snippet = require('snippet/object'),
         lastUrl,
-        nextPageToken,
-        searchNew;
-
-    searchNew = function() {
-        this.set('snippets', []);
-
-        this.search(this.get('searchUrl'));
-    };
+        nextPageToken;
 
     return Ember.Controller.extend({
         query: '',
         snippets: null,
         isLoading: false,
-        // TODO: Latest search is not showing (stays some characters behind when typing fast)
         search: function(url) {
             var fileSystem = this.get('fileSystem'),
                 filters = this.get('session.model.filters'),
@@ -82,10 +74,11 @@ define(function(require) {
 
             return url;
         }.property('session.model.filters.@each', 'query'),
-        // TODO: Only starts after first submit
         searchNew: function() {
-            Ember.run.debounce(this, searchNew, 100, true);
-        }.observes('searchUrl'),
+            this.set('snippets', []);
+
+            this.search(this.get('searchUrl'));
+        },
         searchNext: function() {
             var url;
 

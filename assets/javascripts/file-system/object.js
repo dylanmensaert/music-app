@@ -88,6 +88,7 @@ define(function(require) {
                 }.bind(this));
             }.bind(this));
         },
+        // TODO: http://stackoverflow.com/questions/30132167/how-to-update-ember-debounce-context
         debounceWrite: function() {
             Ember.run.debounce(this, write, 100);
         }.observes('labels.@each', 'snippets.@each'),
