@@ -29,6 +29,8 @@ define(function(require) {
         placeholder: 'Search',
         insertNewline: function() {
             this.sendAction('insert-newline');
+
+            this.$().typeahead('close');
         },
         didInsertElement: function() {
             this.$().typeahead({

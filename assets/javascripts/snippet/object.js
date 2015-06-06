@@ -36,12 +36,13 @@ define(function(require) {
             return this.get('labels').contains('local');
         }.property('labels.@each'),
         audio: function() {
-            return this.setLocal('audio', this.get('extension'));
+            return this.getLocal('audio', this.get('extension'));
         }.property('extension'),
-        setLocal: function(type, extension) {
-            var fileName = this.get('id') + '.' + extension;
+        getLocal: function(type, extension) {
+            var fileName = this.get('id') + '.' + extension,
+                directory = Ember.Inflector.inflector.pluralize(type);
 
-            this.set(type, getLocal(type, fileName));
+            return 'filesystem:http://' + location.hostname + '/' + directory + '/' + fileName;
         },
         fetchDownload: function() {
             var videoUrl = 'http://www.youtube.com/watch?v=' + this.get('id'),
@@ -72,31 +73,37 @@ define(function(require) {
                 });
             });
         },
-        save: function(source) {
+        save: function(url) {
             var oldThumbnail = this.get('thumbnail');
 
+            this.download('audio', url);
+
+            // TODO: write to filesystem on snippet property change
+            // TODO: Implement download via promise, then set local path on success..
+            this.download('thumbnail', oldThumbnail);
+            this.set('thumbnail', getLocal('thumbnail', extractExtension(oldThumbnail)));
+
+            // TODO: update local labels and snippets in 1 write action
             this.get('labels').pushObject('local');
             this.get('fileSystem.snippets').pushObject(this);
-
-            this.download('audio', source);
-
-            this.setLocal('thumbnail', extractExtension(oldThumbnail));
-            this.download('thumbnail', oldThumbnail);
         },
         download: function(type, url) {
             var fileSystem = this.get('fileSystem'),
                 source = this.get(type),
-                xhr = new XMLHttpRequest();
+                xhr = new XMLHttpRequest(),
+                response;
 
             xhr.open('GET', url, true);
             xhr.responseType = 'arraybuffer';
 
             xhr.onload = function() {
+                response = this.response;
+
                 fileSystem.get('instance').root.getFile(source, {
                     create: true
                 }, function(fileEntry) {
                     fileEntry.createWriter(function(fileWriter) {
-                        fileWriter.write(this.response);
+                        fileWriter.write(response);
                     });
                 });
             };

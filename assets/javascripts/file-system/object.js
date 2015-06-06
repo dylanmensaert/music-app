@@ -2,56 +2,7 @@
 define(function(require) {
     'use strict';
 
-    var Ember = require('ember'),
-        write,
-        createFiles;
-
-    write = function(fileSystem, json) {
-        var json = this.toJSON();
-
-        this.get('instance').root.getFile('data.json', function(fileEntry) {
-            fileEntry.createWriter(function(fileWriter) {
-                fileWriter.onwriteend = function() {
-                    if (!fileWriter.length) {
-                        fileWriter.write(new Blob(json, {
-                            type: 'application/json'
-                        }));
-                    }
-                };
-
-                fileWriter.truncate(0);
-            });
-        });
-    };
-
-    createFiles = function(instance) {
-        var fileSystem = this,
-            reader;
-
-        instance.root.getFile('data.json', function(fileEntry) {
-            fileEntry.file(function(file) {
-                reader = new FileReader();
-
-                reader.onloadend = function() {
-                    fileSystem.setProperties(JSON.parse(this.result));
-                };
-
-                reader.readAsText(file);
-            });
-        }, function() {
-            instance.root.getFile('data.json', {
-                create: true
-            });
-        });
-
-        instance.root.getDirectory('thumbnails', {
-            create: true
-        });
-
-        instance.root.getDirectory('audio', {
-            create: true
-        });
-    };
+    var Ember = require('ember');
 
     return Ember.Object.extend({
         init: function() {
@@ -66,9 +17,9 @@ define(function(require) {
         forge: function() {
             navigator.webkitPersistentStorage.queryUsageAndQuota(function(usage, quota) {
                 if (quota > usage) {
-                    this.create(quota).then(createFiles.bind(this));
+                    this.create(quota).then(this.createFiles);
                 } else {
-                    this.increaseQuota().then(createFiles.bind(this));
+                    this.increaseQuota().then(this.createFiles);
                 }
             }.bind(this));
         },
@@ -88,10 +39,51 @@ define(function(require) {
                 }.bind(this));
             }.bind(this));
         },
-        // TODO: http://stackoverflow.com/questions/30132167/how-to-update-ember-debounce-context
-        debounceWrite: function() {
-            Ember.run.debounce(this, write, 100);
+        write: function() {
+            var json = this.toJSON();
+
+            this.get('instance').root.getFile('data.json', function(fileEntry) {
+                fileEntry.createWriter(function(fileWriter) {
+                    fileWriter.onwriteend = function() {
+                        if (!fileWriter.length) {
+                            fileWriter.write(new Blob(json, {
+                                type: 'application/json'
+                            }));
+                        }
+                    };
+
+                    fileWriter.truncate(0);
+                });
+            });
         }.observes('labels.@each', 'snippets.@each'),
+        createFiles: function(instance) {
+            var fileSystem = this,
+                reader;
+
+            instance.root.getFile('data.json', function(fileEntry) {
+                fileEntry.file(function(file) {
+                    reader = new FileReader();
+
+                    reader.onloadend = function() {
+                        fileSystem.setProperties(JSON.parse(this.result));
+                    };
+
+                    reader.readAsText(file);
+                });
+            }, function() {
+                instance.root.getFile('data.json', {
+                    create: true
+                });
+            });
+
+            instance.root.getDirectory('thumbnails', {
+                create: true
+            });
+
+            instance.root.getDirectory('audio', {
+                create: true
+            });
+        },
         contains: function(property, value) {
             this.get('snippets').any(function(snippet) {
                 return snippet.get(property) === value;
