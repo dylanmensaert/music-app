@@ -66,18 +66,18 @@ define(function(require) {
                 }.bind(this));
             }.bind(this));
         },
-        save: function(url) {
+        save: function() {
             var audio = this.getLocal('audio', this.get('extension')),
                 thumbnail = this.getLocal('thumbnail', extractExtension(this.get('thumbnail')));
 
-            this.download(url, audio).then(function(source) {
+            this.download(this.get('audio'), audio).then(function(source) {
                 this.set('audio', source);
-            });
+            }.bind(this));
 
             // TODO: write to filesystem on snippet property change
-            this.download(url, thumbnail).then(function(source) {
+            this.download(this.get('thumbnail'), thumbnail).then(function(source) {
                 this.set('thumbnail', source);
-            });
+            }.bind(this));
 
             // TODO: update local labels and snippets in 1 write action
             this.get('labels').pushObject('local');
@@ -103,7 +103,7 @@ define(function(require) {
                                 resolve(fileEntry.toURL());
                             };
 
-                            fileWriter.write(response);
+                            fileWriter.write(new Blob([response]));
                         });
                     });
                 };

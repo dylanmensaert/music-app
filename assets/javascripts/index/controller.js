@@ -5,7 +5,12 @@ define(function(require) {
         meta = require('meta-data'),
         Snippet = require('snippet/object'),
         lastUrl,
-        nextPageToken;
+        nextPageToken,
+        convertImageUrl;
+
+    convertImageUrl = function(url) {
+        return meta.imageHost + new URL(url).pathname;
+    };
 
     return Ember.Controller.extend({
         query: '',
@@ -38,7 +43,7 @@ define(function(require) {
                                 id: id,
                                 title: item.snippet.title,
                                 extension: 'mp3',
-                                thumbnail: item.snippet.thumbnails.high.url,
+                                thumbnail: convertImageUrl(item.snippet.thumbnails.high.url),
                                 labels: ['youtube'],
                                 fileSystem: fileSystem
                             }));
