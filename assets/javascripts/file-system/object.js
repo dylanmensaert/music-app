@@ -18,9 +18,9 @@ define(function(require) {
         forge: function() {
             navigator.webkitPersistentStorage.queryUsageAndQuota(function(usage, quota) {
                 if (quota > usage) {
-                    this.create(quota).then(this.createFiles);
+                    this.create(quota).then(this.createFiles.bind(this));
                 } else {
-                    this.increaseQuota().then(this.createFiles);
+                    this.increaseQuota().then(this.createFiles.bind(this));
                 }
             }.bind(this));
         },
@@ -40,15 +40,15 @@ define(function(require) {
                 }.bind(this));
             }.bind(this));
         },
-        // Implement something like debounce 
+        // Implement something like debounce
         write: function() {
             var json = this.toJSON();
 
-            this.get('instance').root.getFile('data.json', function(fileEntry) {
+            this.get('instance').root.getFile('data.json', {}, function(fileEntry) {
                 fileEntry.createWriter(function(fileWriter) {
                     fileWriter.onwriteend = function() {
                         if (!fileWriter.length) {
-                            fileWriter.write(new Blob(json, {
+                            fileWriter.write(new Blob([json], {
                                 type: 'application/json'
                             }));
                         }
@@ -62,7 +62,7 @@ define(function(require) {
             var fileSystem = this,
                 reader;
 
-            instance.root.getFile('data.json', function(fileEntry) {
+            instance.root.getFile('data.json', {}, function(fileEntry) {
                 fileEntry.file(function(file) {
                     reader = new FileReader();
 
