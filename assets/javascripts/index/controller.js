@@ -38,12 +38,12 @@ define(function(require) {
                 snippets;
 
             this.get('fileSystem.labels').forEach(function(label) {
-                if(label.get('isVisible')) {
+                if (label.get('isVisible')) {
                     snippets = fileSystem.get('snippets').filter(function(snippet) {
                         return snippet.get('labels').contains(label.get('name')) && !filteredSnippets.isAny('id', snippet.get('id'));
                     });
 
-                    filteredSnippets.pushObjects(snippets);   
+                    filteredSnippets.pushObjects(snippets);
                 }
             });
 
@@ -64,7 +64,7 @@ define(function(require) {
             if (visibleLabels.isAny('name', 'offline')) {
                 // TODO: Implement local suggestions + results for query..
                 // TODO: Check to improve performance
-               snippets.pushObjects(this.get('filteredSnippets'));
+                snippets.pushObjects(this.get('filteredSnippets'));
             }
 
             if (visibleLabels.isAny('name', 'online')) {
@@ -105,7 +105,7 @@ define(function(require) {
             var url = meta.searchHost + '/youtube/v3/search?part=snippet&order=viewCount&type=video&maxResults=50';
             // TODO: url += '&relatedToVideoId=' + this.get('videoId');
 
-            if (this.get('fileSystem.labels')findBy('name', 'music-only').get('isVisible')) {
+            if (this.get('fileSystem.labels') findBy('name', 'music-only').get('isVisible')) {
                 url += '&videoCategoryId=10';
             }
 
