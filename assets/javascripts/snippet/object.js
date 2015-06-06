@@ -6,8 +6,7 @@ define(function(require) {
         meta = require('meta-data'),
         ytMp3 = require('helpers/yt-mp3'),
         signateUrl,
-        extractExtension,
-        getLocal;
+        extractExtension;
 
     signateUrl = function(url) {
         var host = 'http://www.youtube-mp3.org';
@@ -17,12 +16,6 @@ define(function(require) {
 
     extractExtension = function(source) {
         return source.substr(source.lastIndexOf('.') + 1, source.length);
-    };
-
-    getLocal = function(type, fileName) {
-        var directory = Ember.Inflector.inflector.pluralize(type);
-
-        return 'filesystem:http://' + location.hostname + '/' + directory + '/' + fileName;
     };
 
     return Ember.Object.extend({
@@ -40,7 +33,7 @@ define(function(require) {
             var fileName = this.get('id') + '.' + extension,
                 directory = Ember.Inflector.inflector.pluralize(type);
 
-            return 'filesystem:http://' + location.hostname + '/' + directory + '/' + fileName;
+            return directory + '/' + fileName;
         },
         fetchDownload: function() {
             var videoUrl = 'http://www.youtube.com/watch?v=' + this.get('id'),
