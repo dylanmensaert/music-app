@@ -40,7 +40,8 @@ define(function(require) {
             this.get('fileSystem.labels').forEach(function(label) {
                 if (label.get('isVisible')) {
                     snippets = fileSystem.get('snippets').filter(function(snippet) {
-                        return snippet.get('labels').contains(label.get('name')) && !filteredSnippets.isAny('id', snippet.get('id'));
+                        return snippet.get('labels').contains(label.get('name')) && !filteredSnippets.isAny('id', snippet.get(
+                            'id'));
                     });
 
                     filteredSnippets.pushObjects(snippets);
