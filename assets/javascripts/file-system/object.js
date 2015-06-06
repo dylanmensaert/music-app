@@ -2,7 +2,8 @@
 define(function(require) {
     'use strict';
 
-    var Ember = require('ember');
+    var Ember = require('ember'),
+        Label = require('objects/label');
 
     return Ember.Object.extend({
         init: function() {
@@ -39,6 +40,7 @@ define(function(require) {
                 }.bind(this));
             }.bind(this));
         },
+        // Implement something like debounce 
         write: function() {
             var json = this.toJSON();
 
@@ -73,8 +75,34 @@ define(function(require) {
             }, function() {
                 instance.root.getFile('data.json', {
                     create: true
-                });
-            });
+                }, function() {
+                    // TODO: write following via 1 action
+                    this.get('labels').pushObject(Label.create({
+                        name: 'online',
+                        isReadOnly: true
+                    }));
+
+                    this.get('labels').pushObject(Label.create({
+                        name: 'music-only',
+                        isReadOnly: true
+                    }));
+
+                    this.get('labels').pushObject(Label.create({
+                        name: 'offline',
+                        isReadOnly: true
+                    }));
+
+                    this.get('labels').pushObject(Label.create({
+                        name: 'local',
+                        isReadOnly: true
+                    }));
+
+                    this.get('labels').pushObject(Label.create({
+                        name: 'youtube',
+                        isReadOnly: true
+                    }));
+                }.bind(this));
+            }.bind(this));
 
             instance.root.getDirectory('thumbnails', {
                 create: true
@@ -90,7 +118,11 @@ define(function(require) {
             });
         },
         toJSON: function() {
-            var data = this.getProperties('labels');
+            var data = {};
+
+            data.labels = this.get('labels').map(function(label) {
+                return label.toJSON();
+            });
 
             data.snippets = this.get('snippets').map(function(snippet) {
                 return snippet.toJSON();

@@ -4,7 +4,6 @@ define(function(require) {
     var DS = require('ember-data');
 
     return DS.Model.extend({
-        // TODO: initialize as empty array
-        filters: ['youtube', 'local']
+    	
     });
 });
