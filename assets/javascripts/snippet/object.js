@@ -30,14 +30,12 @@ define(function(require) {
         title: null,
         extension: null,
         labels: [],
+        audio: null,
         thumbnail: null,
         fileSystem: null,
         isLocal: function() {
             return this.get('labels').contains('local');
         }.property('labels.@each'),
-        audio: function() {
-            return this.getLocal('audio', this.get('extension'));
-        }.property('extension'),
         getLocal: function(type, extension) {
             var fileName = this.get('id') + '.' + extension,
                 directory = Ember.Inflector.inflector.pluralize(type);
@@ -69,46 +67,56 @@ define(function(require) {
                     url += '&r=' + info.r;
                     url += '&h2=' + info.h2;
 
-                    return signateUrl(url);
-                });
-            });
+                    this.set('audio', signateUrl(url));
+
+                    return this.get('audio');
+                }.bind(this));
+            }.bind(this));
         },
         save: function(url) {
-            var oldThumbnail = this.get('thumbnail');
+            var audio = this.getLocal('audio', this.get('extension')),
+                thumbnail = this.getLocal('thumbnail', extractExtension(this.get('thumbnail')));
 
-            this.download('audio', url);
+            this.download(url, audio).then(function(source) {
+                this.set('audio', source);
+            });
 
             // TODO: write to filesystem on snippet property change
-            // TODO: Implement download via promise, then set local path on success..
-            this.download('thumbnail', oldThumbnail);
-            this.set('thumbnail', getLocal('thumbnail', extractExtension(oldThumbnail)));
+            this.download(url, thumbnail).then(function(source) {
+                this.set('thumbnail', source);
+            });
 
             // TODO: update local labels and snippets in 1 write action
             this.get('labels').pushObject('local');
             this.get('fileSystem.snippets').pushObject(this);
         },
-        download: function(type, url) {
+        download: function(url, source) {
             var fileSystem = this.get('fileSystem'),
-                source = this.get(type),
                 xhr = new XMLHttpRequest(),
                 response;
 
             xhr.open('GET', url, true);
             xhr.responseType = 'arraybuffer';
 
-            xhr.onload = function() {
-                response = this.response;
+            return new Ember.RSVP.Promise(function(resolve) {
+                xhr.onload = function() {
+                    response = this.response;
 
-                fileSystem.get('instance').root.getFile(source, {
-                    create: true
-                }, function(fileEntry) {
-                    fileEntry.createWriter(function(fileWriter) {
-                        fileWriter.write(response);
+                    fileSystem.get('instance').root.getFile(source, {
+                        create: true
+                    }, function(fileEntry) {
+                        fileEntry.createWriter(function(fileWriter) {
+                            fileWriter.onwriteend = function() {
+                                resolve(fileEntry.toURL());
+                            };
+
+                            fileWriter.write(response);
+                        });
                     });
-                });
-            };
+                };
 
-            xhr.send();
+                xhr.send();
+            });
         },
         toJSON: function() {
             return JSON.stringify(this.getProperties('id', 'title', 'extension', 'labels', 'thumbnail'));
