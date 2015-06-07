@@ -8,17 +8,6 @@ define(function(require) {
 
     return Ember.Route.extend(require('helpers/update-title'), {
         title: 'music',
-        beforeModel: function() {
-            return this.get('store').find('session', sessionId).catch(function() {
-                return this.get('store').createRecord('session').save().then(function(session) {
-                    session.set('id', sessionId);
-
-                    return session.save();
-                });
-            }.bind(this)).then(function(session) {
-                this.set('session.model', session);
-            }.bind(this));
-        },
         setupController: function(controller, model) {
             var audio = this.get('audio'),
                 slider;
