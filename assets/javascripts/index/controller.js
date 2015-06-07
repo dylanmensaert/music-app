@@ -133,7 +133,6 @@ define(function(require) {
             search: function() {
                 this.searchNew();
             },
-            // TODO: set class 'active' on currently playing
             // TODO: move load action to playlist
             /*load: function(snippet) {
                 this.get('audio').load(snippet);
