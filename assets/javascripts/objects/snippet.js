@@ -33,6 +33,10 @@ define(function(require) {
         audio: null,
         thumbnail: null,
         fileSystem: null,
+        status: null,
+        isLoading: function() {
+            return this.get('status') === 'loading';
+        }.property('status'),
         isLocal: function() {
             return this.get('labels').contains('local');
         }.property('labels.@each'),
@@ -78,6 +82,8 @@ define(function(require) {
                 thumbnail = this.getLocal('thumbnail', extractExtension(this.get('thumbnail'))),
                 promises;
 
+            this.set('status', 'loading');
+
             promises = {
                 // TODO: No 'Access-Control-Allow-Origin' header because the requested URL redirects to another domain
                 audio: this.download(this.get('audio'), audio),
@@ -94,6 +100,8 @@ define(function(require) {
                 // TODO: update local labels and snippets in 1 write action
                 // TODO: only perform this
                 this.get('fileSystem.snippets').pushObject(this);
+
+                this.set('status', null);
             }.bind(this));
         },
         download: function(url, source) {
