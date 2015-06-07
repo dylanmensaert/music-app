@@ -33,6 +33,7 @@ define(function(require) {
         audio: null,
         thumbnail: null,
         fileSystem: null,
+        isSelected: false,
         status: null,
         isLoading: function() {
             return this.get('status') === 'loading';

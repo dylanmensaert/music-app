@@ -98,11 +98,6 @@ define(function(require) {
                         name: 'local',
                         isReadOnly: true
                     }));
-
-                    this.get('labels').pushObject(Label.create({
-                        name: 'youtube',
-                        isReadOnly: true
-                    }));
                 }.bind(this));
             }.bind(this));
 

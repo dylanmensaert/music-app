@@ -14,7 +14,10 @@ define(function(require) {
 
     return Ember.Controller.extend({
         query: '',
-        snippets: null,
+        snippets: [],
+        selectedSnippets: function() {
+            return this.get('snippets').filterBy('isSelected', true);
+        }.property('snippets.@each.isSelected'),
         online: function() {
             return this.get('fileSystem.labels').findBy('name', 'online');
         }.property('fileSystem'),
@@ -56,12 +59,10 @@ define(function(require) {
                 visibleLabels = this.get('fileSystem.labels').filterBy('isVisible', true),
                 localSnippets = this.get('localSnippets'),
                 promises = [],
-                snippets = [],
+                snippets = this.get('snippets'),
                 id;
 
             lastUrl = url;
-
-            this.set('isLoading', true);
 
             if (visibleLabels.isAny('name', 'offline')) {
                 // TODO: Implement local suggestions + results for query..
@@ -70,38 +71,34 @@ define(function(require) {
             }
 
             if (visibleLabels.isAny('name', 'online')) {
-                promises.push(Ember.$.getJSON(url).then(function(response) {
+                this.set('isLoading', true);
 
-                    response.items.forEach(function(item) {
-                        id = item.id.videoId;
+                Ember.$.getJSON(url).then(function(response) {
+                    if (lastUrl === url) {
+                        response.items.forEach(function(item) {
+                            id = item.id.videoId;
 
-                        if (!localSnippets.isAny('id', id)) {
-                            snippets.pushObject(Snippet.create({
-                                id: id,
-                                title: item.snippet.title,
-                                extension: 'mp3',
-                                thumbnail: convertImageUrl(item.snippet.thumbnails.high.url),
-                                labels: ['youtube'],
-                                fileSystem: fileSystem
-                            }));
+                            if (!localSnippets.isAny('id', id)) {
+                                snippets.pushObject(Snippet.create({
+                                    id: id,
+                                    title: item.snippet.title,
+                                    extension: 'mp3',
+                                    thumbnail: convertImageUrl(item.snippet.thumbnails.high.url),
+                                    fileSystem: fileSystem
+                                }));
+                            }
+                        });
+
+                        if (Ember.isEmpty(response.nextPageToken)) {
+                            nextPageToken = null;
+                        } else {
+                            nextPageToken = response.nextPageToken;
                         }
-                    });
 
-                    if (Ember.isEmpty(response.nextPageToken)) {
-                        nextPageToken = null;
-                    } else {
-                        nextPageToken = response.nextPageToken;
+                        this.set('isLoading', false);
                     }
-                }.bind(this)));
+                }.bind(this));
             }
-
-            Ember.RSVP.Promise.all(promises).then(function() {
-                if (lastUrl === url) {
-                    this.get('snippets').pushObjects(snippets);
-
-                    this.set('isLoading', false);
-                }
-            }.bind(this));
         },
         searchUrl: function() {
             var url = meta.searchHost + '/youtube/v3/search?part=snippet&order=viewCount&type=video&maxResults=50',
@@ -137,8 +134,12 @@ define(function(require) {
                 this.searchNew();
             },
             // TODO: set class 'active' on currently playing
-            load: function(snippet) {
+            // TODO: move load action to playlist
+            /*load: function(snippet) {
                 this.get('audio').load(snippet);
+            },*/
+            select: function(snippet) {
+                snippet.toggleProperty('isSelected');
             },
             clear: function() {
                 this.set('query', '');
@@ -147,6 +148,18 @@ define(function(require) {
                 this.toggleProperty('session.model.musicOnly');
 
                 this.searchNew();
+            },
+            cancel: function() {
+                this.get('selectedSnippets').forEach(function(snippet) {
+                    snippet.set('isSelected', false);
+                });
+            },
+            save: function() {
+                this.get('selectedSnippets').forEach(function(snippet) {
+                    snippet.fetchDownload().then(function() {
+                        snippet.save();
+                    });
+                });
             }
         }
     });
