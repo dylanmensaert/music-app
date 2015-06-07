@@ -112,8 +112,8 @@ define(function(require) {
                 xhr.send();
             });
         },
-        toJSON: function() {
-            return JSON.stringify(this.getProperties('id', 'title', 'extension', 'labels', 'thumbnail'));
+        strip: function() {
+            return this.getProperties('id', 'title', 'extension', 'labels', 'thumbnail');
         }
     });
 });

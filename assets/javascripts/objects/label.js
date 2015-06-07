@@ -8,8 +8,8 @@ define(function(require) {
         name: null,
         isVisible: true,
         isReadOnly: false,
-        toJSON: function() {
-            return JSON.stringify(this.getProperties('name', 'isVisible'));
+        strip: function() {
+            return this.getProperties('name', 'isVisible', 'isReadOnly');
         }
     });
 });

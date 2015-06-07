@@ -121,11 +121,11 @@ define(function(require) {
             var data = {};
 
             data.labels = this.get('labels').map(function(label) {
-                return label.toJSON();
+                return label.strip();
             });
 
             data.snippets = this.get('snippets').map(function(snippet) {
-                return snippet.toJSON();
+                return snippet.strip();
             });
 
             return JSON.stringify(data);
