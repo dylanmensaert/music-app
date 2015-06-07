@@ -33,27 +33,28 @@ define(function(require) {
                 return name !== 'online' && name !== 'offline' && name !== 'music-only';
             });
         }.property('fileSystem.labels.@each'),
-        filteredSnippets: function() {
-            var filteredSnippets = [],
+        localSnippets: function() {
+            var localSnippets = [],
                 snippets;
 
             this.get('fileSystem.labels').forEach(function(label) {
                 if (label.get('isVisible')) {
                     snippets = this.get('fileSystem.snippets').filter(function(snippet) {
-                        return snippet.get('labels').contains(label.get('name')) && !filteredSnippets.isAny('id', snippet.get(
+                        return snippet.get('labels').contains(label.get('name')) && !localSnippets.isAny('id', snippet.get(
                             'id'));
                     });
 
-                    filteredSnippets.pushObjects(snippets);
+                    localSnippets.pushObjects(snippets);
                 }
             }.bind(this));
 
-            return filteredSnippets;
+            return localSnippets;
         }.property('fileSystem.labels.@each.isVisible', 'fileSystem.snippets.@each.labels.@each'),
         isLoading: false,
         search: function(url) {
             var fileSystem = this.get('fileSystem'),
                 visibleLabels = this.get('fileSystem.labels').filterBy('isVisible', true),
+                localSnippets = this.get('localSnippets'),
                 promises = [],
                 snippets = [],
                 id;
@@ -65,7 +66,7 @@ define(function(require) {
             if (visibleLabels.isAny('name', 'offline')) {
                 // TODO: Implement local suggestions + results for query..
                 // TODO: Check to improve performance
-                snippets.pushObjects(this.get('filteredSnippets'));
+                snippets.pushObjects(localSnippets);
             }
 
             if (visibleLabels.isAny('name', 'online')) {
@@ -74,7 +75,7 @@ define(function(require) {
                     response.items.forEach(function(item) {
                         id = item.id.videoId;
 
-                        if (!fileSystem.contains('id', id)) {
+                        if (!localSnippets.isAny('id', id)) {
                             snippets.pushObject(Snippet.create({
                                 id: id,
                                 title: item.snippet.title,

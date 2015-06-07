@@ -114,11 +114,6 @@ define(function(require) {
                 create: true
             });
         },
-        contains: function(property, value) {
-            this.get('snippets').any(function(snippet) {
-                return snippet.get(property) === value;
-            });
-        },
         parseJSON: function(json) {
             var parsedJSON = JSON.parse(json);
 
