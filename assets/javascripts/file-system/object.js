@@ -3,7 +3,8 @@ define(function(require) {
     'use strict';
 
     var Ember = require('ember'),
-        Label = require('objects/label');
+        Label = require('objects/label'),
+        Snippet = require('objects/snippet');
 
     return Ember.Object.extend({
         init: function() {
@@ -60,14 +61,15 @@ define(function(require) {
         }.observes('labels.@each', 'snippets.@each'),
         createFiles: function(instance) {
             var fileSystem = this,
-                reader;
+                reader,
+                parseJSON = this.parseJSON.bind(this);
 
             instance.root.getFile('data.json', {}, function(fileEntry) {
                 fileEntry.file(function(file) {
                     reader = new FileReader();
 
                     reader.onloadend = function() {
-                        fileSystem.setProperties(JSON.parse(this.result));
+                        parseJSON(this.result);
                     };
 
                     reader.readAsText(file);
@@ -116,6 +118,19 @@ define(function(require) {
             this.get('snippets').any(function(snippet) {
                 return snippet.get(property) === value;
             });
+        },
+        parseJSON: function(json) {
+            var parsedJSON = JSON.parse(json);
+
+            parsedJSON.labels = parsedJSON.labels.map(function(label) {
+                return Label.create(label);
+            });
+
+            parsedJSON.snippets = parsedJSON.snippets.map(function(snippet) {
+                return Snippet.create(snippet);
+            });
+
+            this.setProperties(parsedJSON);
         },
         toJSON: function() {
             var data = {};

@@ -35,10 +35,13 @@
                     <img class="media-object inner-image" {{bind-attr src=snippet.thumbnail}} />
                 </div>
             </div>
-            <div class="media-body">
-                <h4 class="list-group-item-heading">
+            <div class="media-body snippet-body">
+                <div class="list-group-item-heading">
                     {{snippet.title}}
-                </h4>
+                </div>
+
+                <span class="glyphicon glyphicon-option-vertical snippet-options" />
+
 
                 {{#each label in snippet.labels}}
                     <span class="label label-default">
