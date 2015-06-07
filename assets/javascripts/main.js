@@ -9,7 +9,6 @@
             ember: '../bower_components/ember/ember.debug',
             'ember-data': '../bower_components/ember-data/ember-data',
             handlebars: '../bower_components/handlebars/handlebars.runtime',
-            'ember-localstorage-adapter': '../bower_components/ember-localstorage-adapter/localstorage_adapter',
             jquery: '../bower_components/jquery/dist/jquery',
             bootstrap: '../bower_components/bootstrap/dist/js/bootstrap',
             'bootstrap-slider': '../bower_components/seiyria-bootstrap-slider/js/bootstrap-slider',
@@ -33,16 +32,6 @@
             'ember-data': {
                 deps: ['ember'],
                 exports: 'DS'
-            },
-            'ember-localstorage-adapter': {
-                deps: ['ember-data'],
-                exports: 'DS.LSAdapter',
-                init: function() {
-                    return {
-                        LSAdapter: DS.LSAdapter,
-                        LSSerializer: DS.LSSerializer
-                    };
-                }
             },
             handlebars: {
                 exports: 'Handlebars'

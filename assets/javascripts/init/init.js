@@ -7,7 +7,6 @@ define(function(require) {
 
     require('application/init');
     require('index/init');
-    require('session/init');
 
     var App = require('init/app');
 

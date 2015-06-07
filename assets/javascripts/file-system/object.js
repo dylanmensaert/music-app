@@ -122,8 +122,10 @@ define(function(require) {
             });
 
             parsedJSON.snippets = parsedJSON.snippets.map(function(snippet) {
+                snippet.fileSystem = this;
+
                 return Snippet.create(snippet);
-            });
+            }.bind(this));
 
             this.setProperties(parsedJSON);
         },

@@ -301,6 +301,10 @@ module.exports = function (grunt) {
                     context: ['/get?video_id'],
                     host: 'www.youtube-mp3.org',
                     changeOrigin: true
+                }, {
+                    context: ['/dl.php'],
+                    host: 'vd.aclst.com',
+                    changeOrigin: true
                 }]
             }
         },
