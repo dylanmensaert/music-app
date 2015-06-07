@@ -75,22 +75,26 @@ define(function(require) {
         },
         save: function() {
             var audio = this.getLocal('audio', this.get('extension')),
-                thumbnail = this.getLocal('thumbnail', extractExtension(this.get('thumbnail')));
+                thumbnail = this.getLocal('thumbnail', extractExtension(this.get('thumbnail'))),
+                promises;
 
-            // TODO: No 'Access-Control-Allow-Origin' header because the requested URL redirects to another domain.
-            this.download(this.get('audio'), audio).then(function(source) {
-                this.set('audio', source);
+            promises = {
+                // TODO: No 'Access-Control-Allow-Origin' header because the requested URL redirects to another domain
+                audio: this.download(this.get('audio'), audio),
+                // TODO: write to filesystem on snippet property change
+                thumbnail: this.download(this.get('thumbnail'), thumbnail)
+            };
+
+            Ember.RSVP.hash(promises).then(function(hash) {
+                this.set('audio', hash.audio);
+                this.set('thumbnail', hash.thumbnail);
 
                 this.get('labels').pushObject('local');
-            }.bind(this));
 
-            // TODO: write to filesystem on snippet property change
-            this.download(this.get('thumbnail'), thumbnail).then(function(source) {
-                this.set('thumbnail', source);
+                // TODO: update local labels and snippets in 1 write action
+                // TODO: only perform this
+                this.get('fileSystem.snippets').pushObject(this);
             }.bind(this));
-
-            // TODO: update local labels and snippets in 1 write action
-            this.get('fileSystem.snippets').pushObject(this);
         },
         download: function(url, source) {
             var fileSystem = this.get('fileSystem'),
