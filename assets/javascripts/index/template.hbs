@@ -55,6 +55,7 @@
 
 <div class="list-group">
     {{#each snippet in snippets}}
+        <!-- TODO: delete bind-attr and implement following new way -->
         <a {{action 'select' snippet}} {{bind-attr class=':list-group-item :audio-list snippet.isSelected:active'}}>
             <div class="media-left media-middle">
                 <div class="outer-image">
