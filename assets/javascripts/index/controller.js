@@ -17,13 +17,13 @@ define(function(require) {
         snippets: null,
         online: function() {
             return this.get('fileSystem.labels').findBy('name', 'online');
-        }.property('fileSystem.labels.@each'),
+        }.property('fileSystem'),
         offline: function() {
             return this.get('fileSystem.labels').findBy('name', 'offline');
-        }.property('fileSystem.labels.@each'),
+        }.property('fileSystem'),
         musicOnly: function() {
             return this.get('fileSystem.labels').findBy('name', 'music-only');
-        }.property('fileSystem.labels.@each'),
+        }.property('fileSystem'),
         labels: function() {
             var name;
 

@@ -6,7 +6,8 @@ define(function(require) {
         meta = require('meta-data'),
         ytMp3 = require('helpers/yt-mp3'),
         signateUrl,
-        extractExtension;
+        extractExtension,
+        pluralizations;
 
     signateUrl = function(url) {
         var host = 'http://www.youtube-mp3.org';
@@ -16,6 +17,12 @@ define(function(require) {
 
     extractExtension = function(source) {
         return source.substr(source.lastIndexOf('.') + 1, source.length);
+    };
+
+    // TODO: Rename audio?
+    pluralizations = {
+        audio: 'audio',
+        thumbnail: 'thumbnails'
     };
 
     return Ember.Object.extend({
@@ -31,7 +38,7 @@ define(function(require) {
         }.property('labels.@each'),
         getLocal: function(type, extension) {
             var fileName = this.get('id') + '.' + extension,
-                directory = Ember.Inflector.inflector.pluralize(type);
+                directory = pluralizations[type];
 
             return directory + '/' + fileName;
         },
@@ -70,6 +77,7 @@ define(function(require) {
             var audio = this.getLocal('audio', this.get('extension')),
                 thumbnail = this.getLocal('thumbnail', extractExtension(this.get('thumbnail')));
 
+            // TODO: No 'Access-Control-Allow-Origin' header because the requested URL redirects to another domain.
             this.download(this.get('audio'), audio).then(function(source) {
                 this.set('audio', source);
 
