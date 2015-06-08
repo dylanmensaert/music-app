@@ -4,6 +4,30 @@
     </div>
 {{/if}}
 
+{{#if snippets}}
+    <div class="action-bar container text-center">
+        <div class="row">
+            {{#if isAnyUnsaved}}
+                <div class="col-xs-2">
+                    <i {{action 'save'}} class="btn fa fa-download"></i>
+                </div>
+            {{/if}}
+
+            <div class="col-xs-2">
+                <i class="btn fa fa-tag"></i>
+            </div>
+
+            <div class="col-xs-2">
+                <i class="btn fa fa-trash-o"></i>
+            </div>
+
+            <div class="col-xs-6">
+                <i {{action 'cancel'}} class="btn fa fa-times action-cancel"></i>
+            </div>
+        </div>
+    </div>
+{{/if}}
+
 {{#if error}}
     <div class="alert alert-danger alert-dismissable error-bar">
         <button type="button" class="close" aria-hidden="true" {{action 'dismissAlert'}}>&times;</button>

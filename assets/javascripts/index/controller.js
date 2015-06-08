@@ -3,7 +3,7 @@ define(function(require) {
 
     var Ember = require('ember'),
         meta = require('meta-data'),
-        Snippet = require('objects/snippet'),
+        Snippet = require('snippet/object'),
         lastUrl,
         nextPageToken,
         convertImageUrl;
@@ -13,11 +13,9 @@ define(function(require) {
     };
 
     return Ember.Controller.extend({
+        'snippet-component': require('snippet/component'),
         query: '',
         snippets: [],
-        selectedSnippets: function() {
-            return this.get('snippets').filterBy('isSelected', true);
-        }.property('snippets.@each.isSelected'),
         online: function() {
             return this.get('fileSystem.labels').findBy('name', 'online');
         }.property('fileSystem'),
@@ -137,9 +135,6 @@ define(function(require) {
             /*load: function(snippet) {
                 this.get('audio').load(snippet);
             },*/
-            select: function(snippet) {
-                snippet.toggleProperty('isSelected');
-            },
             clear: function() {
                 this.set('query', '');
             },
@@ -147,18 +142,6 @@ define(function(require) {
                 this.toggleProperty('session.model.musicOnly');
 
                 this.searchNew();
-            },
-            cancel: function() {
-                this.get('selectedSnippets').forEach(function(snippet) {
-                    snippet.set('isSelected', false);
-                });
-            },
-            save: function() {
-                this.get('selectedSnippets').forEach(function(snippet) {
-                    snippet.fetchDownload().then(function() {
-                        snippet.save();
-                    });
-                });
             }
         }
     });

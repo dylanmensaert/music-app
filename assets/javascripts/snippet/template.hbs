@@ -1,0 +1,20 @@
+<div class="media-left media-middle">
+    <div class="outer-image">
+        <img class="media-object inner-image" {{bind-attr src=snippet.thumbnail}} />
+    </div>
+</div>
+<div class="media-body">
+    <div class="list-group-item-heading">
+        {{snippet.title}}
+    </div>
+
+    {{#each label in snippet.labels}}
+        <span class="label label-default">
+            {{label}}
+        </span>&nbsp;
+    {{/each}}
+
+    {{#if snippet.isLoading}}
+        <i class="fa fa-download"></i>
+    {{/if}}
+</div>

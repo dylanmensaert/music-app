@@ -2,7 +2,7 @@ define(function(require) {
     'use strict';
 
     var Ember = require('ember'),
-        Snippet = require('objects/snippet'),
+        Snippet = require('snippet/object'),
         split;
 
     split = function(fileName) {

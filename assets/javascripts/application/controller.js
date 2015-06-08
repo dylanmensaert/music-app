@@ -8,6 +8,14 @@ define(function(require) {
         'slider-component': require('slider/component'),
         slider: null,
         isLoading: false,
+        // TODO: snippets not being updated since part of new array defined in index controller..
+        snippets: function() {
+            return this.get('fileSystem.snippets').filterBy('isSelected', true);
+        }.property('fileSystem.snippets.@each.isSelected'),
+        // TODO: Unified name for local vs unsaved..
+        isAnyUnsaved: function() {
+            return this.get('snippets').isAny('isLocal', false);
+        }.property('snippets.@each.isLocal'),
         actions: {
             dismissAlert: function() {
                 this.set('error', null);
@@ -17,6 +25,18 @@ define(function(require) {
             },
             pause: function() {
                 this.get('audio').pause();
+            },
+            save: function() {
+                this.get('snippets').forEach(function(snippet) {
+                    if (!snippet.get('isLocal')) {
+                        snippet.fetchDownload().then(function() {
+                            snippet.save();
+                        });
+                    }
+                });
+            },
+            cancel: function() {
+                this.get('snippets').setEach('isSelected', false);
             }
         }
     });

@@ -4,7 +4,7 @@ define(function(require) {
 
     var Ember = require('ember'),
         Label = require('objects/label'),
-        Snippet = require('objects/snippet'),
+        Snippet = require('snippet/object'),
         write,
         lastWriter;
 
