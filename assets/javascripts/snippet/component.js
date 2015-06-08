@@ -3,7 +3,7 @@ define(function(require) {
 
     var Ember = require('ember');
 
-    return Ember.Component.extend({
+    return Ember.Component.extend(require('helpers/draggable-mixin'), {
         tagName: 'a',
         layoutName: 'snippet',
         classNames: ['list-group-item', 'audio-list'],
