@@ -67,30 +67,26 @@ define(function(require) {
 
             lastWriter = Ember.run.later(this, write, 100);
         }.observes('labels.@each', 'snippets.@each'),
-        remove: function(source) {
+        delete: function(source) {
             return new Ember.RSVP.Promise(function(resolve) {
                 this.get('instance').root.getFile(source, {}, function(fileEntry) {
                     fileEntry.remove(function() {
                         resolve();
                     });
                 });
-            });
+            }.bind(this));
         },
-        removeSnippets: function(snippets) {
+        remove: function(snippet) {
             var promises;
 
-            snippets.forEach(function(snippet) {
-                promises = {
-                    audio: this.remove(snippet.get('audio')),
-                    thumbnail: this.remove(snippet.get('thumbnail'))
-                };
+            promises = {
+                audio: this.remove(snippet.get('audio')),
+                thumbnail: this.remove(snippet.get('thumbnail'))
+            };
 
-                Ember.RSVP.all(promises).then(function() {
-                    this.get('snippets').removeObject(snippet);
-                }.bind(this));
+            Ember.RSVP.all(promises).then(function() {
+                this.get('snippets').removeObject(snippet);
             }.bind(this));
-
-            this.get(type).removeObjects(objects);
         },
         createFiles: function(instance) {
             var fileSystem = this,
@@ -128,7 +124,7 @@ define(function(require) {
                     }));
 
                     this.get('labels').pushObject(Label.create({
-                        name: 'local',
+                        name: 'saved',
                         isReadOnly: true
                     }));
                 }.bind(this));

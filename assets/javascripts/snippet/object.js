@@ -38,8 +38,8 @@ define(function(require) {
         isLoading: function() {
             return this.get('status') === 'loading';
         }.property('status'),
-        isLocal: function() {
-            return this.get('labels').contains('local');
+        isSaved: function() {
+            return this.get('labels').contains('saved');
         }.property('labels.@each'),
         getLocal: function(type, extension) {
             var fileName = this.get('id') + '.' + extension,
@@ -96,7 +96,7 @@ define(function(require) {
                 this.set('audio', hash.audio);
                 this.set('thumbnail', hash.thumbnail);
 
-                this.get('labels').pushObject('local');
+                this.get('labels').pushObject('saved');
 
                 // TODO: update local labels and snippets in 1 write action
                 // TODO: only perform this

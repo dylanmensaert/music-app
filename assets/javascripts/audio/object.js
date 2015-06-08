@@ -33,7 +33,7 @@ define(function(require) {
             this.set('status', 'loading');
             this.set('snippet', snippet);
 
-            if (!snippet.get('isLocal')) {
+            if (!snippet.get('isSaved')) {
                 snippet.fetchDownload().then(function(url) {
                     this.start(url);
                 }.bind(this));

@@ -33,7 +33,7 @@ define(function(require) {
                         id: fileName.title,
                         title: fileName.title,
                         extension: fileName.extension,
-                        labels: ['local']
+                        labels: ['saved']
                     });
                 });
 

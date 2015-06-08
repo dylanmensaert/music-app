@@ -13,9 +13,12 @@ define(function(require) {
             return this.get('fileSystem.snippets').filterBy('isSelected', true);
         }.property('fileSystem.snippets.@each.isSelected'),
         // TODO: Unified name for local vs unsaved..
+        isAnySaved: function() {
+            return this.get('snippets').isAny('isSaved', true);
+        }.property('snippets.@each.isSaved'),
         isAnyUnsaved: function() {
-            return this.get('snippets').isAny('isLocal', false);
-        }.property('snippets.@each.isLocal'),
+            return this.get('snippets').isAny('isSaved', false);
+        }.property('snippets.@each.isSaved'),
         actions: {
             dismissAlert: function() {
                 this.set('error', null);
@@ -28,10 +31,17 @@ define(function(require) {
             },
             save: function() {
                 this.get('snippets').forEach(function(snippet) {
-                    if (!snippet.get('isLocal')) {
+                    if (!snippet.get('isSaved')) {
                         snippet.fetchDownload().then(function() {
                             snippet.save();
                         });
+                    }
+                });
+            },
+            remove: function() {
+                this.get('snippets').forEach(function(snippet) {
+                    if (snippet.get('isSaved')) {
+                        this.get('fileSystem').remove(snippet);
                     }
                 });
             },
