@@ -35,7 +35,7 @@ define(function(require) {
                     }
                 });
             },
-            cancel: function() {
+            deselect: function() {
                 this.get('snippets').setEach('isSelected', false);
             }
         }

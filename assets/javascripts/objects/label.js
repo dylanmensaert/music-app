@@ -1,4 +1,3 @@
-/* global location: true, escape: true, XMLHttpRequest: true */
 define(function(require) {
     'use strict';
 
