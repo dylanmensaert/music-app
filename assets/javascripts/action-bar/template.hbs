@@ -1,0 +1,39 @@
+<div class="row">
+    <div class="col-xs-2">
+        <span class="badge">
+            {{snippets.length}}
+        </span>
+    </div>
+
+    {{#if unsavedSnippets}}
+        <div class="col-xs-2">
+            {{#unless isEveryUnsaved}}
+                <span class="badge">
+                    {{unsavedSnippets.length}}
+                </span>
+            {{/unless}}
+
+            <i {{action 'save'}} class="btn fa fa-download"></i>
+        </div>
+    {{/if}}
+
+    <div class="col-xs-2">
+        <i class="btn fa fa-tag"></i>
+    </div>
+
+    {{#if savedSnippets}}
+        <div class="col-xs-2">
+            {{#unless isEverySaved}}
+                <span class="badge">
+                    {{savedSnippets.length}}
+                </span>
+            {{/unless}}
+
+            <i {{action 'remove'}} class="btn fa fa-trash-o"></i>
+        </div>
+    {{/if}}
+
+    <div class="col-xs-6">
+        <i {{action 'deselect'}} class="btn fa fa-times action-cancel"></i>
+    </div>
+</div>

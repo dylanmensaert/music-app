@@ -67,25 +67,13 @@ define(function(require) {
 
             lastWriter = Ember.run.later(this, write, 100);
         }.observes('labels.@each', 'snippets.@each'),
-        delete: function(source) {
+        remove: function(source) {
             return new Ember.RSVP.Promise(function(resolve) {
                 this.get('instance').root.getFile(source, {}, function(fileEntry) {
                     fileEntry.remove(function() {
                         resolve();
                     });
                 });
-            }.bind(this));
-        },
-        remove: function(snippet) {
-            var promises;
-
-            promises = {
-                audio: this.remove(snippet.get('audio')),
-                thumbnail: this.remove(snippet.get('thumbnail'))
-            };
-
-            Ember.RSVP.all(promises).then(function() {
-                this.get('snippets').removeObject(snippet);
             }.bind(this));
         },
         createFiles: function(instance) {

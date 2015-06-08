@@ -1,3 +1,7 @@
+{{#if selectedSnippets}}
+    {{view actionBar-component snippets=selectedSnippets}}
+{{/if}}
+
 <div class="jumbotron search">
     <div class="container">
         <div class="input-group">
@@ -29,7 +33,6 @@
 
 <div class="list-group">
     {{#each snippet in snippets}}
-        <!-- TODO: delete bind-attr and implement following new way -->
         {{view snippet-component snippet=snippet}}
     {{/each}}
 </div>

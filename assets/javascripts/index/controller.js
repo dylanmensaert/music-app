@@ -14,8 +14,12 @@ define(function(require) {
 
     return Ember.Controller.extend({
         'snippet-component': require('snippet/component'),
+        'actionBar-component': require('action-bar/component'),
         query: '',
         snippets: [],
+        selectedSnippets: function() {
+            return this.get('snippets').filterBy('isSelected', true);
+        }.property('snippets.@each.isSelected'),
         online: function() {
             return this.get('fileSystem.labels').findBy('name', 'online');
         }.property('fileSystem'),

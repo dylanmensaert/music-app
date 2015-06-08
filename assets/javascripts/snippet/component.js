@@ -5,7 +5,7 @@ define(function(require) {
 
     return Ember.Component.extend({
         tagName: 'a',
-        templateName: 'snippet',
+        layoutName: 'snippet',
         classNames: ['list-group-item', 'audio-list'],
         classNameBindings: ['snippet.isSelected:active'],
         snippet: null,

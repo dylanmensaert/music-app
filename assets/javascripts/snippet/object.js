@@ -133,6 +133,19 @@ define(function(require) {
                 xhr.send();
             });
         },
+        remove: function() {
+            var fileSystem = this.get('fileSystem'),
+                promises;
+
+            promises = {
+                audio: fileSystem.remove(this.get('audio')),
+                thumbnail: fileSystem.remove(this.get('thumbnail'))
+            };
+
+            Ember.RSVP.all(promises).then(function() {
+                fileSystem.get('snippets').removeObject(this);
+            }.bind(this));
+        },
         strip: function() {
             return this.getProperties('id', 'title', 'extension', 'labels', 'thumbnail');
         }
