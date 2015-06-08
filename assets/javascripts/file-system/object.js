@@ -4,7 +4,27 @@ define(function(require) {
 
     var Ember = require('ember'),
         Label = require('objects/label'),
-        Snippet = require('objects/snippet');
+        Snippet = require('objects/snippet'),
+        write,
+        lastWriter;
+
+    write = function() {
+        var json = this.toJSON();
+
+        this.get('instance').root.getFile('data.json', {}, function(fileEntry) {
+            fileEntry.createWriter(function(fileWriter) {
+                fileWriter.onwriteend = function() {
+                    if (!fileWriter.length) {
+                        fileWriter.write(new Blob([json], {
+                            type: 'application/json'
+                        }));
+                    }
+                };
+
+                fileWriter.truncate(0);
+            });
+        });
+    };
 
     return Ember.Object.extend({
         init: function() {
@@ -41,23 +61,11 @@ define(function(require) {
                 }.bind(this));
             }.bind(this));
         },
-        // Implement something like debounce
+        // TODO: http://stackoverflow.com/questions/30132167/how-to-update-ember-debounce-context
         write: function() {
-            var json = this.toJSON();
+            Ember.run.cancel(lastWriter);
 
-            this.get('instance').root.getFile('data.json', {}, function(fileEntry) {
-                fileEntry.createWriter(function(fileWriter) {
-                    fileWriter.onwriteend = function() {
-                        if (!fileWriter.length) {
-                            fileWriter.write(new Blob([json], {
-                                type: 'application/json'
-                            }));
-                        }
-                    };
-
-                    fileWriter.truncate(0);
-                });
-            });
+            lastWriter = Ember.run.later(this, write, 100);
         }.observes('labels.@each', 'snippets.@each'),
         createFiles: function(instance) {
             var fileSystem = this,
