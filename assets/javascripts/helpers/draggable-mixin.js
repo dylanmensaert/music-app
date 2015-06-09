@@ -4,22 +4,14 @@ define(function(require) {
     var Ember = require('ember');
 
     return Ember.Mixin.create({
-        isDraggable: true,
         attributeBindings: ['isDraggable:draggable'],
-        dragStart: function(event) {
+        isDraggable: true,
+        isDragging: false,
+        dragStart: function() {
             this.set('isDragging', true);
-
-            var dragData = {
-                elementId: this.get('elementId')
-            };
-
-            event.dataTransfer.setData('application/json', JSON.stringify(this.get(dragdata)));
         },
         dragEnd: function() {
             this.set('isDragging', false);
-        },
-        wasDroppedOn: function(droppedOnView) {
-            return droppedOnView;
         }
     });
 });

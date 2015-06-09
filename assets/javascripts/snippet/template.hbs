@@ -3,6 +3,7 @@
         <img class="media-object inner-image" {{bind-attr src=snippet.thumbnail}} />
     </div>
 </div>
+
 <div class="media-body">
     <div class="list-group-item-heading">
         {{snippet.title}}
@@ -18,3 +19,11 @@
         <i class="fa fa-download"></i>
     {{/if}}
 </div>
+
+{{#if showSelected}}
+    <div class="text-center inner-panel text-large">
+        <span class="label label-primary">
+            {{selected}}
+        </span>
+    </div>
+{{/if}}

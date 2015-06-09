@@ -33,7 +33,7 @@
 
 <div class="list-group">
     {{#each snippet in snippets}}
-        {{view snippet-component snippet=snippet}}
+        {{view snippet-component snippet=snippet onDragStart=onSnippetDragStart selected=selectedSnippets.length}}
     {{/each}}
 </div>
 

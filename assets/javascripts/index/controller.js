@@ -131,6 +131,15 @@ define(function(require) {
                 this.search(url);
             }
         },
+        onSnippetDragStart: function(event) {
+            var strippedSnippets;
+
+            strippedSnippets = this.get('selectedSnippets').map(function(snippet) {
+                return snippet.strip();
+            });
+
+            event.dataTransfer.setData('application/json', JSON.stringify(strippedSnippets));
+        }.bind(this),
         actions: {
             search: function() {
                 this.searchNew();
