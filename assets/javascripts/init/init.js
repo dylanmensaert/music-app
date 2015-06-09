@@ -7,6 +7,7 @@ define(function(require) {
 
     require('application/init');
     require('index/init');
+    require('queue/init');
 
     var App = require('init/app');
 

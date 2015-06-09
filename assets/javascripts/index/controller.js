@@ -134,15 +134,20 @@ define(function(require) {
                 this.search(url);
             }
         },
-        onSnippetDragStart: function(event) {
-            var strippedSnippets;
+        onSnippetDragStart: function() {
+            return function(event) {
+                var strippedSnippets;
 
-            strippedSnippets = this.get('selectedSnippets').map(function(snippet) {
-                return snippet.strip();
-            });
+                strippedSnippets = this.get('selectedSnippets').map(function(snippet) {
+                    return snippet.strip();
+                });
 
-            event.dataTransfer.setData('application/json', JSON.stringify(strippedSnippets));
-        }.bind(this),
+                event.dataTransfer.setData('application/json', JSON.stringify(strippedSnippets));
+
+                // TODO: Transition disables dragging..
+                /* this.transitionToRoute('queue');*/
+            }.bind(this);
+        }.property('selectedSnippets.@each'),
         actions: {
             search: function() {
                 this.searchNew();
