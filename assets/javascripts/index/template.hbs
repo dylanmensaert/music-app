@@ -33,7 +33,15 @@
 
 <div class="list-group">
     {{#each snippet in snippets}}
-        {{view snippet-component snippet=snippet onDragStart=onSnippetDragStart selected=selectedSnippets.length}}
+        {{#view snippet-component snippet=snippet onDragStart=onSnippetDragStart selected=selectedSnippets.length}}
+            {{#if showSelected}}
+                <div class="text-center inner-panel text-large">
+                    <span class="label label-primary">
+                        {{selectedSnippets.length}}
+                    </span>
+                </div>
+            {{/if}}
+        {{/view}}
     {{/each}}
 </div>
 

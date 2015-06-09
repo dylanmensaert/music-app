@@ -11,16 +11,13 @@ define(function(require) {
         isDraggable: function() {
             return !Ember.isEmpty(this.get('onDragStart'));
         }.property('onDragStart'),
-        selected: null,
         snippet: null,
         onDragStart: null,
         dragStart: function(event) {
             if (this.get('isDraggable')) {
                 this._super();
 
-                // TODO: Deselect on select.
-                // TODO: Count snippet as 1 of selected when 2+
-                // TODO: create callback where selected are only passed onDrag?
+                this.set('snippet.isSelected', true);
 
                 this.onDragStart(event);
             }

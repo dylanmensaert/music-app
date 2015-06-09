@@ -20,10 +20,6 @@
     {{/if}}
 </div>
 
-{{#if showSelected}}
-    <div class="text-center inner-panel text-large">
-        <span class="label label-primary">
-            {{selected}}
-        </span>
-    </div>
+{{#if isDragging}}
+    {{yield}}
 {{/if}}

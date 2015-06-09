@@ -20,6 +20,9 @@ define(function(require) {
         selectedSnippets: function() {
             return this.get('snippets').filterBy('isSelected', true);
         }.property('snippets.@each.isSelected'),
+        showSelected: function() {
+            return this.get('selectedSnippets.length') > 1;
+        }.property('selectedSnippets.length'),
         online: function() {
             return this.get('fileSystem.labels').findBy('name', 'online');
         }.property('fileSystem'),
