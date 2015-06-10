@@ -22,8 +22,12 @@ define(function(require) {
                 helper: 'clone',
                 appendTo: 'body',
                 revert: 'invalid',
-                scrollSensitivity: 100
+                scrollSensitivity: 100,
+                connectToSortable: '#queue'
             });
+        },
+        willDestroyElement: function() {
+            this.$().draggable('destroy');
         }
     });
 });

@@ -11,6 +11,9 @@ define(function(require) {
                     this.onDrop(event, ui);
                 }.bind(this)
             });
+        },
+        willDestroyElement: function() {
+            this.$().droppable('destroy');
         }
     });
 });

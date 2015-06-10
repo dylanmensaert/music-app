@@ -5,4 +5,5 @@ define(function(require) {
 
     App.QueueRoute = require('queue/route');
     App.QueueController = require('queue/controller');
+    App.QueueView = require('queue/view');
 });

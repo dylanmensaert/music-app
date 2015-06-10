@@ -15,6 +15,8 @@ define(function(require) {
     return Ember.Controller.extend({
         'snippet-component': require('snippet/component'),
         'actionBar-component': require('action-bar/component'),
+        /*TODO: remove*/
+        'sortable-component': require('queue/view'),
         query: '',
         snippets: [],
         selectedSnippets: function() {
@@ -138,7 +140,7 @@ define(function(require) {
             return function(event, ui) {
                 ui.helper.data('snippets', this.get('selectedSnippets'));
 
-                this.transitionToRoute('queue');
+                /*this.transitionToRoute('queue');*/
             }.bind(this);
         }.property('selectedSnippets.@each'),
         actions: {
