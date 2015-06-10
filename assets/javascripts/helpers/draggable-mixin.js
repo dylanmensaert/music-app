@@ -14,17 +14,12 @@ define(function(require) {
                     this.willDragStart(event, ui);
                 }.bind(this),
                 stop: function() {
-                    this.set('isDragging', false);
+                    // TODO: keep initial component
+                    /*this.set('isDragging', false);*/
                 }.bind(this),
-                drag: function() {
-                    var test = this.get('element');
-
-                    this.$().draggable('option', 'helper', function() {
-                        return test;
-                    });
-                }.bind(this),
-                helper: 'clone',
                 axis: 'y',
+                // TODO: keep initial component
+                helper: 'clone',
                 appendTo: 'body',
                 revert: 'invalid',
                 scrollSensitivity: 100

@@ -4,6 +4,6 @@ define(function(require) {
     var Ember = require('ember');
 
     return Ember.Controller.extend({
-
+        'droppable-component': require('my-droppable/component')
     });
 });

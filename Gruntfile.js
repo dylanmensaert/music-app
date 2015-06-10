@@ -272,14 +272,6 @@ module.exports = function (grunt) {
                     https: true,
                     changeOrigin: true
                 }, {
-                    context: ['/fetch', '/download/?video'],
-                    host: 'youtubeinmp3.com',
-                    changeOrigin: true
-                }, {
-                    context: ['/download/grabber'],
-                    host: 'w5.youtubeinmp3.com',
-                    changeOrigin: true
-                }, {
                     context: ['/youtube/v3/search'],
                     host: 'www.googleapis.com',
                     port: 443,

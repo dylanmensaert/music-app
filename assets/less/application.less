@@ -11,16 +11,26 @@ html {
     z-index: 3;
 }
 
+.event-bar {
+    .bar;
+    height: 38px;
+    font-size: 22px;
+}
+
+.droppable-bar {
+   .event-bar;
+   bottom: 0;
+   background: blue;
+}
+
 .error-bar {
     .bar;
     top: 0;
 }
 
 .action-bar {
-    .bar;
-    height: 38px;
+    .event-bar;
     background: orange;
-    font-size: 22px;
 }
 
 .action-cancel {

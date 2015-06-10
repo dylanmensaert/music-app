@@ -136,12 +136,6 @@ define(function(require) {
         },
         onSnippetDragStart: function() {
             return function(event, ui) {
-                /*var strippedSnippets;
-
-                strippedSnippets = this.get('selectedSnippets').map(function(snippet) {
-                    return snippet.strip();
-                });
-*/
                 ui.helper.data('snippets', this.get('selectedSnippets'));
 
                 this.transitionToRoute('queue');

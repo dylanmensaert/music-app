@@ -4,18 +4,12 @@ define(function(require) {
     var Ember = require('ember');
 
     return Ember.Mixin.create({
-        isDragOver: false,
-        dragEnter: function() {
-            this.set('isDragOver', true);
-        },
-        dragLeave: function() {
-            this.set('isDragOver', false);
-        },
+        onDrop: null,
         didInsertElement: function() {
             this.$().droppable({
                 drop: function(event, ui) {
-
-                }
+                    this.onDrop(event, ui);
+                }.bind(this)
             });
         }
     });
