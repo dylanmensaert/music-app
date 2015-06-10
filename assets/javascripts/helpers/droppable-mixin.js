@@ -11,25 +11,12 @@ define(function(require) {
         dragLeave: function() {
             this.set('isDragOver', false);
         },
-        dragOver: function(event) {
-            event.preventDefault();
-        },
-        drop: function(event) {
-            var dragData,
-                draggedView;
+        didInsertElement: function() {
+            this.$().droppable({
+                drop: function(event, ui) {
 
-            event.preventDefault();
-
-            dragData = JSON.parse(event.dataTransfer.getData('application/json'));
-            draggedView = Ember.View.views[dragData.elementId];
-
-            this.handleDrop(dragData);
-
-            //TODO: If drop takes too long, dragEnd never gets called.
-            draggedView.dragEnd();
-            this.set('isDragOver', false);
-
-            event.stopPropagation();
+                }
+            });
         }
     });
 });

@@ -10,6 +10,12 @@
             'ember-data': '../bower_components/ember-data/ember-data',
             handlebars: '../bower_components/handlebars/handlebars.runtime',
             jquery: '../bower_components/jquery/dist/jquery',
+            core: '../bower_components/jquery-ui/ui/core',
+            mouse: '../bower_components/jquery-ui/ui/mouse',
+            widget: '../bower_components/jquery-ui/ui/widget',
+            draggable: '../bower_components/jquery-ui/ui/draggable',
+            droppable: '../bower_components/jquery-ui/ui/droppable',
+            sortable: '../bower_components/jquery-ui/ui/sortable',
             bootstrap: '../bower_components/bootstrap/dist/js/bootstrap',
             'bootstrap-slider': '../bower_components/seiyria-bootstrap-slider/js/bootstrap-slider',
             moment: '../bower_components/momentjs/moment',
@@ -46,6 +52,18 @@
             },
             typeahead: {
                 deps: ['jquery'],
+                exports: 'jQuery'
+            },
+            draggable: {
+                deps: ['core', 'mouse', 'widget'],
+                exports: 'jQuery'
+            },
+            droppable: {
+                deps: ['draggable'],
+                exports: 'jQuery'
+            },
+            sortable: {
+                deps: ['core', 'mouse', 'widget'],
                 exports: 'jQuery'
             }
         },

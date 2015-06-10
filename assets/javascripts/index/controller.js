@@ -135,17 +135,16 @@ define(function(require) {
             }
         },
         onSnippetDragStart: function() {
-            return function(event) {
-                var strippedSnippets;
+            return function(event, ui) {
+                /*var strippedSnippets;
 
                 strippedSnippets = this.get('selectedSnippets').map(function(snippet) {
                     return snippet.strip();
                 });
+*/
+                ui.helper.data('snippets', this.get('selectedSnippets'));
 
-                event.dataTransfer.setData('application/json', JSON.stringify(strippedSnippets));
-
-                // TODO: Transition disables dragging..
-                /* this.transitionToRoute('queue');*/
+                this.transitionToRoute('queue');
             }.bind(this);
         }.property('selectedSnippets.@each'),
         actions: {

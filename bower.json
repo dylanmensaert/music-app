@@ -13,7 +13,8 @@
         "fontawesome": "4.3.0",
         "momentjs": "2.10.2",
         "typeahead.js": "0.10.5",
-        "typeahead.js-bootstrap3.less": "0.2.3"
+        "typeahead.js-bootstrap3.less": "0.2.3",
+        "jquery-ui": "1.11.4"
     },
     "devDependencies": {
         "almond": "0.3.1"

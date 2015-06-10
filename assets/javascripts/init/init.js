@@ -9,6 +9,10 @@ define(function(require) {
     require('index/init');
     require('queue/init');
 
+    require('draggable');
+    require('droppable');
+    require('sortable');
+
     var App = require('init/app');
 
     App.advanceReadiness();
