@@ -5,6 +5,7 @@ define(function(require) {
     var Ember = require('ember');
 
     return Ember.View.extend({
+        /*classNames: ['list-group'],*/
         didInsertElement: function() {
             var viewport = Ember.$(window),
                 position,
@@ -18,9 +19,17 @@ define(function(require) {
                     this.get('controller').searchNext();
                 }
             }.bind(this));
+
+            this.$().sortable({
+                revert: 200,
+                axis: 'y',
+                items: '> .row'
+            });
         },
         willDestroyElement: function() {
             Ember.$(window).unbind('scroll');
+
+            this.$().sortable('destroy');
         }
     });
 });

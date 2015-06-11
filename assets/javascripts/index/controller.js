@@ -14,14 +14,16 @@ define(function(require) {
 
     return Ember.Controller.extend({
         'snippet-component': require('snippet/component'),
+        'label-component': require('label/component'),
         'actionBar-component': require('action-bar/component'),
-        /*TODO: remove*/
-        'sortable-component': require('queue/view'),
         query: '',
         snippets: [],
         selectedSnippets: function() {
             return this.get('snippets').filterBy('isSelected', true);
         }.property('snippets.@each.isSelected'),
+        selectedLabels: function() {
+            return this.get('fileSystem.labels').filterBy('isSelected', true);
+        }.property('fileSystem.labels.@each.isSelected'),
         showSelected: function() {
             return this.get('selectedSnippets.length') > 1;
         }.property('selectedSnippets.length'),
@@ -47,23 +49,21 @@ define(function(require) {
             var localSnippets = [],
                 snippets;
 
-            this.get('fileSystem.labels').forEach(function(label) {
-                if (label.get('isVisible')) {
-                    snippets = this.get('fileSystem.snippets').filter(function(snippet) {
-                        return snippet.get('labels').contains(label.get('name')) && !localSnippets.isAny('id', snippet.get(
-                            'id'));
-                    });
+            this.get('selectedLabels').forEach(function(label) {
+                snippets = this.get('fileSystem.snippets').filter(function(snippet) {
+                    return snippet.get('labels').contains(label.get('name')) && !localSnippets.isAny('id', snippet.get(
+                        'id'));
+                });
 
-                    localSnippets.pushObjects(snippets);
-                }
+                localSnippets.pushObjects(snippets);
             }.bind(this));
 
             return localSnippets;
-        }.property('fileSystem.labels.@each.isVisible', 'fileSystem.snippets.@each.labels.@each'),
+        }.property('selectedLabels.@each', 'fileSystem.snippets.@each.labels.@each'),
         isLoading: false,
         search: function(url) {
             var fileSystem = this.get('fileSystem'),
-                visibleLabels = this.get('fileSystem.labels').filterBy('isVisible', true),
+                selectedLabels = this.get('selectedLabels'),
                 localSnippets = this.get('localSnippets'),
                 promises = [],
                 snippets = this.get('snippets'),
@@ -71,13 +71,13 @@ define(function(require) {
 
             lastUrl = url;
 
-            if (visibleLabels.isAny('name', 'offline')) {
+            if (selectedLabels.isAny('name', 'offline')) {
                 // TODO: Implement local suggestions + results for query..
                 // TODO: Check to improve performance
                 snippets.pushObjects(localSnippets);
             }
 
-            if (visibleLabels.isAny('name', 'online')) {
+            if (selectedLabels.isAny('name', 'online')) {
                 this.set('isLoading', true);
 
                 Ember.$.getJSON(url).then(function(response) {
@@ -112,7 +112,7 @@ define(function(require) {
                 label = this.get('fileSystem.labels').findBy('name', 'music-only');
             // TODO: url += '&relatedToVideoId=' + this.get('videoId');
 
-            if (!Ember.isEmpty(label) && label.get('isVisible')) {
+            if (!Ember.isEmpty(label) && label.get('isSelected')) {
                 url += '&videoCategoryId=10';
             }
 
@@ -120,12 +120,12 @@ define(function(require) {
             url += '&q=' + this.get('query');
 
             return url;
-        }.property('fileSystem.labels.@each.isVisible', 'query'),
+        }.property('selectedLabels.@each', 'query'),
         searchNew: function() {
             this.set('snippets', []);
 
             this.search(this.get('searchUrl'));
-        }.observes('fileSystem.labels.@each.isVisible'),
+        }.observes('selectedLabels.@each'),
         searchNext: function() {
             var url;
 
@@ -137,9 +137,15 @@ define(function(require) {
             }
         },
         onSnippetDragStart: function() {
+            var labels;
+
             return function(event, ui) {
+                labels = this.get('fileSystem.labels');
+
                 ui.helper.data('snippets', this.get('selectedSnippets'));
 
+                labels.findBy('name', 'online').set('isSelected', false);
+                labels.findBy('name', 'queue').set('isSelected', true);
                 /*this.transitionToRoute('queue');*/
             }.bind(this);
         }.property('selectedSnippets.@each'),
@@ -158,6 +164,11 @@ define(function(require) {
                 this.toggleProperty('session.model.musicOnly');
 
                 this.searchNew();
+            },
+            play: function(snippet) {
+                this.get('audio').load(snippet);
+
+                return true;
             }
         }
     });

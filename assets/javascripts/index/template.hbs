@@ -1,5 +1,3 @@
-{{view sortable-component}}
-
 {{#if selectedSnippets}}
     {{view actionBar-component snippets=selectedSnippets}}
 {{/if}}
@@ -22,9 +20,12 @@
                     <i class="fa fa-search"></i>
                 </button>
             </div>
-
-            <!-- TODO: Implement session.model.filters based on fileSystem.model.labels -->
         </div>
+
+        <!-- TODO: Implement session.model.filters based on fileSystem.model.labels -->
+        {{#each label in fileSystem.labels}}
+            {{view label-component label=label}}&nbsp;
+        {{/each}}
     </div>
 </div>
 
@@ -35,7 +36,7 @@
 
 <div class="list-group">
     {{#each snippet in snippets}}
-        {{#view snippet-component snippet=snippet onDragStart=onSnippetDragStart}}
+        {{#view snippet-component snippet=snippet action='play' param=snippet onDragStart=onSnippetDragStart}}
             {{#if showSelected}}
                 <div class="text-center inner-panel text-large">
                     <span class="label label-primary">

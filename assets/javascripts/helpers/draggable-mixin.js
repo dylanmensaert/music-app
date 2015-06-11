@@ -23,7 +23,8 @@ define(function(require) {
                 appendTo: 'body',
                 revert: 'invalid',
                 scrollSensitivity: 100,
-                connectToSortable: '#queue'
+                connectToSortable: this.get('.parentView.elementId'),
+                handle: '.handle'
             });
         },
         willDestroyElement: function() {

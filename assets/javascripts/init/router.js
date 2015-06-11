@@ -10,6 +10,6 @@ define(function(require) {
     });
 
     App.Router.map(function() {
-        this.route('queue');
+
     });
 });

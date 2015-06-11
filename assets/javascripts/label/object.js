@@ -5,10 +5,10 @@ define(function(require) {
 
     return Ember.Object.extend({
         name: null,
-        isVisible: true,
         isReadOnly: false,
+        isSelected: false,
         strip: function() {
-            return this.getProperties('name', 'isVisible', 'isReadOnly');
+            return this.getProperties('name', 'isReadOnly', 'isSelected');
         }
     });
 });

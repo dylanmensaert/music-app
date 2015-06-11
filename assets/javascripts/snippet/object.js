@@ -103,6 +103,9 @@ define(function(require) {
                 this.get('fileSystem.snippets').pushObject(this);
 
                 this.set('status', null);
+            }.bind(this), function() {
+                // TODO: Implement every error by showing a message for few seconds
+                this.set('status', null);
             }.bind(this));
         },
         download: function(url, source) {

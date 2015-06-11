@@ -4,14 +4,9 @@ define(function(require) {
     var Ember = require('ember');
 
     return Ember.Component.extend(require('helpers/draggable-mixin'), {
-        tagName: 'a',
+        'handle-component': require('snippet/handle'),
         layoutName: 'snippet',
-        classNames: ['list-group-item', 'audio-list', 'outer-panel'],
-        classNameBindings: ['snippet.isSelected:active'],
-        attributeBindings: ['name'],
-        name: function() {
-            return this.get('snippet.id');
-        }.property('snippet.id'),
+        classNames: ['row', 'row-fill'],
         snippet: null,
         onDragStart: null,
         willDragStart: function(event, ui) {
@@ -21,8 +16,13 @@ define(function(require) {
 
             this.onDragStart(event, ui);
         },
-        click: function(event) {
-            this.get('snippet').toggleProperty('isSelected');
+        click: function() {
+            this.sendAction('action', this.get('snippet'));
+        },
+        actions: {
+            toggleSelection: function() {
+                this.get('snippet').toggleProperty('isSelected');
+            }
         }
     });
 });

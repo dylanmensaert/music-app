@@ -11,25 +11,15 @@ html {
     z-index: 3;
 }
 
-.event-bar {
-    .bar;
-    height: 38px;
-    font-size: 22px;
-}
-
-.droppable-bar {
-   .event-bar;
-   bottom: 0;
-   background: blue;
-}
-
 .error-bar {
     .bar;
     top: 0;
 }
 
 .action-bar {
-    .event-bar;
+    .bar;
+    height: 38px;
+    font-size: 22px;
     background: orange;
 }
 
@@ -156,6 +146,7 @@ html {
 
 .outer-panel {
     position: relative;
+    padding-right: 0;
 }
 
 .inner-panel {
@@ -168,3 +159,20 @@ html {
 .text-large {
     font-size: 52px;
 }
+
+.inner-fill {
+    float: none;
+    display: table-cell;
+    vertical-align: top;
+    padding: 0;
+}
+
+.handle {
+    .inner-fill;
+    background: green;
+}
+
+.outer-fill {
+    display: table;
+}
+
