@@ -51,26 +51,27 @@ define(function(require) {
                 return name !== 'online' && name !== 'offline' && name !== 'music-only';
             });
         }.property('fileSystem.labels.@each'),
-        offlineSnippets: function() {
-            var offlineSnippets = [],
+        offlineFilteredSnippets: function() {
+            var offlineFilteredSnippets = [],
                 snippets;
 
             this.get('selectedLabels').forEach(function(label) {
                 snippets = this.get('fileSystem.snippets').filter(function(snippet) {
-                    return snippet.get('labels').contains(label.get('name')) && !offlineSnippets.isAny('id', snippet.get(
-                        'id'));
+                    return snippet.get('labels').contains(label.get('name')) && !offlineFilteredSnippets.isAny('id',
+                        snippet.get(
+                            'id'));
                 });
 
-                offlineSnippets.pushObjects(snippets);
+                offlineFilteredSnippets.pushObjects(snippets);
             }.bind(this));
 
-            return offlineSnippets;
+            return offlineFilteredSnippets;
         }.property('selectedLabels.@each', 'fileSystem.snippets.@each.labels.@each'),
         isLoading: false,
         search: function(url) {
             var fileSystem = this.get('fileSystem'),
                 selectedLabels = this.get('selectedLabels'),
-                offlineSnippets = this.get('offlineSnippets'),
+                offlineFilteredSnippets = this.get('offlineFilteredSnippets'),
                 promises = [],
                 snippets = this.get('snippets'),
                 id;
@@ -80,7 +81,7 @@ define(function(require) {
             if (selectedLabels.isAny('name', 'offline')) {
                 // TODO: Implement offline suggestions + results for query..
                 // TODO: Check to improve performance
-                snippets.pushObjects(offlineSnippets);
+                snippets.pushObjects(offlineFilteredSnippets);
             }
 
             if (selectedLabels.isAny('name', 'online')) {
@@ -91,7 +92,7 @@ define(function(require) {
                         response.items.forEach(function(item) {
                             id = item.id.videoId;
 
-                            if (!offlineSnippets.isAny('id', id)) {
+                            if (!offlineFilteredSnippets.isAny('id', id)) {
                                 snippets.pushObject(Snippet.create({
                                     id: id,
                                     title: item.snippet.title,
@@ -155,14 +156,21 @@ define(function(require) {
                 /*this.transitionToRoute('queue');*/
             }.bind(this);
         }.property( /*'selectedSnippets.@each', */ 'fileSystem.labels.@each.isSelected', 'queueLabel.isSelected'),
-        sortQueueBy: function(snippetIds) {
-            var queue = this.get('fileSystem.queue');
+        didSortQueue: function(snippetIds) {
+            var snippets = this.get('fileSystem.snippets');
 
-            queue = snippetIds.map(function(snippetId) {
-                return queue.findBy('id', snippetId);
-            });
+            this.set('fileSystem.queue', snippetIds);
 
-            this.set('fileSystem.queue', queue);
+            // TODO: Also auto download?
+            // TODO: resort queue when number has done playing...
+            this.get('selectedSnippets').forEach(function(snippet) {
+                if (!snippets.isAny('id', snippet.get('id'))) {
+                    snippets.pushObject(snippet);
+                }
+            }.bind(this));
+        },
+        pushSnippetToQueue: function(snippet) {
+
         },
         actions: {
             search: function() {

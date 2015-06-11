@@ -33,7 +33,7 @@ define(function(require) {
                         attribute: 'name'
                     });
 
-                    this.get('controller').sortQueueBy(snippetIds);
+                    this.get('controller').didSortQueue(snippetIds);
                 }.bind(this)
             });
         },
