@@ -27,7 +27,14 @@ define(function(require) {
                 revert: 200,
                 axis: 'y',
                 items: '> .row',
-                containment: '.list-group'
+                containment: '.list-group',
+                update: function() {
+                    var snippetIds = this.$().sortable('toArray', {
+                        attribute: 'name'
+                    });
+
+                    this.get('controller').sortQueueBy(snippetIds);
+                }.bind(this)
             });
         },
         willDestroyElement: function() {

@@ -33,6 +33,7 @@ define(function(require) {
             this.forge();
         },
         instance: null,
+        queue: [],
         labels: [],
         snippets: [],
         // TODO: http://stackoverflow.com/questions/30109066/html-5-file-system-how-to-increase-persistent-storage
@@ -117,11 +118,6 @@ define(function(require) {
                         name: 'saved',
                         isReadOnly: true
                     }));
-
-                    this.get('labels').pushObject(Label.create({
-                        name: 'queue',
-                        isReadOnly: true
-                    }));
                 }.bind(this));
             }.bind(this));
 
@@ -150,6 +146,8 @@ define(function(require) {
         },
         toJSON: function() {
             var data = {};
+
+            data.queue = this.get('queue');
 
             data.labels = this.get('labels').map(function(label) {
                 return label.strip();

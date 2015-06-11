@@ -22,6 +22,8 @@
             </div>
         </div>
 
+        {{view label-component label=queueLabel}}&nbsp;
+
         <!-- TODO: Implement session.model.filters based on fileSystem.model.labels -->
         {{#each label in fileSystem.labels}}
             {{view label-component label=label}}&nbsp;

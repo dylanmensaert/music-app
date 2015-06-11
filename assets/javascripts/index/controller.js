@@ -4,6 +4,7 @@ define(function(require) {
     var Ember = require('ember'),
         meta = require('meta-data'),
         Snippet = require('snippet/object'),
+        Label = require('snippet/object'),
         lastUrl,
         nextPageToken,
         convertImageUrl;
@@ -18,6 +19,11 @@ define(function(require) {
         'actionBar-component': require('action-bar/component'),
         query: '',
         snippets: [],
+        // TODO: init in route via setupControl or something? (then same with components)
+        queueLabel: Label.create({
+            name: 'queue',
+            isReadOnly: true
+        }),
         selectedSnippets: function() {
             return this.get('snippets').filterBy('isSelected', true);
         }.property('snippets.@each.isSelected'),
@@ -142,13 +148,22 @@ define(function(require) {
             return function(event, ui) {
                 labels = this.get('fileSystem.labels');
 
-                ui.helper.data('snippets', this.get('selectedSnippets'));
+                /*ui.helper.data('snippets', this.get('selectedSnippets'));*/
 
                 labels.findBy('name', 'online').set('isSelected', false);
-                labels.findBy('name', 'queue').set('isSelected', true);
+                this.get('queueLabel').set('isSelected', true);
                 /*this.transitionToRoute('queue');*/
             }.bind(this);
-        }.property('selectedSnippets.@each', 'fileSystem.labels.@each.isSelected'),
+        }.property( /*'selectedSnippets.@each', */ 'fileSystem.labels.@each.isSelected', 'queueLabel.isSelected'),
+        sortQueueBy: function(snippetIds) {
+            var queue = this.get('fileSystem.queue');
+
+            queue = snippetIds.map(function(snippetId) {
+                return queue.findBy('id', snippetId);
+            });
+
+            this.set('fileSystem.queue', queue);
+        },
         actions: {
             search: function() {
                 this.searchNew();
