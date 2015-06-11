@@ -45,26 +45,26 @@ define(function(require) {
                 return name !== 'online' && name !== 'offline' && name !== 'music-only';
             });
         }.property('fileSystem.labels.@each'),
-        localSnippets: function() {
-            var localSnippets = [],
+        offlineSnippets: function() {
+            var offlineSnippets = [],
                 snippets;
 
             this.get('selectedLabels').forEach(function(label) {
                 snippets = this.get('fileSystem.snippets').filter(function(snippet) {
-                    return snippet.get('labels').contains(label.get('name')) && !localSnippets.isAny('id', snippet.get(
+                    return snippet.get('labels').contains(label.get('name')) && !offlineSnippets.isAny('id', snippet.get(
                         'id'));
                 });
 
-                localSnippets.pushObjects(snippets);
+                offlineSnippets.pushObjects(snippets);
             }.bind(this));
 
-            return localSnippets;
+            return offlineSnippets;
         }.property('selectedLabels.@each', 'fileSystem.snippets.@each.labels.@each'),
         isLoading: false,
         search: function(url) {
             var fileSystem = this.get('fileSystem'),
                 selectedLabels = this.get('selectedLabels'),
-                localSnippets = this.get('localSnippets'),
+                offlineSnippets = this.get('offlineSnippets'),
                 promises = [],
                 snippets = this.get('snippets'),
                 id;
@@ -72,9 +72,9 @@ define(function(require) {
             lastUrl = url;
 
             if (selectedLabels.isAny('name', 'offline')) {
-                // TODO: Implement local suggestions + results for query..
+                // TODO: Implement offline suggestions + results for query..
                 // TODO: Check to improve performance
-                snippets.pushObjects(localSnippets);
+                snippets.pushObjects(offlineSnippets);
             }
 
             if (selectedLabels.isAny('name', 'online')) {
@@ -85,7 +85,7 @@ define(function(require) {
                         response.items.forEach(function(item) {
                             id = item.id.videoId;
 
-                            if (!localSnippets.isAny('id', id)) {
+                            if (!offlineSnippets.isAny('id', id)) {
                                 snippets.pushObject(Snippet.create({
                                     id: id,
                                     title: item.snippet.title,
@@ -148,7 +148,7 @@ define(function(require) {
                 labels.findBy('name', 'queue').set('isSelected', true);
                 /*this.transitionToRoute('queue');*/
             }.bind(this);
-        }.property('selectedSnippets.@each'),
+        }.property('selectedSnippets.@each', 'fileSystem.labels.@each.isSelected'),
         actions: {
             search: function() {
                 this.searchNew();
@@ -168,7 +168,7 @@ define(function(require) {
             play: function(snippet) {
                 this.get('audio').load(snippet);
 
-                return true;
+                this.get('audio').play();
             }
         }
     });

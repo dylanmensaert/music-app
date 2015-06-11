@@ -4,10 +4,10 @@ define(function(require) {
     var Ember = require('ember');
 
     return Ember.Mixin.create({
-        isDragging: false,
+        /*isDragging: false,
         willDragStart: function() {
             this.set('isDragging', true);
-        },
+        },*/
         didInsertElement: function() {
             this.$().draggable({
                 start: function(event, ui) {
@@ -20,10 +20,11 @@ define(function(require) {
                 axis: 'y',
                 // TODO: keep initial component
                 helper: 'clone',
-                appendTo: 'body',
+                appendTo: 'parent',
                 revert: 'invalid',
                 scrollSensitivity: 100,
-                connectToSortable: this.get('.parentView.elementId'),
+                connectToSortable: '#' + this.get('parentView.elementId'),
+                containment: 'parent',
                 handle: '.handle'
             });
         },

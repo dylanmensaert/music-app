@@ -6,6 +6,9 @@ define(function(require) {
 
     return Ember.View.extend({
         /*classNames: ['list-group'],*/
+        refreshSortable: function() {
+            this.$().sortable('refresh');
+        }.observes('controller.snippets.@each'),
         didInsertElement: function() {
             var viewport = Ember.$(window),
                 position,
@@ -23,7 +26,8 @@ define(function(require) {
             this.$().sortable({
                 revert: 200,
                 axis: 'y',
-                items: '> .row'
+                items: '> .row',
+                containment: '.list-group'
             });
         },
         willDestroyElement: function() {

@@ -41,7 +41,7 @@ define(function(require) {
         isSaved: function() {
             return this.get('labels').contains('saved');
         }.property('labels.@each'),
-        getLocal: function(type, extension) {
+        createFilePath: function(type, extension) {
             var fileName = this.get('id') + '.' + extension,
                 directory = pluralizations[type];
 
@@ -79,8 +79,8 @@ define(function(require) {
             }.bind(this));
         },
         save: function() {
-            var audio = this.getLocal('audio', this.get('extension')),
-                thumbnail = this.getLocal('thumbnail', extractExtension(this.get('thumbnail'))),
+            var audio = this.createFilePath('audio', this.get('extension')),
+                thumbnail = this.createFilePath('thumbnail', extractExtension(this.get('thumbnail'))),
                 promises;
 
             this.set('status', 'loading');
@@ -98,7 +98,7 @@ define(function(require) {
 
                 this.get('labels').pushObject('saved');
 
-                // TODO: update local labels and snippets in 1 write action
+                // TODO: update offline labels and snippets in 1 write action
                 // TODO: only perform this
                 this.get('fileSystem.snippets').pushObject(this);
 

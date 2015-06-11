@@ -1,4 +1,4 @@
-<div class="col-xs-10 inner-fill">
+<div {{action 'click'}} class="col-xs-10 inner-fill">
     <a {{bind-attr name=snippet.id class=':list-group-item :audio-list :outer-panel snippet.isSelected:active'}}>
         <div class="media-left media-middle">
             <div class="outer-image">
@@ -24,7 +24,7 @@
     </a>
 </div>
 
-{{view handle-component action='toggleSelection'}}
+<div {{action 'toggleSelection'}} class="col-xs-2 handle" />
 
 {{#if isDragging}}
     {{yield}}
