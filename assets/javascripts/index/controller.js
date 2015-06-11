@@ -19,6 +19,50 @@ define(function(require) {
         'actionBar-component': require('action-bar/component'),
         query: '',
         snippets: [],
+        sortedSnippets: function() {
+            return Ember.ArrayProxy.createWithMixins(Ember.SortableMixin, {
+                content: this.get('snippets'),
+                // TODO: labels.@each?
+                sortProperties: ['labels', 'name', 'id'],
+                orderBy: function(snippet, other) {
+                    var isLocal = snippet.get('labels').contains('saved'),
+                        otherHasLocal = other.get('labels').contains('saved'),
+                        name = snippet.get('name'),
+                        otherName = other.get('name'),
+                        queue,
+                        queueIndex,
+                        otherQueueIndex,
+                        result = 0;
+
+                    if (this.get('queueLabel.isSelected')) {
+                        queue = this.get('fileSystem.queue');
+                        queueIndex = queue.getIndexOf(snippet.get('id'));
+                        otherQueueIndex = queue.getIndexOf(other.get('id'));
+
+                        if (queueIndex < otherQueueIndex) {
+                            result = -1;
+                        } else if (queueIndex > otherQueueIndex) {
+                            result = 1;
+                        }
+                    } else {
+                        // TODO: remove isLocal check if decided to split online and offline search
+                        if (isLocal && !otherHasLocal) {
+                            result = -1;
+                        } else if (!hasLocal && otherHasLocal) {
+                            result = 1;
+                        } else if (isLocal && otherHasLocal) {
+                            if (name < otherName) {
+                                result = -1;
+                            } else if (name > otherName) {
+                                result = 1;
+                            }
+                        }
+                    }
+
+                    return result;
+                }.bind(this)
+            }.bind(this));
+        }.property('snippets'),
         // TODO: init in route via setupControl or something? (then same with components)
         queueLabel: Label.create({
             name: 'queue',
@@ -157,17 +201,29 @@ define(function(require) {
             }.bind(this);
         }.property( /*'selectedSnippets.@each', */ 'fileSystem.labels.@each.isSelected', 'queueLabel.isSelected'),
         didSortQueue: function(snippetIds) {
-            var snippets = this.get('fileSystem.snippets');
+            var firstSnippetId = snippetIds.get('firstObject'),
+                hasChangedFirst = this.get('fileSystem.queue.firstObject') !== firstSnippetId,
+                firstSnippet;
 
             this.set('fileSystem.queue', snippetIds);
 
-            // TODO: Also auto download?
-            // TODO: resort queue when number has done playing...
             this.get('selectedSnippets').forEach(function(snippet) {
-                if (!snippets.isAny('id', snippet.get('id'))) {
-                    snippets.pushObject(snippet);
+                if (!snippet.get('isSaved')) {
+                    snippet.save();
                 }
-            }.bind(this));
+
+                if (hasChangedFirst && snippet.get('id') === firstSnippetId) {
+                    firstSnippet = snippet;
+                }
+            });
+
+            if (hasChangedFirst && Ember.isEmpty(firstSnippet)) {
+                firstSnippet = this.get('fileSystem.snippets').findBy('id', firstSnippetId);
+            }
+
+            if (!Ember.isEmpty(firstSnippet)) {
+                this.get('audio').play(firstSnippet);
+            }
         },
         pushSnippetToQueue: function(snippet) {
 
@@ -189,9 +245,7 @@ define(function(require) {
                 this.searchNew();
             },
             play: function(snippet) {
-                this.get('audio').load(snippet);
-
-                this.get('audio').play();
+                this.get('audio').play(snippet);
             }
         }
     });

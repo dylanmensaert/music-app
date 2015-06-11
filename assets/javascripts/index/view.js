@@ -34,7 +34,8 @@ define(function(require) {
                     });
 
                     this.get('controller').didSortQueue(snippetIds);
-                }.bind(this)
+                }.bind(this),
+                delay: 100
             });
         },
         willDestroyElement: function() {

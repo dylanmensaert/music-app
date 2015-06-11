@@ -61,9 +61,9 @@ define(function(require) {
             });
 
             element.addEventListener('ended', function() {
-                audio.set('hasEnded', true);
-
                 audio.set('status', 'idle');
+
+                audio.didEnd();
             });
 
             element.addEventListener('canplaythrough', function() {

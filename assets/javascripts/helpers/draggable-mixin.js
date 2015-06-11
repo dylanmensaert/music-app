@@ -25,7 +25,8 @@ define(function(require) {
                 scrollSensitivity: 100,
                 connectToSortable: '#' + this.get('parentView.elementId'),
                 containment: 'parent',
-                handle: '.handle'
+                handle: '.handle',
+                delay: 100
             });
         },
         willDestroyElement: function() {

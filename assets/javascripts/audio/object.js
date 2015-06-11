@@ -10,7 +10,7 @@ define(function(require) {
         duration: null,
         buffered: null,
         status: null,
-        hasEnded: false,
+        didEnd: null,
         isLoading: function() {
             return this.get('status') === 'loading';
         }.property('status'),
@@ -23,22 +23,28 @@ define(function(require) {
         setCurrentTime: function(currentTime) {
             this.get('element').currentTime = currentTime;
         },
-        play: function() {
-            this.get('element').play();
+        play: function(snippet) {
+            if (Ember.isEmpty(snippet)) {
+                this.get('element').play();
+            } else {
+                this.load(snippet);
+            }
         },
         pause: function() {
             this.get('element').pause();
         },
         load: function(snippet) {
+            var audio = snippet.get('audio');
+
             this.set('status', 'loading');
             this.set('snippet', snippet);
 
-            if (!snippet.get('isSaved')) {
+            if (Ember.isEmpty(audio)) {
                 snippet.fetchDownload().then(function(url) {
                     this.start(url);
                 }.bind(this));
             } else {
-                this.start(snippet.get('audio'));
+                this.start(audio);
             }
         },
         start: function(source) {

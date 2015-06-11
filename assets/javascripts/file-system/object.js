@@ -3,7 +3,7 @@ define(function(require) {
     'use strict';
 
     var Ember = require('ember'),
-        Label = require('objects/label'),
+        Label = require('label/object'),
         Snippet = require('snippet/object'),
         write,
         lastWriter;
@@ -67,7 +67,7 @@ define(function(require) {
             Ember.run.cancel(lastWriter);
 
             lastWriter = Ember.run.later(this, write, 100);
-        }.observes('labels.@each', 'snippets.@each'),
+        }.observes('queue.@each', 'labels.@each', 'snippets.@each'),
         remove: function(source) {
             return new Ember.RSVP.Promise(function(resolve) {
                 this.get('instance').root.getFile(source, {}, function(fileEntry) {

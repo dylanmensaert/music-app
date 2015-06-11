@@ -10,7 +10,10 @@ define(function(require) {
         title: 'music',
         setupController: function(controller, model) {
             var audio = this.get('audio'),
-                slider;
+                slider,
+                queue,
+                snippet,
+                snippetId;
 
             slider = Slider.create({
                 onSlideStop: function(value) {
@@ -27,6 +30,20 @@ define(function(require) {
             });
 
             controller.set('slider', slider);
+
+            audio.set('didEnd', function() {
+                queue = this.get('fileSystem.queue');
+                snippet = audio.get('snippet');
+                snippetId = snippet.get('id');
+
+                queue.removeObject(snippetId);
+                queue.putObject(snippetId);
+
+                snippetId = this.get('firstObject');
+                snippet = this.get('fileSystem.snippets').findBy('id', snippetId);
+
+                audio.play(snippet);
+            }.bind(this));
 
             this._super(controller, model);
         },
