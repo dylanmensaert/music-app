@@ -37,7 +37,7 @@
 </button>
 
 <div class="list-group">
-    {{#each snippet in snippets}}
+    {{#each snippet in sortedSnippets}}
         {{#view snippet-component snippet=snippet action='play' param=snippet onDragStart=onSnippetDragStart}}
             {{#if showSelected}}
                 <div class="text-center inner-panel text-large">

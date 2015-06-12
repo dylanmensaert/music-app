@@ -25,8 +25,9 @@ define(function(require) {
                 // TODO: labels.@each?
                 sortProperties: ['labels', 'name', 'id'],
                 orderBy: function(snippet, other) {
-                    var isLocal = snippet.get('labels').contains('saved'),
-                        otherHasLocal = other.get('labels').contains('saved'),
+                    var offlineFilteredSnippets = this.get('offlineFilteredSnippets'),
+                        isOffline = offlineFilteredSnippets.isAny('id', snippet.get('id')),
+                        otherIsOffline = offlineFilteredSnippets.isAny('id', other.get('id')),
                         name = snippet.get('name'),
                         otherName = other.get('name'),
                         queue,
@@ -45,12 +46,12 @@ define(function(require) {
                             result = 1;
                         }
                     } else {
-                        // TODO: remove isLocal check if decided to split online and offline search
-                        if (isLocal && !otherHasLocal) {
+                        // TODO: remove isOffline check if decided to split online and offline search
+                        if (isOffline && !otherIsOffline) {
                             result = -1;
-                        } else if (!hasLocal && otherHasLocal) {
+                        } else if (!isOffline && otherIsOffline) {
                             result = 1;
-                        } else if (isLocal && otherHasLocal) {
+                        } else if (isOffline && otherIsOffline) {
                             if (name < otherName) {
                                 result = -1;
                             } else if (name > otherName) {
@@ -61,13 +62,18 @@ define(function(require) {
 
                     return result;
                 }.bind(this)
-            }.bind(this));
+            });
         }.property('snippets'),
         // TODO: init in route via setupControl or something? (then same with components)
         queueLabel: Label.create({
             name: 'queue',
             isReadOnly: true
         }),
+        // TODO: save musicOnly label state (and others) in fileSystem someway
+        /*musicOnly: Label.create({
+            name: 'music-only',
+            isReadOnly: true
+        }),*/
         selectedSnippets: function() {
             return this.get('snippets').filterBy('isSelected', true);
         }.property('snippets.@each.isSelected'),

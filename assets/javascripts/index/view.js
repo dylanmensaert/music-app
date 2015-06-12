@@ -5,7 +5,6 @@ define(function(require) {
     var Ember = require('ember');
 
     return Ember.View.extend({
-        /*classNames: ['list-group'],*/
         refreshSortable: function() {
             this.$().sortable('refresh');
         }.observes('controller.snippets.@each'),
