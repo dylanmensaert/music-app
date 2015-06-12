@@ -3,16 +3,11 @@ define(function(require) {
 
     var Ember = require('ember');
 
-    return Ember.Component.extend(require('helpers/draggable-mixin'), {
+    return Ember.Component.extend({
         layoutName: 'snippet',
         classNames: ['row', 'row-fill'],
         classNameBindings: ['snippet.isSelected:active'],
         snippet: null,
-        onDragStart: function() {
-            this.set('snippet.isSelected', true);
-
-            this.sendAction('didDragStart');
-        },
         actions: {
             toggleSelection: function() {
                 this.get('snippet').toggleProperty('isSelected');

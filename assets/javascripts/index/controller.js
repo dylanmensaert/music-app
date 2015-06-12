@@ -16,7 +16,7 @@ define(function(require) {
     return Ember.Controller.extend({
         'label-component': require('label/component'),
         'actionBar-component': require('action-bar/component'),
-        'snippets-component': require('snippet-list/component'),
+        'snippets-component': require('snippets/component'),
         query: '',
         snippets: [],
         sortedSnippets: function() {
@@ -25,65 +25,26 @@ define(function(require) {
                 // TODO: labels.@each?
                 sortProperties: ['labels', 'name', 'id'],
                 orderBy: function(snippet, other) {
-                        var offlineFilteredSnippets = this.get('offlineFilteredSnippets'),
-                            isOffline = offlineFilteredSnippets.isAny('id', snippet.get('id')),
-                            otherIsOffline = offlineFilteredSnippets.isAny('id', other.get('id')),
-                            queue,
-                            result = -1;
+                    var offlineFilteredSnippets = this.get('offlineFilteredSnippets'),
+                        isOffline = offlineFilteredSnippets.isAny('id', snippet.get('id')),
+                        otherIsOffline = offlineFilteredSnippets.isAny('id', other.get('id')),
+                        queue,
+                        result = -1;
 
-                        if (this.get('queueLabel.isSelected')) {
-                            queue = this.get('fileSystem.queue');
+                    if (this.get('queueLabel.isSelected')) {
+                        queue = this.get('fileSystem.queue');
 
-                            if (queue.indexOf(snippet.get('id')) > queue.indexOf(other.get('id'))) {
-                                result = 1;
-                            }
-                            // TODO: remove isOffline check if decided to split online and offline search
-                        } else if ((!isOffline && otherIsOffline) || (isOffline && otherIsOffline && snippet.get('name') > other.get(
-                                'name'))) {
+                        if (queue.indexOf(snippet.get('id')) > queue.indexOf(other.get('id'))) {
                             result = 1;
                         }
+                        // TODO: remove isOffline check if decided to split online and offline search
+                    } else if ((!isOffline && otherIsOffline) || (isOffline && otherIsOffline && snippet.get('name') > other.get(
+                            'name'))) {
+                        result = 1;
+                    }
 
-                        return result;
-                    }.bind(this)
-                    // TODO: Delete following if not needed.
-                    /*orderBy: function(snippet, other) {
-                        var offlineFilteredSnippets = this.get('offlineFilteredSnippets'),
-                            isOffline = offlineFilteredSnippets.isAny('id', snippet.get('id')),
-                            otherIsOffline = offlineFilteredSnippets.isAny('id', other.get('id')),
-                            name = snippet.get('name'),
-                            otherName = other.get('name'),
-                            queue,
-                            queueIndex,
-                            otherQueueIndex,
-                            result = 0;
-
-                        if (this.get('queueLabel.isSelected')) {
-                            queue = this.get('fileSystem.queue');
-                            queueIndex = queue.indexOf(snippet.get('id'));
-                            otherQueueIndex = queue.indexOf(other.get('id'));
-
-                            if (queueIndex < otherQueueIndex) {
-                                result = -1;
-                            } else if (queueIndex > otherQueueIndex) {
-                                result = 1;
-                            }
-                        } else {
-                            // TODO: remove isOffline check if decided to split online and offline search
-                            if (isOffline && !otherIsOffline) {
-                                result = -1;
-                            } else if (!isOffline && otherIsOffline) {
-                                result = 1;
-                            } else if (isOffline && otherIsOffline) {
-                                if (name < otherName) {
-                                    result = -1;
-                                } else if (name > otherName) {
-                                    result = 1;
-                                }
-                            }
-                        }
-
-                        return result;
-                    }.bind(this)*/
+                    return result;
+                }.bind(this)
             });
         }.property('snippets'),
         // TODO: init in route via setupControl or something? (then same with components)
@@ -124,18 +85,13 @@ define(function(require) {
             });
         }.property('fileSystem.labels.@each'),
         offlineFilteredSnippets: function() {
-            var offlineFilteredSnippets = [],
-                snippets;
+            var offlineFilteredSnippets;
 
-            this.get('selectedLabels').forEach(function(label) {
-                snippets = this.get('fileSystem.snippets').filter(function(snippet) {
-                    return snippet.get('labels').contains(label.get('name')) && !offlineFilteredSnippets.isAny('id',
-                        snippet.get(
-                            'id'));
+            offlineFilteredSnippets = this.get('fileSystem.snippets').filter(function(snippet) {
+                return this.get('selectedLabels').every(function(label) {
+                    return snippet.get('labels').contains(label.get('name'));
                 });
-
-                offlineFilteredSnippets.pushObjects(snippets);
-            }.bind(this));
+            });
 
             return offlineFilteredSnippets;
         }.property('selectedLabels.@each', 'fileSystem.snippets.@each.labels.@each'),

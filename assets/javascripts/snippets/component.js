@@ -4,13 +4,19 @@ define(function(require) {
     var Ember = require('ember');
 
     return Ember.Component.extend(require('helpers/sortable-mixin'), {
-        layoutName: 'snippetList',
-        classNames: ['list-group'],
         'snippet-component': require('snippet/component'),
+        layoutName: 'snippets',
+        classNames: ['list-group'],
         snippets: null,
-        refreshSortable: function() {
-            this.$().sortable('refresh');
-        }.observes('snippets.@each'),
+        onDragStart: function(event, ui) {
+            ui.item.appendTo(this.$());
+
+            Ember.run.scheduleOnce('afterRender', this.$(), function() {
+                this.sortable('refresh');
+            });
+
+            this.sendAction('didDragStart');
+        },
         onUpdate: function() {
             var snippetIds = this.$().sortable('toArray', {
                 attribute: 'name'
@@ -21,9 +27,6 @@ define(function(require) {
         actions: {
             play: function(snippet) {
                 this.sendAction('action', snippet);
-            },
-            didDragStart: function() {
-                this.sendAction('didDragStart');
             }
         }
     });

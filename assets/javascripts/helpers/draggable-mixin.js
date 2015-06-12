@@ -13,7 +13,6 @@ define(function(require) {
                 appendTo: 'parent',
                 revert: 'invalid',
                 scrollSensitivity: 100,
-                connectToSortable: '#' + this.get('parentView.elementId'),
                 containment: 'parent',
                 handle: '.handle',
                 delay: 100
