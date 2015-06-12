@@ -36,19 +36,7 @@
     {{file-input}}
 </button>
 
-<div class="list-group">
-    {{#each snippet in sortedSnippets}}
-        {{#view snippet-component snippet=snippet action='play' param=snippet onDragStart=onSnippetDragStart}}
-            {{#if showSelected}}
-                <div class="text-center inner-panel text-large">
-                    <span class="label label-primary">
-                        {{selectedSnippets.length}}
-                    </span>
-                </div>
-            {{/if}}
-        {{/view}}
-    {{/each}}
-</div>
+{{view snippets-component snippets=sortedSnippets action='play' param=snippet didUpdate='didUpdate' param=snippetIds didDragStart='didDragStart'}}
 
 {{#if isLoading}}
     <div class="text-center audio-icon">

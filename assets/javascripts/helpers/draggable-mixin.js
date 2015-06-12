@@ -4,19 +4,9 @@ define(function(require) {
     var Ember = require('ember');
 
     return Ember.Mixin.create({
-        /*isDragging: false,
-        willDragStart: function() {
-            this.set('isDragging', true);
-        },*/
         didInsertElement: function() {
             this.$().draggable({
-                start: function(event, ui) {
-                    this.willDragStart(event, ui);
-                }.bind(this),
-                stop: function() {
-                    // TODO: keep initial component
-                    /*this.set('isDragging', false);*/
-                }.bind(this),
+                start: this.onDragStart.bind(this),
                 axis: 'y',
                 // TODO: keep initial component
                 helper: 'clone',

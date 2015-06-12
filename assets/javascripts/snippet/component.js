@@ -8,13 +8,10 @@ define(function(require) {
         classNames: ['row', 'row-fill'],
         classNameBindings: ['snippet.isSelected:active'],
         snippet: null,
-        onDragStart: null,
-        willDragStart: function(event, ui) {
-            this._super();
-
+        onDragStart: function() {
             this.set('snippet.isSelected', true);
 
-            this.onDragStart(event, ui);
+            this.sendAction('didDragStart');
         },
         actions: {
             toggleSelection: function() {

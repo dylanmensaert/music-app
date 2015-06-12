@@ -14,9 +14,9 @@ define(function(require) {
     };
 
     return Ember.Controller.extend({
-        'snippet-component': require('snippet/component'),
         'label-component': require('label/component'),
         'actionBar-component': require('action-bar/component'),
+        'snippets-component': require('snippet-list/component'),
         query: '',
         snippets: [],
         sortedSnippets: function() {
@@ -25,43 +25,65 @@ define(function(require) {
                 // TODO: labels.@each?
                 sortProperties: ['labels', 'name', 'id'],
                 orderBy: function(snippet, other) {
-                    var offlineFilteredSnippets = this.get('offlineFilteredSnippets'),
-                        isOffline = offlineFilteredSnippets.isAny('id', snippet.get('id')),
-                        otherIsOffline = offlineFilteredSnippets.isAny('id', other.get('id')),
-                        name = snippet.get('name'),
-                        otherName = other.get('name'),
-                        queue,
-                        queueIndex,
-                        otherQueueIndex,
-                        result = 0;
-
-                    if (this.get('queueLabel.isSelected')) {
-                        queue = this.get('fileSystem.queue');
-                        queueIndex = queue.getIndexOf(snippet.get('id'));
-                        otherQueueIndex = queue.getIndexOf(other.get('id'));
-
-                        if (queueIndex < otherQueueIndex) {
+                        var offlineFilteredSnippets = this.get('offlineFilteredSnippets'),
+                            isOffline = offlineFilteredSnippets.isAny('id', snippet.get('id')),
+                            otherIsOffline = offlineFilteredSnippets.isAny('id', other.get('id')),
+                            queue,
                             result = -1;
-                        } else if (queueIndex > otherQueueIndex) {
-                            result = 1;
-                        }
-                    } else {
-                        // TODO: remove isOffline check if decided to split online and offline search
-                        if (isOffline && !otherIsOffline) {
-                            result = -1;
-                        } else if (!isOffline && otherIsOffline) {
-                            result = 1;
-                        } else if (isOffline && otherIsOffline) {
-                            if (name < otherName) {
-                                result = -1;
-                            } else if (name > otherName) {
+
+                        if (this.get('queueLabel.isSelected')) {
+                            queue = this.get('fileSystem.queue');
+
+                            if (queue.indexOf(snippet.get('id')) > queue.indexOf(other.get('id'))) {
                                 result = 1;
                             }
+                            // TODO: remove isOffline check if decided to split online and offline search
+                        } else if ((!isOffline && otherIsOffline) || (isOffline && otherIsOffline && snippet.get('name') > other.get(
+                                'name'))) {
+                            result = 1;
                         }
-                    }
 
-                    return result;
-                }.bind(this)
+                        return result;
+                    }.bind(this)
+                    // TODO: Delete following if not needed.
+                    /*orderBy: function(snippet, other) {
+                        var offlineFilteredSnippets = this.get('offlineFilteredSnippets'),
+                            isOffline = offlineFilteredSnippets.isAny('id', snippet.get('id')),
+                            otherIsOffline = offlineFilteredSnippets.isAny('id', other.get('id')),
+                            name = snippet.get('name'),
+                            otherName = other.get('name'),
+                            queue,
+                            queueIndex,
+                            otherQueueIndex,
+                            result = 0;
+
+                        if (this.get('queueLabel.isSelected')) {
+                            queue = this.get('fileSystem.queue');
+                            queueIndex = queue.indexOf(snippet.get('id'));
+                            otherQueueIndex = queue.indexOf(other.get('id'));
+
+                            if (queueIndex < otherQueueIndex) {
+                                result = -1;
+                            } else if (queueIndex > otherQueueIndex) {
+                                result = 1;
+                            }
+                        } else {
+                            // TODO: remove isOffline check if decided to split online and offline search
+                            if (isOffline && !otherIsOffline) {
+                                result = -1;
+                            } else if (!isOffline && otherIsOffline) {
+                                result = 1;
+                            } else if (isOffline && otherIsOffline) {
+                                if (name < otherName) {
+                                    result = -1;
+                                } else if (name > otherName) {
+                                    result = 1;
+                                }
+                            }
+                        }
+
+                        return result;
+                    }.bind(this)*/
             });
         }.property('snippets'),
         // TODO: init in route via setupControl or something? (then same with components)
@@ -193,47 +215,6 @@ define(function(require) {
                 this.search(url);
             }
         },
-        onSnippetDragStart: function() {
-            var labels;
-
-            return function(event, ui) {
-                labels = this.get('fileSystem.labels');
-
-                /*ui.helper.data('snippets', this.get('selectedSnippets'));*/
-
-                labels.findBy('name', 'online').set('isSelected', false);
-                this.get('queueLabel').set('isSelected', true);
-                /*this.transitionToRoute('queue');*/
-            }.bind(this);
-        }.property( /*'selectedSnippets.@each', */ 'fileSystem.labels.@each.isSelected', 'queueLabel.isSelected'),
-        didSortQueue: function(snippetIds) {
-            var firstSnippetId = snippetIds.get('firstObject'),
-                hasChangedFirst = this.get('fileSystem.queue.firstObject') !== firstSnippetId,
-                firstSnippet;
-
-            this.set('fileSystem.queue', snippetIds);
-
-            this.get('selectedSnippets').forEach(function(snippet) {
-                if (!snippet.get('isSaved')) {
-                    snippet.save();
-                }
-
-                if (hasChangedFirst && snippet.get('id') === firstSnippetId) {
-                    firstSnippet = snippet;
-                }
-            });
-
-            if (hasChangedFirst && Ember.isEmpty(firstSnippet)) {
-                firstSnippet = this.get('fileSystem.snippets').findBy('id', firstSnippetId);
-            }
-
-            if (!Ember.isEmpty(firstSnippet)) {
-                this.get('audio').play(firstSnippet);
-            }
-        },
-        pushSnippetToQueue: function(snippet) {
-
-        },
         actions: {
             search: function() {
                 this.searchNew();
@@ -252,6 +233,37 @@ define(function(require) {
             },
             play: function(snippet) {
                 this.get('audio').play(snippet);
+            },
+            didDragStart: function() {
+                var labels = this.get('fileSystem.labels');
+
+                labels.findBy('name', 'online').set('isSelected', false);
+                this.get('queueLabel').set('isSelected', true);
+            },
+            didUpdate: function(snippetIds) {
+                var firstSnippetId = snippetIds.get('firstObject'),
+                    hasChangedFirst = this.get('fileSystem.queue.firstObject') !== firstSnippetId,
+                    firstSnippet;
+
+                this.set('fileSystem.queue', snippetIds);
+
+                this.get('selectedSnippets').forEach(function(snippet) {
+                    if (!snippet.get('isSaved')) {
+                        snippet.save();
+                    }
+
+                    if (hasChangedFirst && snippet.get('id') === firstSnippetId) {
+                        firstSnippet = snippet;
+                    }
+                });
+
+                if (hasChangedFirst && Ember.isEmpty(firstSnippet)) {
+                    firstSnippet = this.get('fileSystem.snippets').findBy('id', firstSnippetId);
+                }
+
+                if (!Ember.isEmpty(firstSnippet)) {
+                    this.get('audio').play(firstSnippet);
+                }
             }
         }
     });
