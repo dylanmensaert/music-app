@@ -8,7 +8,7 @@ define(function(require) {
         isReadOnly: false,
         isSelected: false,
         strip: function() {
-            return this.getProperties('name', 'isReadOnly', 'isSelected');
+            return this.getProperties('name', 'isReadOnly');
         }
     });
 });

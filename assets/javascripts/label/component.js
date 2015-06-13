@@ -14,6 +14,8 @@ define(function(require) {
         },
         click: function() {
             this.toggleProperty('label.isSelected');
+
+            this.sendAction('action');
         }
     });
 });

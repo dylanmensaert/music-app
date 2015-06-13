@@ -98,23 +98,6 @@ define(function(require) {
                 }, function() {
                     // TODO: write following via 1 action
                     this.get('labels').pushObject(Label.create({
-                        name: 'online',
-                        isReadOnly: true,
-                        isSelected: true
-                    }));
-
-                    this.get('labels').pushObject(Label.create({
-                        name: 'offline',
-                        isReadOnly: true,
-                        isSelected: true
-                    }));
-
-                    this.get('labels').pushObject(Label.create({
-                        name: 'music-only',
-                        isReadOnly: true
-                    }));
-
-                    this.get('labels').pushObject(Label.create({
                         name: 'saved',
                         isReadOnly: true
                     }));

@@ -19,6 +19,7 @@ define(function(require) {
         'snippets-component': require('snippets/component'),
         query: '',
         snippets: [],
+        newLabel: null,
         sortedSnippets: function() {
             return Ember.ArrayProxy.createWithMixins(Ember.SortableMixin, {
                 content: this.get('snippets'),
@@ -47,6 +48,8 @@ define(function(require) {
                 }.bind(this)
             });
         }.property('snippets'),
+        isOnline: true,
+        isOffline: true,
         // TODO: init in route via setupControl or something? (then same with components)
         queueLabel: Label.create({
             name: 'queue',
@@ -66,24 +69,6 @@ define(function(require) {
         showSelected: function() {
             return this.get('selectedSnippets.length') > 1;
         }.property('selectedSnippets.length'),
-        online: function() {
-            return this.get('fileSystem.labels').findBy('name', 'online');
-        }.property('fileSystem'),
-        offline: function() {
-            return this.get('fileSystem.labels').findBy('name', 'offline');
-        }.property('fileSystem'),
-        musicOnly: function() {
-            return this.get('fileSystem.labels').findBy('name', 'music-only');
-        }.property('fileSystem'),
-        labels: function() {
-            var name;
-
-            return this.get('fileSystem.labels').filter(function(label) {
-                name = label.get('name');
-
-                return name !== 'online' && name !== 'offline' && name !== 'music-only';
-            });
-        }.property('fileSystem.labels.@each'),
         offlineFilteredSnippets: function() {
             var offlineFilteredSnippets;
 
@@ -160,7 +145,7 @@ define(function(require) {
             this.set('snippets', []);
 
             this.search(this.get('searchUrl'));
-        }.observes('selectedLabels.@each'),
+        },
         searchNext: function() {
             var url;
 
@@ -191,9 +176,8 @@ define(function(require) {
                 this.get('audio').play(snippet);
             },
             didDragStart: function() {
-                var labels = this.get('fileSystem.labels');
+                this.get('fileSystem.labels').setEach('isSelected', false);
 
-                labels.findBy('name', 'online').set('isSelected', false);
                 this.get('queueLabel').set('isSelected', true);
             },
             didUpdate: function(snippetIds) {
@@ -220,6 +204,22 @@ define(function(require) {
                 if (!Ember.isEmpty(firstSnippet)) {
                     this.get('audio').play(firstSnippet);
                 }
+            },
+            createLabel: function() {
+                var newLabel = this.get('newLabel'),
+                    labels = this.get('fileSystem.labels');
+
+                if (!Ember.isEmpty(newLabel)) {
+                    if (!labels.isAny('name', newLabel)) {
+                        labels.pushObject(Label.create({
+                            name: newLabel
+                        }));
+                    } else {
+                        // TODO: Error when label already exists
+                    }
+                }
+
+                this.set('newLabel', null);
             }
         }
     });

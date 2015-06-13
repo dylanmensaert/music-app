@@ -16,17 +16,40 @@
             {{suggest-input value=query insert-newline='search'}}
 
             <div class="input-group-btn">
-                <button {{action 'search'}} class="btn btn-primary btn-search">
+                <button {{action 'search'}} class="btn btn-primary btn-icon">
                     <i class="fa fa-search"></i>
                 </button>
             </div>
         </div>
 
+        <div>
+            <label>
+                {{input type='checkbox' name='online' checked=isOnline}}
+                online
+            </label>
+        </div>
+
+        <div>
+            <label>
+                {{input type='checkbox' checked=isOffline}}
+                offline
+            </label>
+        </div>
+
+        <div class="input-group">
+            {{input value=newLabel placeholder='Create label' action='createLabel' on='enter' class="form-control"}}
+
+            <span class="input-group-btn">
+                <button {{action 'createLabel'}} class="btn btn-primary btn-icon">
+                    <i class="fa fa-check"></i>
+                </button>
+            </span>
+        </div>
+
         {{view label-component label=queueLabel}}&nbsp;
 
-        <!-- TODO: Implement session.model.filters based on fileSystem.model.labels -->
         {{#each label in fileSystem.labels}}
-            {{view label-component label=label}}&nbsp;
+            {{view label-component label=label action='search' }}&nbsp;
         {{/each}}
     </div>
 </div>
