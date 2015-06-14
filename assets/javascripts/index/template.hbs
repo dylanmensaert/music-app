@@ -7,7 +7,7 @@
         <div class="input-group">
             {{#if searchQuery}}
                 <div class="input-group-btn">
-                    <div {{action 'clear'}} class="btn btn-default">
+                    <div {{action 'clear' 'searchQuery'}} class="btn btn-default">
                         <i class="fa fa-times"></i>
                     </div>
                 </div>
@@ -24,7 +24,7 @@
 
         <div>
             <label>
-                {{input type='checkbox' name='online' checked=searchOnline}}
+                {{input type='checkbox' checked=searchOnline}}
                 online
             </label>
         </div>
@@ -44,7 +44,7 @@
         <div class="input-group">
             {{#if newLabel}}
                 <div class="input-group-btn">
-                    <div {{action 'clear'}} class="btn btn-default">
+                    <div {{action 'clear' 'newLabel'}} class="btn btn-default">
                         <i class="fa fa-times"></i>
                     </div>
                 </div>

@@ -7,10 +7,15 @@ define(function(require) {
         Label = require('label/object'),
         lastUrl,
         nextPageToken,
-        convertImageUrl;
+        convertImageUrl,
+        formatSearch;
 
     convertImageUrl = function(url) {
         return meta.imageHost + new URL(url).pathname;
+    };
+
+    formatSearch = function(value) {
+        return value.toLowerCase().replace(/\s/g, '')
     };
 
     return Ember.Controller.extend({
@@ -91,16 +96,22 @@ define(function(require) {
             return this.get('selectedSnippets.length') > 1;
         }.property('selectedSnippets.length'),
         offlineFilteredSnippets: function() {
-            var offlineFilteredSnippets;
+            var offlineFilteredSnippets,
+                hasSelectedLabels,
+                containsSearchQuery;
 
             offlineFilteredSnippets = this.get('fileSystem.snippets').filter(function(snippet) {
-                return this.get('selectedLabels').every(function(label) {
+                hasSelectedLabels = this.get('selectedLabels').every(function(label) {
                     return snippet.get('labels').contains(label.get('name'));
                 });
-            });
+
+                containsSearchQuery = formatSearch(snippet.get('name')).includes(formatSearch(this.get('searchQuery')));
+
+                return hasSelectedLabels && containsSearchQuery;
+            }.bind(this));
 
             return offlineFilteredSnippets;
-        }.property('selectedLabels.@each', 'fileSystem.snippets.@each.labels.@each'),
+        }.property('selectedLabels.@each', 'fileSystem.snippets.@each.labels.@each', 'searchQuery'),
         isLoading: false,
         search: function(url) {
             var fileSystem = this.get('fileSystem'),
@@ -166,7 +177,7 @@ define(function(require) {
             this.set('snippets', []);
 
             this.search(this.get('searchUrl'));
-        },
+        }.observes('searchOffline', 'searchOnline'),
         searchNext: function() {
             var url;
 
@@ -185,18 +196,37 @@ define(function(require) {
             /*load: function(snippet) {
                 this.get('audio').load(snippet);
             },*/
-            clear: function() {
-                this.set('searchQuery', '');
+            clear: function(field) {
+                this.set(field, '');
             },
             play: function(snippet) {
+                this.get('fileSystem.queue').unshiftObject(snippet.get('id'));
+
                 this.get('audio').play(snippet);
             },
-            didDragStart: function() {
+            pushToQueue: function(snippet) {
+                var snippets;
+
+                if (Ember.isEmpty(snippet)) {
+                    snippets = this.get('selectedSnippets');
+                } else {
+                    snippets = [snippet];
+                }
+
+                snippets.forEach(function(snippet) {
+                    if (!snippet.get('isSaved')) {
+                        snippet.save();
+                    }
+
+                    this.get('fileSystem.queue').pushObject(snippet.get('id'));
+                }.bind(this));
+            },
+            /*didDragStart: function() {
                 this.get('fileSystem.labels').setEach('isSelected', false);
 
                 this.get('queueLabel').set('isSelected', true);
-            },
-            didUpdate: function(snippetIds) {
+            },*/
+            /*didUpdate: function(snippetIds) {
                 var firstSnippetId = snippetIds.get('firstObject'),
                     hasChangedFirst = this.get('fileSystem.queue.firstObject') !== firstSnippetId,
                     firstSnippet;
@@ -220,7 +250,7 @@ define(function(require) {
                 if (!Ember.isEmpty(firstSnippet)) {
                     this.get('audio').play(firstSnippet);
                 }
-            },
+            },*/
             createLabel: function() {
                 var newLabel = this.get('newLabel'),
                     labels = this.get('fileSystem.labels');

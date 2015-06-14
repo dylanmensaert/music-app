@@ -18,6 +18,8 @@ define(function(require) {
                     this.get('controller').searchNext();
                 }
             }.bind(this));
+
+            this.get('controller').searchNew();
         },
         willDestroyElement: function() {
             Ember.$(window).unbind('scroll');
