@@ -4,7 +4,7 @@ define(function(require) {
     var Ember = require('ember'),
         meta = require('meta-data'),
         Snippet = require('snippet/object'),
-        Label = require('snippet/object'),
+        Label = require('label/object'),
         lastUrl,
         nextPageToken,
         convertImageUrl;
@@ -17,9 +17,25 @@ define(function(require) {
         'label-component': require('label/component'),
         'actionBar-component': require('action-bar/component'),
         'snippets-component': require('snippets/component'),
-        query: '',
+        searchQuery: '',
         snippets: [],
         newLabel: null,
+        fetchOnlineSuggestions: function(query, callback) {
+            var url = meta.suggestHost + '/complete/search?client=firefox&ds=yt',
+                suggestions;
+
+            url += '&q=' + query;
+
+            Ember.$.getJSON(url).then(function(response) {
+                suggestions = response[1].map(function(suggestion) {
+                    return {
+                        value: suggestion
+                    };
+                });
+
+                callback(suggestions);
+            });
+        },
         sortedSnippets: function() {
             return Ember.ArrayProxy.createWithMixins(Ember.SortableMixin, {
                 content: this.get('snippets'),
@@ -48,12 +64,17 @@ define(function(require) {
                 }.bind(this)
             });
         }.property('snippets'),
-        isOnline: true,
-        isOffline: true,
+        searchOnline: true,
+        searchOffline: true,
         // TODO: init in route via setupControl or something? (then same with components)
         queueLabel: Label.create({
             name: 'queue',
             isReadOnly: true
+        }),
+        musicOnlyLabel: Label.create({
+            name: 'music-only',
+            isReadOnly: true,
+            isSelected: true
         }),
         // TODO: save musicOnly label state (and others) in fileSystem someway
         /*musicOnly: Label.create({
@@ -91,13 +112,13 @@ define(function(require) {
 
             lastUrl = url;
 
-            if (selectedLabels.isAny('name', 'offline')) {
-                // TODO: Implement offline suggestions + results for query..
+            if (this.get('searchOffline')) {
+                // TODO: Implement offline suggestions + results for searchQuery..
                 // TODO: Check to improve performance
                 snippets.pushObjects(offlineFilteredSnippets);
             }
 
-            if (selectedLabels.isAny('name', 'online')) {
+            if (this.get('searchOnline')) {
                 this.set('isLoading', true);
 
                 Ember.$.getJSON(url).then(function(response) {
@@ -129,18 +150,18 @@ define(function(require) {
         },
         searchUrl: function() {
             var url = meta.searchHost + '/youtube/v3/search?part=snippet&order=viewCount&type=video&maxResults=50',
-                label = this.get('fileSystem.labels').findBy('name', 'music-only');
+                musicOnlyIsSelected = this.get('musicOnlyLabel.isSelected');
             // TODO: url += '&relatedToVideoId=' + this.get('videoId');
 
-            if (!Ember.isEmpty(label) && label.get('isSelected')) {
+            if (musicOnlyIsSelected) {
                 url += '&videoCategoryId=10';
             }
 
             url += '&key=' + meta.key;
-            url += '&q=' + this.get('query');
+            url += '&q=' + this.get('searchQuery');
 
             return url;
-        }.property('selectedLabels.@each', 'query'),
+        }.property('musicOnlyLabel.isSelected', 'searchQuery'),
         searchNew: function() {
             this.set('snippets', []);
 
@@ -165,12 +186,7 @@ define(function(require) {
                 this.get('audio').load(snippet);
             },*/
             clear: function() {
-                this.set('query', '');
-            },
-            toggleMusicOnly: function() {
-                this.toggleProperty('session.model.musicOnly');
-
-                this.searchNew();
+                this.set('searchQuery', '');
             },
             play: function(snippet) {
                 this.get('audio').play(snippet);

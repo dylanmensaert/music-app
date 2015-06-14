@@ -5,7 +5,7 @@
 <div class="jumbotron search">
     <div class="container">
         <div class="input-group">
-            {{#if query}}
+            {{#if searchQuery}}
                 <div class="input-group-btn">
                     <div {{action 'clear'}} class="btn btn-default">
                         <i class="fa fa-times"></i>
@@ -13,7 +13,7 @@
                 </div>
             {{/if}}
 
-            {{suggest-input value=query insert-newline='search'}}
+            {{suggest-input value=searchQuery placeholder='Search' fetchSuggestions=fetchOnlineSuggestions insert-newline='search'}}
 
             <div class="input-group-btn">
                 <button {{action 'search'}} class="btn btn-primary btn-icon">
@@ -24,20 +24,33 @@
 
         <div>
             <label>
-                {{input type='checkbox' name='online' checked=isOnline}}
+                {{input type='checkbox' name='online' checked=searchOnline}}
                 online
             </label>
         </div>
 
         <div>
+            {{view label-component label=musicOnlyLabel}}&nbsp;
+        </div>
+
+        <div>
             <label>
-                {{input type='checkbox' checked=isOffline}}
+                {{input type='checkbox' checked=searchOffline}}
                 offline
             </label>
         </div>
 
+        <!-- TODO: create component for whole input. Applies search && label in this case. -->
         <div class="input-group">
-            {{input value=newLabel placeholder='Create label' action='createLabel' on='enter' class="form-control"}}
+            {{#if newLabel}}
+                <div class="input-group-btn">
+                    <div {{action 'clear'}} class="btn btn-default">
+                        <i class="fa fa-times"></i>
+                    </div>
+                </div>
+            {{/if}}
+
+            {{input value=newLabel placeholder='Create label' action='createLabel' on='enter' class='form-control'}}
 
             <span class="input-group-btn">
                 <button {{action 'createLabel'}} class="btn btn-primary btn-icon">
