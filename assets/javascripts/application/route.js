@@ -67,6 +67,13 @@ define(function(require) {
 
                 tokens.reverse();
                 document.title = tokens.join(' - ');
+            },
+            play: function(snippet) {
+                if (!Ember.isEmpty(snippet)) {
+                    this.get('fileSystem.queue').unshiftObject(snippet.get('id'));
+                }
+
+                this.get('audio').play(snippet);
             }
         }
     });

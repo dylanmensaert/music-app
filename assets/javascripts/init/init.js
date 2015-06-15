@@ -7,8 +7,8 @@ define(function(require) {
 
     require('application/init');
     require('index/init');
-    require('labels');
-    require('queue');
+    require('labels/init');
+    require('queue/init');
 
     require('draggable');
     require('droppable');

@@ -12,19 +12,12 @@ define(function(require) {
         selectedSnippets: function() {
             return this.get('fileSystem.snippets').filterBy('isSelected', true);
         }.property('fileSystem.snippets.@each.isSelected'),
-        searchQuery: '',
         actions: {
             dismissAlert: function() {
                 this.set('error', null);
             },
-            play: function() {
-                this.get('audio').play();
-            },
             pause: function() {
                 this.get('audio').pause();
-            },
-            clear: function(field) {
-                this.set(field, '');
             }
         }
     });

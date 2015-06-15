@@ -4,11 +4,7 @@
         {{input value=newLabel placeholder='Create label' action='createLabel' on='enter' class='form-control'}}
 
         {{#if newLabel}}
-            <div class="input-group-btn">
-                <div {{action 'clear' 'newLabel'}} class="btn btn-default">
-                    <i class="fa fa-times"></i>
-                </div>
-            </div>
+            {{clear-addon text=newLabel}}
         {{/if}}
     </div>
 </div>

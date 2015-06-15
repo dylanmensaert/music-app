@@ -3,7 +3,7 @@ define(function(require) {
 
     var Ember = require('ember');
 
-    return Ember.View.extend(require('helpers/sortable'), {
+    return Ember.View.extend({
 
     });
 });

@@ -11,19 +11,25 @@
     </div>
 {{/if}}
 
-<div class="btn-group btn-group-justified menu-bar">
-    {{#menu-item 'labels'}}
-        Labels
-    {{/menu-item}}
+<ul class="nav nav-tabs nav-justified menu-bar">
+    {{#link-li}}
+        {{#link-to 'labels'}}
+            Labels
+        {{/link-to}}
+    {{/link-li}}
 
-    {{#menu-item 'index'}}
-        Search
-    {{/menu-item}}
+    {{#link-li}}
+        {{#link-to 'index'}}
+            Search
+        {{/link-to}}
+    {{/link-li}}
 
-    {{#menu-item 'queue'}}
-        queue
-    {{/menu-item}}
-</div>
+    {{#link-li}}
+        {{#link-to 'queue'}}
+            queue
+        {{/link-to}}
+    {{/link-li}}
+</ul>
 
 <div class="menu-placeholder" />
 
@@ -32,20 +38,6 @@
 
     <div class="action-bar-placeholder" />
 {{/if}}
-
-<div class="form-group">
-    <div {{bind-attr class='searchQuery:input-group'}}>
-        {{suggest-input value=searchQuery placeholder='Search' fetchSuggestions=fetchOnlineSuggestions insert-newline='search'}}
-
-        {{#if searchQuery}}
-            <div class="input-group-btn">
-                <div {{action 'clear' 'searchQuery'}} class="btn btn-default">
-                    <i class="fa fa-times"></i>
-                </div>
-            </div>
-        {{/if}}
-    </div>
-</div>
 
 {{outlet}}
 

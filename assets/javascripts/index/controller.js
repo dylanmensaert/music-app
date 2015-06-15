@@ -22,6 +22,7 @@ define(function(require) {
         'label-component': require('label/component'),
         'snippets-component': require('snippets/component'),
         snippets: [],
+        searchQuery: null,
         fetchOnlineSuggestions: function(query, callback) {
             var url = meta.suggestHost + '/complete/search?client=firefox&ds=yt',
                 suggestions;
@@ -189,11 +190,6 @@ define(function(require) {
             /*load: function(snippet) {
                 this.get('audio').load(snippet);
             },*/
-            play: function(snippet) {
-                this.get('fileSystem.queue').unshiftObject(snippet.get('id'));
-
-                this.get('audio').play(snippet);
-            },
             pushToQueue: function(snippet) {
                 var snippets;
 

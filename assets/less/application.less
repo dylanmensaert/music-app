@@ -13,14 +13,9 @@ html {
 
 .action-bar {
     .bar;
-    height: 34px;
+    height: 42px;
     font-size: 22px;
     background: orange;
-    top: 34px;
-}
-
-.menu-placeholder {
-    height: 34px;
 }
 
 .action-cancel {
@@ -112,13 +107,6 @@ html {
     border: none;
 }
 
-.search {
-    margin-bottom: 10px;
-    @media screen and (min-width: 768px) {
-        padding: 30px 0;
-    }
-}
-
 .btn-icon {
     width: 60px;
 }
@@ -185,12 +173,26 @@ html {
     user-select: none;
 }
 
-.menu-bar {
+.menu-bar.nav-tabs.nav-justified {
     .bar;
     top: 0;
     background-color: #eeeeee;
+
+    li {
+        display: table-cell;
+        width: 1%;
+
+        a {
+            border-bottom: 1px solid #ddd;
+            border-radius: 4px 4px 0 0;
+            margin-bottom: 0;
+        }
+    }
+    .active a {
+        border-bottom-color: #fff;
+    }
 }
 
 .menu-placeholder {
-    height: 34px;
+    height: 42px;
 }

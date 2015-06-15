@@ -1,49 +1,49 @@
-<div class="jumbotron search">
-    <div>
-        <label>
-            {{input type='checkbox' checked=searchOnline}}
-            online
-        </label>
+<div class="btn-group btn-group-justified">
+    <div class="btn btn-primary">
+        Online
     </div>
-
-    <div>
-        {{view label-component label=musicOnlyLabel}}&nbsp;
-    </div>
-
-    <div>
-        <label>
-            {{input type='checkbox' checked=searchOffline}}
-            offline
-        </label>
-    </div>
-
-    {{view label-component label=queueLabel}}&nbsp;
-
-    <div>
-        <label>
-            {{input type='checkbox' checked=searchOnline}}
-            online
-        </label>
-    </div>
-
-    <div>
-        {{view label-component label=musicOnlyLabel}}&nbsp;
-    </div>
-
-    <div>
-        <label>
-            {{input type='checkbox' checked=searchOffline}}
-            offline
-        </label>
+    <div class="btn">
+        Offline
     </div>
 </div>
+
+<div class="form-group">
+    <div {{bind-attr class='searchQuery:input-group'}}>
+        {{suggest-input value=searchQuery placeholder='Search' fetchSuggestions=fetchOnlineSuggestions insert-newline='search'}}
+
+        {{#if searchQuery}}
+            {{clear-addon text=searchQuery}}
+        {{/if}}
+    </div>
+</div>
+
+<div>
+    <label>
+        {{input type='checkbox' checked=searchOnline}}
+        online
+    </label>
+</div>
+
+<div>
+    {{view label-component label=musicOnlyLabel}}&nbsp;
+</div>
+
+<div>
+    <label>
+        {{input type='checkbox' checked=searchOffline}}
+        offline
+    </label>
+</div>
+
+{{view label-component label=queueLabel}}&nbsp;
+
 
 <button class="btn btn-default btn-file">
     Import audio
     {{file-input}}
 </button>
 
-{{view snippets-component snippets=sortedSnippets action='play' param=snippet didUpdate='didUpdate' param=snippetIds didDragStart='didDragStart'}}
+{{view snippets-component snippets=sortedSnippets action='play' param=snippet}}
 
 {{#if isLoading}}
     <div class="text-center audio-icon">
