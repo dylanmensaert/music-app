@@ -20,11 +20,8 @@ define(function(require) {
 
     return Ember.Controller.extend({
         'label-component': require('label/component'),
-        'actionBar-component': require('action-bar/component'),
         'snippets-component': require('snippets/component'),
-        searchQuery: '',
         snippets: [],
-        newLabel: null,
         fetchOnlineSuggestions: function(query, callback) {
             var url = meta.suggestHost + '/complete/search?client=firefox&ds=yt',
                 suggestions;
@@ -72,10 +69,6 @@ define(function(require) {
         searchOnline: true,
         searchOffline: true,
         // TODO: init in route via setupControl or something? (then same with components)
-        queueLabel: Label.create({
-            name: 'queue',
-            isReadOnly: true
-        }),
         musicOnlyLabel: Label.create({
             name: 'music-only',
             isReadOnly: true,
@@ -196,9 +189,6 @@ define(function(require) {
             /*load: function(snippet) {
                 this.get('audio').load(snippet);
             },*/
-            clear: function(field) {
-                this.set(field, '');
-            },
             play: function(snippet) {
                 this.get('fileSystem.queue').unshiftObject(snippet.get('id'));
 
@@ -251,22 +241,6 @@ define(function(require) {
                     this.get('audio').play(firstSnippet);
                 }
             },*/
-            createLabel: function() {
-                var newLabel = this.get('newLabel'),
-                    labels = this.get('fileSystem.labels');
-
-                if (!Ember.isEmpty(newLabel)) {
-                    if (!labels.isAny('name', newLabel)) {
-                        labels.pushObject(Label.create({
-                            name: newLabel
-                        }));
-                    } else {
-                        // TODO: Error when label already exists
-                    }
-                }
-
-                this.set('newLabel', null);
-            }
         }
     });
 });

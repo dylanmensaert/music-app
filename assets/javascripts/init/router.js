@@ -10,6 +10,7 @@ define(function(require) {
     });
 
     App.Router.map(function() {
-
+        this.resource('labels');
+        this.resource('queue');
     });
 });

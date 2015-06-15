@@ -11,6 +11,42 @@
     </div>
 {{/if}}
 
+<div class="btn-group btn-group-justified menu-bar">
+    {{#menu-item 'labels'}}
+        Labels
+    {{/menu-item}}
+
+    {{#menu-item 'index'}}
+        Search
+    {{/menu-item}}
+
+    {{#menu-item 'queue'}}
+        queue
+    {{/menu-item}}
+</div>
+
+<div class="menu-placeholder" />
+
+{{#if selectedSnippets}}
+    {{view action-bar snippets=selectedSnippets}}
+
+    <div class="action-bar-placeholder" />
+{{/if}}
+
+<div class="form-group">
+    <div {{bind-attr class='searchQuery:input-group'}}>
+        {{suggest-input value=searchQuery placeholder='Search' fetchSuggestions=fetchOnlineSuggestions insert-newline='search'}}
+
+        {{#if searchQuery}}
+            <div class="input-group-btn">
+                <div {{action 'clear' 'searchQuery'}} class="btn btn-default">
+                    <i class="fa fa-times"></i>
+                </div>
+            </div>
+        {{/if}}
+    </div>
+</div>
+
 {{outlet}}
 
 {{#if audio.snippet}}

@@ -1,69 +1,40 @@
-{{#if selectedSnippets}}
-    {{view actionBar-component snippets=selectedSnippets}}
-{{/if}}
-
 <div class="jumbotron search">
-    <div class="container">
-        <div class="input-group">
-            {{#if searchQuery}}
-                <div class="input-group-btn">
-                    <div {{action 'clear' 'searchQuery'}} class="btn btn-default">
-                        <i class="fa fa-times"></i>
-                    </div>
-                </div>
-            {{/if}}
+    <div>
+        <label>
+            {{input type='checkbox' checked=searchOnline}}
+            online
+        </label>
+    </div>
 
-            {{suggest-input value=searchQuery placeholder='Search' fetchSuggestions=fetchOnlineSuggestions insert-newline='search'}}
+    <div>
+        {{view label-component label=musicOnlyLabel}}&nbsp;
+    </div>
 
-            <div class="input-group-btn">
-                <button {{action 'search'}} class="btn btn-primary btn-icon">
-                    <i class="fa fa-search"></i>
-                </button>
-            </div>
-        </div>
+    <div>
+        <label>
+            {{input type='checkbox' checked=searchOffline}}
+            offline
+        </label>
+    </div>
 
-        <div>
-            <label>
-                {{input type='checkbox' checked=searchOnline}}
-                online
-            </label>
-        </div>
+    {{view label-component label=queueLabel}}&nbsp;
 
-        <div>
-            {{view label-component label=musicOnlyLabel}}&nbsp;
-        </div>
+    <div>
+        <label>
+            {{input type='checkbox' checked=searchOnline}}
+            online
+        </label>
+    </div>
 
-        <div>
-            <label>
-                {{input type='checkbox' checked=searchOffline}}
-                offline
-            </label>
-        </div>
+    <div>
+        {{view label-component label=musicOnlyLabel}}&nbsp;
+    </div>
 
-        <!-- TODO: create component for whole input. Applies search && label in this case. -->
-        <div class="input-group">
-            {{#if newLabel}}
-                <div class="input-group-btn">
-                    <div {{action 'clear' 'newLabel'}} class="btn btn-default">
-                        <i class="fa fa-times"></i>
-                    </div>
-                </div>
-            {{/if}}
-
-            {{input value=newLabel placeholder='Create label' action='createLabel' on='enter' class='form-control'}}
-
-            <span class="input-group-btn">
-                <button {{action 'createLabel'}} class="btn btn-primary btn-icon">
-                    <i class="fa fa-check"></i>
-                </button>
-            </span>
-        </div>
-
-        {{view label-component label=queueLabel}}&nbsp;
-
-        {{#each label in fileSystem.labels}}
-            {{view label-component label=label action='search' }}&nbsp;
-        {{/each}}
+    <div>
+        <label>
+            {{input type='checkbox' checked=searchOffline}}
+            offline
+        </label>
     </div>
 </div>
 
