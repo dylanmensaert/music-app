@@ -2,10 +2,21 @@ define(function(require) {
     'use strict';
 
     var Ember = require('ember'),
-        Label = require('label/object');
+        Label = require('label/object'),
+        formatSearch;
+
+    formatSearch = function(value) {
+        return value.toLowerCase().replace(/\s/g, '')
+    };
 
     return Ember.Controller.extend({
         query: null,
+        // TODO: Implement
+        fetchSuggestions: function() {
+            this.get('labels').map(function(label) {
+                formatSearch(label.get('name')).includes(formatSearch(query));
+            });
+        },
         sortedLabels: function() {
             return Ember.ArrayProxy.createWithMixins(Ember.SortableMixin, {
                 content: this.get('labels'),
@@ -31,7 +42,7 @@ define(function(require) {
             }
 
             return labels;
-        }.property('fileSystem.labels.@each', 'selectedSnippets.@each'),
+        }.property('fileSystem.labels.@each.name', 'selectedSnippets.@each', 'query'),
         actions: {
             createLabel: function() {
                 var query = this.get('query'),
@@ -66,6 +77,13 @@ define(function(require) {
                 } else {
                     // TODO: implement
                 }
+            },
+            removeLabel: function(label) {
+                this.get('fileSystem.snippets').forEach(function(snippet) {
+                    snippet.get('labels').removeObject(label.get('name'));
+                });
+
+                this.get('fileSystem.labels').removeObject(label);
             }
         }
     });

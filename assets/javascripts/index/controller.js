@@ -88,12 +88,13 @@ define(function(require) {
         searchOnline: true,
         searchMusicOnly: true,
         searchOffline: true,
+        /*TODO: Implement this as a function instead of property?*/
         offlineFilteredSnippets: function() {
             return this.get('fileSystem.snippets').filter(function(snippet) {
                 /*TODO: Implement label search also?*/
                 return formatSearch(snippet.get('name')).includes(formatSearch(this.get('query')));
             }.bind(this));
-        }.property('query'),
+        }.property('query', 'fileSystem.snippets.@each.name'),
         isLoading: false,
         search: function(url) {
             var fileSystem = this.get('fileSystem'),
