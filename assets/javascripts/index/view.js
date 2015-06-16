@@ -15,11 +15,10 @@ define(function(require) {
                 maxPosition = this.$().offset().top + this.$().outerHeight(true) - viewport.height();
 
                 if (position > maxPosition) {
-                    this.get('controller').searchNext();
+                    // TODO: Implement better way of doing this
+                    this.get('controller').updateOnlineSnippets(this.get('controller.nextPageToken'));
                 }
             }.bind(this));
-
-            this.get('controller').searchNew();
         },
         willDestroyElement: function() {
             Ember.$(window).unbind('scroll');

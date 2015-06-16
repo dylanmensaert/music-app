@@ -2,10 +2,9 @@ define(function(require) {
     'use strict';
 
     var Ember = require('ember'),
+        DS = require('ember-data'),
         meta = require('meta-data'),
         Snippet = require('snippet/object'),
-        lastUrl,
-        nextPageToken,
         convertImageUrl,
         formatSearch;
 
@@ -34,7 +33,7 @@ define(function(require) {
                 lastQuery = query;
 
                 if (this.get('searchOffline')) {
-                    offlineSuggestions = this.get('offlineSnippets').map(function(snippet) {
+                    offlineSuggestions = this.get('fileSystem.snippets').map(function(snippet) {
                         return {
                             value: snippet.get('name')
                         };
@@ -63,7 +62,7 @@ define(function(require) {
                     })(lastQuery);
                 }
             }.bind(this);
-        }.property('searchOffline', 'searchOnline', 'offlineSnippets.@each'),
+        }.property('searchOffline', 'searchOnline', 'fileSystem.snippets.@each.name'),
         sortedSnippets: function() {
             return Ember.ArrayProxy.createWithMixins(Ember.SortableMixin, {
                 content: this.get('snippets'),
@@ -91,7 +90,11 @@ define(function(require) {
         snippets: function() {
             var snippets = this.get('offlineSnippets');
 
-            snippets.pushObjects(this.get('onlineSnippets'));
+            this.get('onlineSnippets').forEach(function(snippet) {
+                if (!snippets.isAny('id', snippet.get('id'))) {
+                    snippets.pushObject(snippet);
+                }
+            });
 
             return snippets;
         }.property('offlineSnippets.@each', 'onlineSnippets.@each'),
@@ -113,15 +116,13 @@ define(function(require) {
         }.property('query', 'fileSystem.snippets.@each.name', 'searchOffline'),
         nextPageToken: null,
         isLoading: false,
-        onlineSnippets: function() {
+        onlineSnippets: [],
+        updateOnlineSnippets: function(nextPageToken) {
             var url,
-                nextPageToken,
-                snippets = [];
+                snippets;
 
             if (this.get('searchOnline')) {
                 url = meta.searchHost + '/youtube/v3/search?part=snippet&order=viewCount&type=video&maxResults=50';
-                nextPageToken = this.get('nextPageToken');
-
                 this.set('isLoading', true);
 
                 // TODO: url += '&relatedToVideoId=' + this.get('videoId');
@@ -138,34 +139,34 @@ define(function(require) {
                 }
 
                 Ember.$.getJSON(url).then(function(response) {
-                    if (lastUrl === url) {
-                        response.items.forEach(function(item) {
-                            id = item.id.videoId;
-
-                            if (!offlineSnippets.isAny('id', id)) {
-                                snippets.pushObject(Snippet.create({
-                                    id: id,
-                                    title: item.snippet.title,
-                                    extension: 'mp3',
-                                    thumbnail: convertImageUrl(item.snippet.thumbnails.high.url),
-                                    fileSystem: fileSystem
-                                }));
-                            }
-                        });
-
-                        if (Ember.isEmpty(response.nextPageToken)) {
-                            nextPageToken = null;
-                        } else {
-                            nextPageToken = response.nextPageToken;
-                        }
-
-                        this.set('isLoading', false);
+                    if (Ember.isEmpty(response.nextPageToken)) {
+                        nextPageToken = null;
+                    } else {
+                        nextPageToken = response.nextPageToken;
                     }
+
+                    this.set('nextPageToken', nextPageToken);
+
+                    snippets = response.items.map(function(item) {
+                        return Snippet.create({
+                            id: item.id.videoId,
+                            title: item.snippet.title,
+                            extension: 'mp3',
+                            thumbnail: convertImageUrl(item.snippet.thumbnails.high.url),
+                            // TODO: Remove if possible
+                            fileSystem: this.get('fileSystem')
+                        });
+                    }.bind(this));
+
+                    this.set('onlineSnippets', snippets);
+
+                    this.set('isLoading', false);
                 }.bind(this));
             }
-
-            return snippets;
-        }.property('query', 'searchOnline', 'searchMusicOnly'),
+        },
+        scheduleUpdateOnlineSnippets: function() {
+            Ember.run.once(this, this.updateOnlineSnippets);
+        }.observes('query', 'searchOnline', 'searchMusicOnly'),
         actions: {
             search: function() {
                 this.set('query', this.get('liveQuery'));
