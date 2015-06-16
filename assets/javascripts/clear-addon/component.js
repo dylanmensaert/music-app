@@ -6,10 +6,10 @@ define(function(require) {
     return Ember.Component.extend({
         layoutName: 'clearAddon',
         classNames: ['input-group-btn'],
-        text: null,
+        text: '',
         actions: {
             clear: function() {
-                this.set('text', null);
+                this.set('text', '');
             }
         }
     });

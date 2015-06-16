@@ -22,23 +22,49 @@ define(function(require) {
         'label-component': require('label/component'),
         'snippets-component': require('snippets/component'),
         snippets: [],
-        searchQuery: null,
-        fetchOnlineSuggestions: function(query, callback) {
-            var url = meta.suggestHost + '/complete/search?client=firefox&ds=yt',
-                suggestions;
+        query: '',
+        fetchSuggestions: function() {
+            var url,
+                offlineSuggestions,
+                onlineSuggestions,
+                lastQuery;
 
-            url += '&q=' + query;
+            return function(query, callback) {
+                var suggestions = [];
 
-            Ember.$.getJSON(url).then(function(response) {
-                suggestions = response[1].map(function(suggestion) {
-                    return {
-                        value: suggestion
-                    };
-                });
+                lastQuery = query;
 
-                callback(suggestions);
-            });
-        },
+                if (this.get('searchOffline')) {
+                    offlineSuggestions = this.get('offlineFilteredSnippets').map(function(snippet) {
+                        return {
+                            value: snippet.get('name')
+                        };
+                    });
+
+                    suggestions.pushObjects(offlineSuggestions);
+                    callback(suggestions);
+                }
+
+                if (this.get('searchOnline')) {
+                    url = meta.suggestHost + '/complete/search?client=firefox&ds=yt&q=' + query;
+
+                    (function(oldQuery) {
+                        Ember.$.getJSON(url).then(function(response) {
+                            if (oldQuery === lastQuery) {
+                                onlineSuggestions = response[1].map(function(suggestion) {
+                                    return {
+                                        value: suggestion
+                                    };
+                                });
+
+                                suggestions.pushObjects(onlineSuggestions);
+                                callback(suggestions);
+                            }
+                        });
+                    })(lastQuery);
+                }
+            }.bind(this);
+        }.property('searchOffline', 'searchOnline', 'offlineFilteredSnippets'),
         sortedSnippets: function() {
             return Ember.ArrayProxy.createWithMixins(Ember.SortableMixin, {
                 content: this.get('snippets'),
@@ -48,17 +74,10 @@ define(function(require) {
                     var offlineFilteredSnippets = this.get('offlineFilteredSnippets'),
                         isOffline = offlineFilteredSnippets.isAny('id', snippet.get('id')),
                         otherIsOffline = offlineFilteredSnippets.isAny('id', other.get('id')),
-                        queue,
                         result = -1;
 
-                    if (this.get('queueLabel.isSelected')) {
-                        queue = this.get('fileSystem.queue');
-
-                        if (queue.indexOf(snippet.get('id')) > queue.indexOf(other.get('id'))) {
-                            result = 1;
-                        }
-                        // TODO: remove isOffline check if decided to split online and offline search
-                    } else if ((!isOffline && otherIsOffline) || (isOffline && otherIsOffline && snippet.get('name') > other.get(
+                    // TODO: remove isOffline check if decided to split online and offline search
+                    if ((!isOffline && otherIsOffline) || (isOffline && otherIsOffline && snippet.get('name') > other.get(
                             'name'))) {
                         result = 1;
                     }
@@ -67,45 +86,16 @@ define(function(require) {
                 }.bind(this)
             });
         }.property('snippets'),
-        searchOnline: true,
-        searchOffline: true,
-        // TODO: init in route via setupControl or something? (then same with components)
-        musicOnlyLabel: Label.create({
-            name: 'music-only',
-            isReadOnly: true,
-            isSelected: true
-        }),
         // TODO: save musicOnly label state (and others) in fileSystem someway
-        /*musicOnly: Label.create({
-            name: 'music-only',
-            isReadOnly: true
-        }),*/
-        selectedSnippets: function() {
-            return this.get('snippets').filterBy('isSelected', true);
-        }.property('snippets.@each.isSelected'),
-        selectedLabels: function() {
-            return this.get('fileSystem.labels').filterBy('isSelected', true);
-        }.property('fileSystem.labels.@each.isSelected'),
-        showSelected: function() {
-            return this.get('selectedSnippets.length') > 1;
-        }.property('selectedSnippets.length'),
+        searchOnline: true,
+        searchMusicOnly: true,
+        searchOffline: true,
         offlineFilteredSnippets: function() {
-            var offlineFilteredSnippets,
-                hasSelectedLabels,
-                containsSearchQuery;
-
-            offlineFilteredSnippets = this.get('fileSystem.snippets').filter(function(snippet) {
-                hasSelectedLabels = this.get('selectedLabels').every(function(label) {
-                    return snippet.get('labels').contains(label.get('name'));
-                });
-
-                containsSearchQuery = formatSearch(snippet.get('name')).includes(formatSearch(this.get('searchQuery')));
-
-                return hasSelectedLabels && containsSearchQuery;
+            return this.get('fileSystem.snippets').filter(function(snippet) {
+                /*TODO: Implement label search also?*/
+                return formatSearch(snippet.get('name')).includes(formatSearch(this.get('query')));
             }.bind(this));
-
-            return offlineFilteredSnippets;
-        }.property('selectedLabels.@each', 'fileSystem.snippets.@each.labels.@each', 'searchQuery'),
+        }.property('query'),
         isLoading: false,
         search: function(url) {
             var fileSystem = this.get('fileSystem'),
@@ -118,8 +108,6 @@ define(function(require) {
             lastUrl = url;
 
             if (this.get('searchOffline')) {
-                // TODO: Implement offline suggestions + results for searchQuery..
-                // TODO: Check to improve performance
                 snippets.pushObjects(offlineFilteredSnippets);
             }
 
@@ -154,19 +142,18 @@ define(function(require) {
             }
         },
         searchUrl: function() {
-            var url = meta.searchHost + '/youtube/v3/search?part=snippet&order=viewCount&type=video&maxResults=50',
-                musicOnlyIsSelected = this.get('musicOnlyLabel.isSelected');
+            var url = meta.searchHost + '/youtube/v3/search?part=snippet&order=viewCount&type=video&maxResults=50';
             // TODO: url += '&relatedToVideoId=' + this.get('videoId');
 
-            if (musicOnlyIsSelected) {
+            if (this.get('searchMusicOnly')) {
                 url += '&videoCategoryId=10';
             }
 
             url += '&key=' + meta.key;
-            url += '&q=' + this.get('searchQuery');
+            url += '&q=' + this.get('query');
 
             return url;
-        }.property('musicOnlyLabel.isSelected', 'searchQuery'),
+        }.property('searchMusicOnly', 'query'),
         searchNew: function() {
             this.set('snippets', []);
 
@@ -186,18 +173,9 @@ define(function(require) {
             search: function() {
                 this.searchNew();
             },
-            // TODO: move load action to playlist
-            /*load: function(snippet) {
-                this.get('audio').load(snippet);
-            },*/
+            /*TODO: Figure out if will select on snippet drag? else implement snippets.pushObject(snippet);*/
             pushToQueue: function(snippet) {
-                var snippets;
-
-                if (Ember.isEmpty(snippet)) {
-                    snippets = this.get('selectedSnippets');
-                } else {
-                    snippets = [snippet];
-                }
+                var snippets = this.get('fileSystem.snippets').filterBy('isSelected', true);
 
                 snippets.forEach(function(snippet) {
                     if (!snippet.get('isSaved')) {
@@ -207,36 +185,19 @@ define(function(require) {
                     this.get('fileSystem.queue').pushObject(snippet.get('id'));
                 }.bind(this));
             },
-            /*didDragStart: function() {
-                this.get('fileSystem.labels').setEach('isSelected', false);
+            save: function(snippet) {
+                var snippets = this.get('fileSystem.snippets').filterBy('isSelected', true);
 
-                this.get('queueLabel').set('isSelected', true);
-            },*/
-            /*didUpdate: function(snippetIds) {
-                var firstSnippetId = snippetIds.get('firstObject'),
-                    hasChangedFirst = this.get('fileSystem.queue.firstObject') !== firstSnippetId,
-                    firstSnippet;
-
-                this.set('fileSystem.queue', snippetIds);
-
-                this.get('selectedSnippets').forEach(function(snippet) {
+                snippets.forEach(function(snippet) {
+                    /*TODO: Check if wifi, else add label and this.get('fileSystem.snippets').push.. Also make compatible with browser*/
                     if (!snippet.get('isSaved')) {
                         snippet.save();
                     }
-
-                    if (hasChangedFirst && snippet.get('id') === firstSnippetId) {
-                        firstSnippet = snippet;
-                    }
                 });
-
-                if (hasChangedFirst && Ember.isEmpty(firstSnippet)) {
-                    firstSnippet = this.get('fileSystem.snippets').findBy('id', firstSnippetId);
-                }
-
-                if (!Ember.isEmpty(firstSnippet)) {
-                    this.get('audio').play(firstSnippet);
-                }
-            },*/
+            },
+            toggle: function(property) {
+                this.toggleProperty(property);
+            }
         }
     });
 });

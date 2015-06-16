@@ -66,14 +66,6 @@ define(function(require) {
                 audio.didEnd();
             });
 
-            element.addEventListener('canplaythrough', function() {
-                if (!audio.get('snippet.isSaved')) {
-                    // TODO: currentSrc references the online source. Consider using download instead of fetchDownload, save, ..
-                    // audio.set('snippet.audio', element.currentSrc);
-                    audio.get('snippet').save();
-                }
-            });
-
             audio.set('element', element);
         },
         willDestroyElement: function() {
