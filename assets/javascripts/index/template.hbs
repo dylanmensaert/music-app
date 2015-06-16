@@ -11,12 +11,12 @@
 </div>
 
 <div class="form-group">
-    <div {{bind-attr class='query:input-group'}}>
-        {{#if query}}
-            {{clear-addon text=query}}
+    <div {{bind-attr class='liveQuery:input-group'}}>
+        {{#if liveQuery}}
+            {{clear-addon text=liveQuery}}
         {{/if}}
 
-        {{suggest-input value=query placeholder='Search' fetchSuggestions=fetchSuggestions insert-newline='search'}}
+        {{suggest-input value=liveQuery placeholder='Search' fetchSuggestions=fetchSuggestions insert-newline='search'}}
     </div>
 </div>
 

@@ -1,10 +1,10 @@
 <div class="form-group">
     <div class="input-group">
-        {{#if query}}
-            {{clear-addon text=query}}
+        {{#if liveQuery}}
+            {{clear-addon text=liveQuery}}
         {{/if}}
 
-        {{input value=query placeholder='Create or search label' action='search' on='enter' class='form-control'}}
+        {{input value=liveQuery placeholder='Create or search label' action='search' on='enter' class='form-control'}}
 
         <div {{action 'createLabel'}} class="input-group-btn">
             <div class="btn btn-primary">

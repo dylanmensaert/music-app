@@ -20,7 +20,7 @@ define(function(require) {
     return Ember.Controller.extend({
         'label-component': require('label/component'),
         'snippets-component': require('snippets/component'),
-        snippets: [],
+        liveQuery: '',
         query: '',
         fetchSuggestions: function() {
             var url,
@@ -34,7 +34,7 @@ define(function(require) {
                 lastQuery = query;
 
                 if (this.get('searchOffline')) {
-                    offlineSuggestions = this.get('offlineFilteredSnippets').map(function(snippet) {
+                    offlineSuggestions = this.get('offlineSnippets').map(function(snippet) {
                         return {
                             value: snippet.get('name')
                         };
@@ -63,15 +63,15 @@ define(function(require) {
                     })(lastQuery);
                 }
             }.bind(this);
-        }.property('searchOffline', 'searchOnline', 'offlineFilteredSnippets'),
+        }.property('searchOffline', 'searchOnline', 'offlineSnippets.@each'),
         sortedSnippets: function() {
             return Ember.ArrayProxy.createWithMixins(Ember.SortableMixin, {
                 content: this.get('snippets'),
                 sortProperties: ['name', 'id'],
                 orderBy: function(snippet, other) {
-                    var offlineFilteredSnippets = this.get('offlineFilteredSnippets'),
-                        isOffline = offlineFilteredSnippets.isAny('id', snippet.get('id')),
-                        otherIsOffline = offlineFilteredSnippets.isAny('id', other.get('id')),
+                    var offlineSnippets = this.get('offlineSnippets'),
+                        isOffline = offlineSnippets.isAny('id', snippet.get('id')),
+                        otherIsOffline = offlineSnippets.isAny('id', other.get('id')),
                         result = -1;
 
                     // TODO: remove isOffline check if decided to split online and offline search
@@ -88,37 +88,61 @@ define(function(require) {
         searchOnline: true,
         searchMusicOnly: true,
         searchOffline: true,
-        /*TODO: Implement this as a function instead of property?*/
-        offlineFilteredSnippets: function() {
-            return this.get('fileSystem.snippets').filter(function(snippet) {
-                /*TODO: Implement label search also?*/
-                return formatSearch(snippet.get('name')).includes(formatSearch(this.get('query')));
-            }.bind(this));
-        }.property('query', 'fileSystem.snippets.@each.name'),
-        isLoading: false,
-        search: function(url) {
-            var fileSystem = this.get('fileSystem'),
-                selectedLabels = this.get('selectedLabels'),
-                offlineFilteredSnippets = this.get('offlineFilteredSnippets'),
-                promises = [],
-                snippets = this.get('snippets'),
-                id;
+        snippets: function() {
+            var snippets = this.get('offlineSnippets');
 
-            lastUrl = url;
+            snippets.pushObjects(this.get('onlineSnippets'));
+
+            return snippets;
+        }.property('offlineSnippets.@each', 'onlineSnippets.@each'),
+        /*TODO: Implement this as a function instead of property?*/
+        offlineSnippets: function() {
+            var snippets = [],
+                offlineSnippets;
 
             if (this.get('searchOffline')) {
-                snippets.pushObjects(offlineFilteredSnippets);
+                offlineSnippets = this.get('fileSystem.snippets').filter(function(snippet) {
+                    /*TODO: Implement label search also?*/
+                    return formatSearch(snippet.get('name')).includes(formatSearch(this.get('query')));
+                }.bind(this));
+
+                snippets.pushObjects(offlineSnippets);
             }
 
+            return snippets;
+        }.property('query', 'fileSystem.snippets.@each.name', 'searchOffline'),
+        nextPageToken: null,
+        isLoading: false,
+        onlineSnippets: function() {
+            var url,
+                nextPageToken,
+                snippets = [];
+
             if (this.get('searchOnline')) {
+                url = meta.searchHost + '/youtube/v3/search?part=snippet&order=viewCount&type=video&maxResults=50';
+                nextPageToken = this.get('nextPageToken');
+
                 this.set('isLoading', true);
+
+                // TODO: url += '&relatedToVideoId=' + this.get('videoId');
+                if (this.get('searchMusicOnly')) {
+                    url += '&videoCategoryId=10';
+                }
+
+                url += '&key=' + meta.key;
+                url += '&q=' + this.get('query');
+
+                if (!Ember.isEmpty(nextPageToken)) {
+                    // Implement as searchNext because it will not work this way.
+                    url += '&pageToken=' + nextPageToken;
+                }
 
                 Ember.$.getJSON(url).then(function(response) {
                     if (lastUrl === url) {
                         response.items.forEach(function(item) {
                             id = item.id.videoId;
 
-                            if (!offlineFilteredSnippets.isAny('id', id)) {
+                            if (!offlineSnippets.isAny('id', id)) {
                                 snippets.pushObject(Snippet.create({
                                     id: id,
                                     title: item.snippet.title,
@@ -139,38 +163,12 @@ define(function(require) {
                     }
                 }.bind(this));
             }
-        },
-        searchUrl: function() {
-            var url = meta.searchHost + '/youtube/v3/search?part=snippet&order=viewCount&type=video&maxResults=50';
-            // TODO: url += '&relatedToVideoId=' + this.get('videoId');
 
-            if (this.get('searchMusicOnly')) {
-                url += '&videoCategoryId=10';
-            }
-
-            url += '&key=' + meta.key;
-            url += '&q=' + this.get('query');
-
-            return url;
-        }.property('searchMusicOnly', 'query'),
-        searchNew: function() {
-            this.set('snippets', []);
-
-            this.search(this.get('searchUrl'));
-        }.observes('searchOffline', 'searchOnline'),
-        searchNext: function() {
-            var url;
-
-            if (nextPageToken) {
-                url = this.get('searchUrl');
-                url += '&pageToken=' + nextPageToken;
-
-                this.search(url);
-            }
-        },
+            return snippets;
+        }.property('query', 'searchOnline', 'searchMusicOnly'),
         actions: {
             search: function() {
-                this.searchNew();
+                this.set('query', this.get('liveQuery'));
             },
             /*TODO: Figure out if will select on snippet drag? else implement snippets.pushObject(snippet);*/
             pushToQueue: function(snippet) {

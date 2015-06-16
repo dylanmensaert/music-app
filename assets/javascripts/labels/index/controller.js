@@ -10,13 +10,23 @@ define(function(require) {
     };
 
     return Ember.Controller.extend({
-        query: null,
-        // TODO: Implement
+        liveQuery: '',
+        query: '',
         fetchSuggestions: function() {
-            this.get('labels').map(function(label) {
-                formatSearch(label.get('name')).includes(formatSearch(query));
-            });
-        },
+            var suggestions;
+
+            return function(query, callback) {
+                suggestions = this.get('fileSystem.labels').filter(function(label) {
+                    return formatSearch(label.get('name')).includes(formatSearch(query));
+                }).map(function(label) {
+                    return {
+                        value: label.get('name')
+                    };
+                });
+
+                callback(suggestions);
+            }.bind(this);
+        }.property('fileSystem.labels.@each'),
         sortedLabels: function() {
             return Ember.ArrayProxy.createWithMixins(Ember.SortableMixin, {
                 content: this.get('labels'),
@@ -31,6 +41,10 @@ define(function(require) {
                 labels = this.get('fileSystem.labels'),
                 isEvery;
 
+            labels = labels.filter(function(label) {
+                return formatSearch(label.get('name')).includes(formatSearch(this.get('query')));
+            }.bind(this));
+
             if (selectedSnippets.get('length')) {
                 labels.forEach(function(label) {
                     isEvery = selectedSnippets.every(function(snippet) {
@@ -44,14 +58,17 @@ define(function(require) {
             return labels;
         }.property('fileSystem.labels.@each.name', 'selectedSnippets.@each', 'query'),
         actions: {
+            search: function() {
+                this.set('query', this.get('liveQuery'));
+            },
             createLabel: function() {
-                var query = this.get('query'),
+                var liveQuery = this.get('liveQuery'),
                     labels = this.get('fileSystem.labels');
 
-                if (!Ember.isEmpty(query)) {
-                    if (!labels.isAny('name', query)) {
+                if (!Ember.isEmpty(liveQuery)) {
+                    if (!labels.isAny('name', liveQuery)) {
                         labels.pushObject(Label.create({
-                            name: query
+                            name: liveQuery
                         }));
                     } else {
                         // TODO: Error when label already exists
