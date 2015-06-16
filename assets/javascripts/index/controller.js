@@ -4,7 +4,6 @@ define(function(require) {
     var Ember = require('ember'),
         meta = require('meta-data'),
         Snippet = require('snippet/object'),
-        Label = require('label/object'),
         lastUrl,
         nextPageToken,
         convertImageUrl,
@@ -68,8 +67,7 @@ define(function(require) {
         sortedSnippets: function() {
             return Ember.ArrayProxy.createWithMixins(Ember.SortableMixin, {
                 content: this.get('snippets'),
-                // TODO: labels.@each?
-                sortProperties: ['labels', 'name', 'id'],
+                sortProperties: ['name', 'id'],
                 orderBy: function(snippet, other) {
                     var offlineFilteredSnippets = this.get('offlineFilteredSnippets'),
                         isOffline = offlineFilteredSnippets.isAny('id', snippet.get('id')),
@@ -175,7 +173,7 @@ define(function(require) {
             },
             /*TODO: Figure out if will select on snippet drag? else implement snippets.pushObject(snippet);*/
             pushToQueue: function(snippet) {
-                var snippets = this.get('fileSystem.snippets').filterBy('isSelected', true);
+                var snippets = this.get('fileSystem.snippets').filterBy('isSelected');
 
                 snippets.forEach(function(snippet) {
                     if (!snippet.get('isSaved')) {
@@ -186,7 +184,7 @@ define(function(require) {
                 }.bind(this));
             },
             save: function(snippet) {
-                var snippets = this.get('fileSystem.snippets').filterBy('isSelected', true);
+                var snippets = this.get('fileSystem.snippets').filterBy('isSelected');
 
                 snippets.forEach(function(snippet) {
                     /*TODO: Check if wifi, else add label and this.get('fileSystem.snippets').push.. Also make compatible with browser*/

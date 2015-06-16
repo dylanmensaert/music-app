@@ -1,23 +1,23 @@
 <div {{action 'click'}} class="col-xs-10 inner-fill">
-    <a {{bind-attr name=snippet.id class=':list-group-item :audio-list :outer-panel snippet.isSelected:active'}}>
+    <a {{bind-attr name=model.id class=':list-group-item :audio-list :outer-panel model.isSelected:active'}}>
         <div class="media-left media-middle">
             <div class="outer-image">
-                <img class="media-object inner-image" {{bind-attr src=snippet.thumbnail}} />
+                <img class="media-object inner-image" {{bind-attr src=model.thumbnail}} />
             </div>
         </div>
 
         <div class="media-body">
             <div class="list-group-item-heading">
-                {{snippet.title}}
+                {{model.title}}
             </div>
 
-            {{#each label in snippet.labels}}
+            {{#each label in model.labels}}
                 <span class="label label-default">
                     {{label}}
                 </span>&nbsp;
             {{/each}}
 
-            {{#if snippet.isLoading}}
+            {{#if model.isLoading}}
                 <i class="fa fa-spinner fa-pulse"></i>
             {{/if}}
         </div>

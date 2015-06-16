@@ -8,4 +8,7 @@ define(function(require) {
     App.FileInputComponent = require('components/file-input');
     App.ClearAddonComponent = require('clear-addon/component');
     App.LinkLiComponent = require('components/link-li');
+    App.AppLabelComponent = require('label/component');
+    App.AppSnippetComponent = require('snippet/component');
+    App.ActionBarComponent = require('action-bar/component');
 });

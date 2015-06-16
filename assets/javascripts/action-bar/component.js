@@ -8,13 +8,13 @@ define(function(require) {
         classNames: ['action-bar', 'container', 'text-center'],
         snippets: null,
         isEverySaved: function() {
-            return this.get('snippets').isEvery('isSaved', true);
+            return this.get('snippets').isEvery('isSaved');
         }.property('snippets.@each.isSaved'),
         isEveryUnsaved: function() {
             return this.get('snippets').isEvery('isSaved', false);
         }.property('snippets.@each.isSaved'),
         savedSnippets: function() {
-            return this.get('snippets').filterBy('isSaved', true);
+            return this.get('snippets').filterBy('isSaved');
         }.property('snippets.@each.isSaved'),
         unsavedSnippets: function() {
             return this.get('snippets').filterBy('isSaved', false);

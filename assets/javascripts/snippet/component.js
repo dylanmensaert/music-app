@@ -6,14 +6,14 @@ define(function(require) {
     return Ember.Component.extend({
         layoutName: 'snippet',
         classNames: ['row', 'row-fill'],
-        classNameBindings: ['snippet.isSelected:active'],
-        snippet: null,
+        classNameBindings: ['model.isSelected:active'],
+        model: null,
         actions: {
             toggleSelection: function() {
-                this.get('snippet').toggleProperty('isSelected');
+                this.get('model').toggleProperty('isSelected');
             },
             click: function() {
-                this.sendAction('action', this.get('snippet'));
+                this.sendAction('action', this.get('model'));
             }
         }
     });

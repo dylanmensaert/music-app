@@ -5,11 +5,11 @@ define(function(require) {
 
     return Ember.Component.extend({
         layoutName: 'label',
-        classNames: ['label'],
-        classNameBindings: ['label.isSelected:label-success:label-default'],
-        label: null,
+        classNames: ['btn', 'grid-label'],
+        classNameBindings: ['model.isSelected::btn-primary'],
+        model: null,
         click: function() {
-            this.toggleProperty('label.isSelected');
+            this.toggleProperty('model.isSelected');
 
             this.sendAction('action');
         }

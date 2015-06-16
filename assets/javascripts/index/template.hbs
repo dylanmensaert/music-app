@@ -12,11 +12,11 @@
 
 <div class="form-group">
     <div {{bind-attr class='query:input-group'}}>
-        {{suggest-input value=query placeholder='Search' fetchSuggestions=fetchSuggestions insert-newline='search'}}
-
         {{#if query}}
             {{clear-addon text=query}}
         {{/if}}
+
+        {{suggest-input value=query placeholder='Search' fetchSuggestions=fetchSuggestions insert-newline='search'}}
     </div>
 </div>
 

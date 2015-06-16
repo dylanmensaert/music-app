@@ -6,11 +6,10 @@ define(function(require) {
     return Ember.Controller.extend({
         'audio-component': require('audio/component'),
         'slider-component': require('slider/component'),
-        'action-bar': require('action-bar/component'),
         slider: null,
         isLoading: false,
         selectedSnippets: function() {
-            return this.get('fileSystem.snippets').filterBy('isSelected', true);
+            return this.get('fileSystem.snippets').filterBy('isSelected');
         }.property('fileSystem.snippets.@each.isSelected'),
         actions: {
             dismissAlert: function() {

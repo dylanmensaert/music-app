@@ -4,7 +4,6 @@ define(function(require) {
     var Ember = require('ember');
 
     return Ember.Component.extend({
-        'snippet-component': require('snippet/component'),
         layoutName: 'snippets',
         classNames: ['list-group'],
         snippets: null,
