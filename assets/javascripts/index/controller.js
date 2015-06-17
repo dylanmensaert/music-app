@@ -79,6 +79,8 @@ define(function(require) {
                             'name')) || (!isOffline && !otherIsOffline && snippets.indexOf(snippet) > snippets.indexOf(other))) {
                         result = 1;
                     }
+
+                    return result;
                 }.bind(this)
             });
         }.property('snippets.@each', 'offlineSnippets.@each.id'),
@@ -87,7 +89,9 @@ define(function(require) {
         searchMusicOnly: true,
         searchOffline: true,
         snippets: function() {
-            var snippets = this.get('offlineSnippets');
+            var snippets = [];
+
+            snippets.pushObjects(this.get('offlineSnippets'));
 
             this.get('onlineSnippets').forEach(function(snippet) {
                 if (!snippets.isAny('id', snippet.get('id'))) {
@@ -138,14 +142,6 @@ define(function(require) {
                 }
 
                 Ember.$.getJSON(url).then(function(response) {
-                    if (Ember.isEmpty(response.nextPageToken)) {
-                        nextPageToken = null;
-                    } else {
-                        nextPageToken = response.nextPageToken;
-                    }
-
-                    this.set('nextPageToken', nextPageToken);
-
                     snippets = response.items.map(function(item) {
                         return Snippet.create({
                             id: item.id.videoId,
@@ -157,7 +153,19 @@ define(function(require) {
                         });
                     }.bind(this));
 
-                    this.set('onlineSnippets', snippets);
+                    if (Ember.isEmpty(nextPageToken)) {
+                        this.set('onlineSnippets', snippets);
+                    } else {
+                        this.get('onlineSnippets').pushObjects(snippets);
+                    }
+
+                    if (Ember.isEmpty(response.nextPageToken)) {
+                        nextPageToken = null;
+                    } else {
+                        nextPageToken = response.nextPageToken;
+                    }
+
+                    this.set('nextPageToken', nextPageToken);
 
                     this.set('isLoading', false);
                 }.bind(this));
