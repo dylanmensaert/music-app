@@ -71,18 +71,17 @@ define(function(require) {
                     var offlineSnippets = this.get('offlineSnippets'),
                         isOffline = offlineSnippets.isAny('id', snippet.get('id')),
                         otherIsOffline = offlineSnippets.isAny('id', other.get('id')),
+                        snippets = this.get('snippets'),
                         result = -1;
 
-                    // TODO: remove isOffline check if decided to split online and offline search
+                    // Does not seem to work entirely correct
                     if ((!isOffline && otherIsOffline) || (isOffline && otherIsOffline && snippet.get('name') > other.get(
-                            'name'))) {
+                            'name')) || (!isOffline && !otherIsOffline && snippets.indexOf(snippet) > snippets.indexOf(other))) {
                         result = 1;
                     }
-
-                    return result;
                 }.bind(this)
             });
-        }.property('snippets'),
+        }.property('snippets.@each', 'offlineSnippets.@each.id'),
         // TODO: save musicOnly label state (and others) in fileSystem someway
         searchOnline: true,
         searchMusicOnly: true,
