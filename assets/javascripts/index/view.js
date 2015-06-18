@@ -5,6 +5,7 @@ define(function(require) {
     var Ember = require('ember');
 
     return Ember.View.extend({
+        /*TODO: Delete endless scroll functionality?*/
         didInsertElement: function() {
             var viewport = Ember.$(window),
                 position,
