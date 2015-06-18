@@ -11,6 +11,7 @@ define(function(require) {
         return meta.imageHost + new URL(url).pathname;
     };
 
+    /*TODO: lot of duplication with queue controller. Maybe implement via mixin*/
     return Ember.Controller.extend({
         liveQuery: '',
         query: '',
@@ -70,7 +71,6 @@ define(function(require) {
                         snippets = this.get('snippets'),
                         result = -1;
 
-                    // Does not seem to work entirely correct
                     if ((!isOffline && otherIsOffline) || (isOffline && otherIsOffline && snippet.get('title') > other.get(
                             'title')) || (!isOffline && !otherIsOffline && snippets.indexOf(snippet) > snippets.indexOf(other))) {
                         result = 1;
@@ -81,8 +81,8 @@ define(function(require) {
             });
         }.property('snippets.@each', 'offlineSnippets.@each.id'),
         // TODO: save musicOnly label state (and others) in fileSystem someway
-        searchOnline: true,
-        searchMusicOnly: true,
+        searchOnline: false,
+        searchMusicOnly: false,
         searchOffline: true,
         snippets: function() {
             var snippets = [];
@@ -170,6 +170,12 @@ define(function(require) {
         scheduleUpdateOnlineSnippets: function() {
             Ember.run.once(this, this.updateOnlineSnippets);
         }.observes('query', 'searchOnline', 'searchMusicOnly'),
+        /*TODO: Implement another way?*/
+        updateSelectedSnippets: function() {
+            var selectedSnippets = this.get('snippets').filterBy('isSelected');
+
+            this.set('session.selectedSnippets', selectedSnippets);
+        }.observes('snippets.@each.isSelected'),
         actions: {
             search: function() {
                 this.set('query', this.get('liveQuery'));

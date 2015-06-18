@@ -4,7 +4,7 @@ define(function(require) {
     var Ember = require('ember'),
         utilities = require('helpers/utilities');
 
-    /*TODO: lot of duplication with index controller*/
+    /*TODO: lot of duplication with index controller. Maybe implement via mixin*/
     return Ember.Controller.extend({
         query: '',
         liveQuery: '',
@@ -69,6 +69,12 @@ define(function(require) {
                 this.get('audio').play(firstSnippet);
             }
         },
+        /*TODO: Implement another way?*/
+        updateSelectedSnippets: function() {
+            var selectedSnippets = this.get('snippets').filterBy('isSelected');
+
+            this.set('session.selectedSnippets', selectedSnippets);
+        }.observes('snippets.@each.isSelected'),
         actions: {
             search: function() {
                 this.set('query', this.get('liveQuery'));

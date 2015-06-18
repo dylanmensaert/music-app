@@ -1,4 +1,5 @@
 @audio-height: 50px;
+@menu-height: 42px;
 
 /* TODO: Fix when writing in search */
 html {
@@ -8,12 +9,13 @@ html {
 .bar {
     position: fixed;
     width: 100%;
+    /* TODO: z-index needed? */
     z-index: 3;
 }
 
 .action-bar {
     .bar;
-    height: 42px;
+    height: @menu-height;
     font-size: 22px;
     background: orange;
 }
@@ -194,7 +196,7 @@ html {
 }
 
 .menu-placeholder {
-    height: 42px;
+    height: @menu-height;
 }
 
 .grid-label {
