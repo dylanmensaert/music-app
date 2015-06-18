@@ -4,7 +4,7 @@
             {{clear-addon text=liveQuery}}
         {{/if}}
 
-        {{input value=liveQuery placeholder='Create or search label' action='search' on='enter' class='form-control'}}
+        {{suggest-input value=liveQuery placeholder='Create or search label' fetchSuggestions=fetchSuggestions insert-newline='search'}}
 
         <div {{action 'createLabel'}} class="input-group-btn">
             <div class="btn btn-primary">

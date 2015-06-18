@@ -5,6 +5,7 @@ define(function(require) {
     var Ember = require('ember'),
         meta = require('meta-data'),
         ytMp3 = require('helpers/yt-mp3'),
+        utilities = require('helpers/utilities'),
         signateUrl,
         extractExtension,
         pluralizations;
@@ -41,6 +42,14 @@ define(function(require) {
         isSaved: function() {
             return this.get('labels').contains('saved');
         }.property('labels.@each'),
+        isQueued: function() {
+            return this.get('fileSystem.queue').contains(this.get('id'));
+        }.property('fileSystem.queue.@each', 'id'),
+        containsLabel: function(value) {
+            return this.get('labels').any(function(label) {
+                return utilities.includes(label, value);
+            });
+        },
         createFilePath: function(type, extension) {
             var fileName = this.get('id') + '.' + extension,
                 directory = pluralizations[type];
@@ -79,11 +88,20 @@ define(function(require) {
             }.bind(this));
         },
         save: function() {
+            this.set('status', 'loading');
+
+            if (Ember.isEmpty(this.get('audio'))) {
+                this.fetchDownload().then(function(url) {
+                    this.insert();
+                }.bind(this));
+            } else {
+                this.insert();
+            }
+        },
+        insert: function() {
             var audio = this.createFilePath('audio', this.get('extension')),
                 thumbnail = this.createFilePath('thumbnail', extractExtension(this.get('thumbnail'))),
                 promises;
-
-            this.set('status', 'loading');
 
             promises = {
                 // TODO: No 'Access-Control-Allow-Origin' header because the requested URL redirects to another domain
@@ -103,10 +121,8 @@ define(function(require) {
                 this.get('fileSystem.snippets').pushObject(this);
 
                 this.set('status', null);
-            }.bind(this), function() {
-                // TODO: Implement every error by showing a message for few seconds
-                this.set('status', null);
             }.bind(this));
+            // TODO: Implement every error by showing a message for few seconds
         },
         download: function(url, source) {
             var fileSystem = this.get('fileSystem'),

@@ -16,7 +16,6 @@
             {{clear-addon text=liveQuery}}
         {{/if}}
 
-        <!-- TODO: when liveQuery changes, clear does value not.. -->
         {{suggest-input value=liveQuery placeholder='Search' fetchSuggestions=fetchSuggestions insert-newline='search'}}
     </div>
 </div>
@@ -26,7 +25,11 @@
     {{file-input}}
 </button>
 
-{{view snippets-component snippets=sortedSnippets action='play' param=snippet}}
+<div class="list-group">
+    {{#each snippet in sortedSnippets}}
+        {{app-snippet model=snippet action='play' param=snippet}}
+    {{/each}}
+</div>
 
 {{#if isLoading}}
     <div class="text-center audio-icon">

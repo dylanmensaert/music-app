@@ -5,6 +5,7 @@ define(function(require) {
         meta = require('meta-data');
 
     // TODO: Implement as focus-input
+    // TODO: send action on suggestion click
     return Ember.TextField.extend({
         classNames: ['form-control'],
         attributeBindings: ['placeholder'],

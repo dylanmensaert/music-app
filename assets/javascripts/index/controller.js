@@ -2,29 +2,21 @@ define(function(require) {
     'use strict';
 
     var Ember = require('ember'),
-        DS = require('ember-data'),
         meta = require('meta-data'),
         Snippet = require('snippet/object'),
-        convertImageUrl,
-        formatSearch;
+        utilities = require('helpers/utilities'),
+        convertImageUrl;
 
     convertImageUrl = function(url) {
         return meta.imageHost + new URL(url).pathname;
     };
 
-    formatSearch = function(value) {
-        return value.toLowerCase().replace(/\s/g, '')
-    };
-
     return Ember.Controller.extend({
-        'label-component': require('label/component'),
-        'snippets-component': require('snippets/component'),
         liveQuery: '',
         query: '',
         fetchSuggestions: function() {
             var url,
-                offlineSuggestions,
-                onlineSuggestions,
+                title,
                 lastQuery;
 
             return function(query, callback) {
@@ -33,13 +25,16 @@ define(function(require) {
                 lastQuery = query;
 
                 if (this.get('searchOffline')) {
-                    offlineSuggestions = this.get('fileSystem.snippets').map(function(snippet) {
-                        return {
-                            value: snippet.get('name')
-                        };
+                    this.get('fileSystem.snippets').forEach(function(snippet) {
+                        title = snippet.get('title');
+
+                        if (utilities.includes(title, query) || snippet.containsLabel(query)) {
+                            suggestions.pushObject({
+                                value: title
+                            });
+                        }
                     });
 
-                    suggestions.pushObjects(offlineSuggestions);
                     callback(suggestions);
                 }
 
@@ -49,24 +44,25 @@ define(function(require) {
                     (function(oldQuery) {
                         Ember.$.getJSON(url).then(function(response) {
                             if (oldQuery === lastQuery) {
-                                onlineSuggestions = response[1].map(function(suggestion) {
-                                    return {
-                                        value: suggestion
-                                    };
+                                response[1].forEach(function(suggestion) {
+                                    if (!suggestions.isAny('value', suggestion)) {
+                                        suggestions.pushObject({
+                                            value: suggestion
+                                        });
+                                    }
                                 });
 
-                                suggestions.pushObjects(onlineSuggestions);
                                 callback(suggestions);
                             }
                         });
                     })(lastQuery);
                 }
             }.bind(this);
-        }.property('searchOffline', 'searchOnline', 'fileSystem.snippets.@each.name'),
+        }.property('searchOffline', 'searchOnline', 'fileSystem.snippets.@each.title'),
         sortedSnippets: function() {
             return Ember.ArrayProxy.createWithMixins(Ember.SortableMixin, {
                 content: this.get('snippets'),
-                sortProperties: ['name', 'id'],
+                sortProperties: ['title', 'id'],
                 orderBy: function(snippet, other) {
                     var offlineSnippets = this.get('offlineSnippets'),
                         isOffline = offlineSnippets.isAny('id', snippet.get('id')),
@@ -75,8 +71,8 @@ define(function(require) {
                         result = -1;
 
                     // Does not seem to work entirely correct
-                    if ((!isOffline && otherIsOffline) || (isOffline && otherIsOffline && snippet.get('name') > other.get(
-                            'name')) || (!isOffline && !otherIsOffline && snippets.indexOf(snippet) > snippets.indexOf(other))) {
+                    if ((!isOffline && otherIsOffline) || (isOffline && otherIsOffline && snippet.get('title') > other.get(
+                            'title')) || (!isOffline && !otherIsOffline && snippets.indexOf(snippet) > snippets.indexOf(other))) {
                         result = 1;
                     }
 
@@ -101,22 +97,23 @@ define(function(require) {
 
             return snippets;
         }.property('offlineSnippets.@each', 'onlineSnippets.@each'),
-        /*TODO: Implement this as a function instead of property?*/
         offlineSnippets: function() {
             var snippets = [],
+                query,
                 offlineSnippets;
 
             if (this.get('searchOffline')) {
+                query = this.get('query')
+
                 offlineSnippets = this.get('fileSystem.snippets').filter(function(snippet) {
-                    /*TODO: Implement label search also?*/
-                    return formatSearch(snippet.get('name')).includes(formatSearch(this.get('query')));
+                    return utilities.includes(snippet.get('title'), query) || snippet.containsLabel(query);
                 }.bind(this));
 
-                snippets.pushObjects(offlineSnippets);
+                snippets = offlineSnippets;
             }
 
             return snippets;
-        }.property('query', 'fileSystem.snippets.@each.name', 'searchOffline'),
+        }.property('query', 'fileSystem.snippets.@each.title', 'searchOffline'),
         nextPageToken: null,
         isLoading: false,
         onlineSnippets: [],
@@ -137,7 +134,6 @@ define(function(require) {
                 url += '&q=' + this.get('query');
 
                 if (!Ember.isEmpty(nextPageToken)) {
-                    // Implement as searchNext because it will not work this way.
                     url += '&pageToken=' + nextPageToken;
                 }
 
@@ -180,7 +176,7 @@ define(function(require) {
             },
             /*TODO: Figure out if will select on snippet drag? else implement snippets.pushObject(snippet);*/
             pushToQueue: function(snippet) {
-                var snippets = this.get('fileSystem.snippets').filterBy('isSelected');
+                var snippets = this.get('snippets').filterBy('isSelected');
 
                 snippets.forEach(function(snippet) {
                     if (!snippet.get('isSaved')) {

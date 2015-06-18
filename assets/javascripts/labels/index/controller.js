@@ -3,25 +3,24 @@ define(function(require) {
 
     var Ember = require('ember'),
         Label = require('label/object'),
-        formatSearch;
-
-    formatSearch = function(value) {
-        return value.toLowerCase().replace(/\s/g, '')
-    };
+        utilities = require('helpers/utilities');
 
     return Ember.Controller.extend({
         liveQuery: '',
         query: '',
         fetchSuggestions: function() {
-            var suggestions;
-
             return function(query, callback) {
-                suggestions = this.get('fileSystem.labels').filter(function(label) {
-                    return formatSearch(label.get('name')).includes(formatSearch(query));
-                }).map(function(label) {
-                    return {
-                        value: label.get('name')
-                    };
+                var suggestions = [],
+                    name;
+
+                this.get('fileSystem.labels').forEach(function(label) {
+                    name = label.get('name');
+
+                    if (utilities.includes(name, query)) {
+                        suggestions.pushObject({
+                            value: name
+                        });
+                    }
                 });
 
                 callback(suggestions);
@@ -42,7 +41,7 @@ define(function(require) {
                 isEvery;
 
             labels = labels.filter(function(label) {
-                return formatSearch(label.get('name')).includes(formatSearch(this.get('query')));
+                return utilities.includes(label.get('name'), this.get('query'));
             }.bind(this));
 
             if (selectedSnippets.get('length')) {

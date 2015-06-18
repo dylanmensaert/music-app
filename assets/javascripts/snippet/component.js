@@ -6,7 +6,10 @@ define(function(require) {
     return Ember.Component.extend({
         layoutName: 'snippet',
         classNames: ['row', 'row-fill'],
-        classNameBindings: ['model.isSelected:active'],
+        attributeBindings: ['name'],
+        name: function() {
+            return this.get('model.id');
+        }.property('model.id'),
         model: null,
         actions: {
             toggleSelection: function() {

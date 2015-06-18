@@ -6,11 +6,10 @@ define(function(require) {
     return Ember.Mixin.create({
         didInsertElement: function() {
             this.$().sortable({
-                start: this.onDragStart.bind(this),
-                update: this.onUpdate.bind(this),
+                update: this.didUpdate.bind(this),
                 revert: 200,
                 axis: 'y',
-                items: '> .row',
+                items: '.row',
                 delay: 100,
                 helper: 'clone',
                 containment: this.$(),

@@ -15,8 +15,7 @@ define(function(require) {
                 maxPosition = this.$().offset().top + this.$().outerHeight(true) - viewport.height();
 
                 if (position > maxPosition) {
-                    // TODO: Implement better way of doing this
-                    this.get('controller').updateOnlineSnippets(this.get('controller.nextPageToken'));
+                    this.get('controller').scheduleUpdateOnlineSnippets(this.get('controller.nextPageToken'));
                 }
             }.bind(this));
         },
