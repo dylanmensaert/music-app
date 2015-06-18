@@ -8,14 +8,17 @@ define(function(require) {
         didInsertElement: function() {
             var viewport = Ember.$(window),
                 position,
-                maxPosition;
+                maxPosition,
+                controller;
 
             viewport.scroll(function() {
                 position = viewport.scrollTop() + viewport.height();
                 maxPosition = this.$().offset().top + this.$().outerHeight(true) - viewport.height();
 
                 if (position > maxPosition) {
-                    this.get('controller').scheduleUpdateOnlineSnippets(this.get('controller.nextPageToken'));
+                    controller = this.get('controller');
+
+                    controller.updateOnlineSnippets(controller.get('nextPageToken'));
                 }
             }.bind(this));
         },
