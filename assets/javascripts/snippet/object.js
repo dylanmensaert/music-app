@@ -45,10 +45,21 @@ define(function(require) {
         isQueued: function() {
             return this.get('fileSystem.queue').contains(this.get('id'));
         }.property('fileSystem.queue.@each', 'id'),
-        containsLabel: function(value) {
-            return this.get('labels').any(function(label) {
-                return utilities.includes(label, value);
+        match: function(value) {
+            var matches = [],
+                title = this.get('title');
+
+            if (utilities.isMatch(title, value)) {
+                matches.pushObject(title);
+            }
+
+            this.get('labels').forEach(function(label) {
+                if (utilities.isMatch(label, value)) {
+                    matches.pushObject(label);
+                }
             });
+
+            return matches;
         },
         createFilePath: function(type, extension) {
             var fileName = this.get('id') + '.' + extension,

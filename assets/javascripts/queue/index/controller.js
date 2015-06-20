@@ -14,14 +14,14 @@ define(function(require) {
                     suggestions = [];
 
                 this.get('fileSystem.snippets').forEach(function(snippet) {
-                    title = snippet.get('title');
-
-                    if (snippet.get('isQueued') && (utilities.includes(title, query) || snippet.containsLabel(query))) {
-                        suggestions.pushObject({
-                            value: title
+                    if (snippet.get('isQueued')) {
+                        suggestions = snippet.match(query).map(function() {
+                            return {
+                                value: snippet.get('title')
+                            };
                         });
                     }
-                }.bind(this));
+                });
 
                 callback(suggestions);
             }.bind(this);
@@ -43,14 +43,11 @@ define(function(require) {
             });
         }.property('snippets.@each', 'fileSystem.queue.@each'),
         snippets: function() {
-            var query = this.get('query'),
-                isQueued,
-                includesQuery,
-                containsLabel;
+            var query = this.get('query');
 
             return this.get('fileSystem.snippets').filter(function(snippet) {
-                return snippet.get('isQueued') && (utilities.includes(snippet.get('title'), query) || snippet.containsLabel(query));
-            }.bind(this));
+                return snippet.get('isQueued') && snippet.match(query).get('length');
+            });
         }.property('query', 'fileSystem.snippets.@each.title', 'fileSystem.queue.@each'),
         didUpdate: function(snippetIds) {
             var firstSnippetId = snippetIds.get('firstObject'),

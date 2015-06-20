@@ -37,7 +37,7 @@ define(function(require) {
                 snippetId = snippet.get('id');
 
                 queue.removeObject(snippetId);
-                queue.putObject(snippetId);
+                queue.pushObject(snippetId);
 
                 snippetId = this.get('firstObject');
                 snippet = this.get('fileSystem.snippets').findBy('id', snippetId);

@@ -67,7 +67,8 @@ define(function(require) {
             Ember.run.cancel(lastWriter);
 
             lastWriter = Ember.run.later(this, write, 100);
-        }.observes('queue.@each', 'labels.@each', 'snippets.@each'),
+            /*TODO: snippets.@each.labels.@each needed?*/
+        }.observes('queue.@each', 'labels.@each', 'snippets.@each', 'snippets.@each.labels.@each'),
         remove: function(source) {
             return new Ember.RSVP.Promise(function(resolve) {
                 this.get('instance').root.getFile(source, {}, function(fileEntry) {
@@ -99,6 +100,11 @@ define(function(require) {
                     // TODO: write following via 1 action
                     this.get('labels').pushObject(Label.create({
                         name: 'saved',
+                        isReadOnly: true
+                    }));
+
+                    this.get('labels').pushObject(Label.create({
+                        name: 'download-later',
                         isReadOnly: true
                     }));
                 }.bind(this));

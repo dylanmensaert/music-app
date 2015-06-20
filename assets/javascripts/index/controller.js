@@ -21,7 +21,8 @@ define(function(require) {
                 lastQuery;
 
             return function(query, callback) {
-                var suggestions = [];
+                var suggestions = [],
+                    matches;
 
                 lastQuery = query;
 
@@ -29,17 +30,19 @@ define(function(require) {
                     this.get('fileSystem.snippets').forEach(function(snippet) {
                         title = snippet.get('title');
 
-                        if (utilities.includes(title, query) || snippet.containsLabel(query)) {
-                            suggestions.pushObject({
+                        matches = snippet.match(query).map(function() {
+                            return {
                                 value: title
-                            });
-                        }
+                            };
+                        });
+
+                        suggestions.pushObjects(matches);
                     });
 
                     callback(suggestions);
                 }
 
-                if (this.get('searchOnline')) {
+                if (this.get('searchOnline') && suggestions.get('length') < 10) {
                     url = meta.suggestHost + '/complete/search?client=firefox&ds=yt&q=' + query;
 
                     (function(oldQuery) {
@@ -103,11 +106,11 @@ define(function(require) {
                 offlineSnippets;
 
             if (this.get('searchOffline')) {
-                query = this.get('query')
+                query = this.get('query');
 
                 offlineSnippets = this.get('fileSystem.snippets').filter(function(snippet) {
-                    return utilities.includes(snippet.get('title'), query) || snippet.containsLabel(query);
-                }.bind(this));
+                    return snippet.match(query).get('length');
+                });
 
                 snippets = offlineSnippets;
             }

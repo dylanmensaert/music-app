@@ -6,12 +6,12 @@ define(function(require) {
     return Ember.Component.extend({
         layoutName: 'label',
         classNames: ['btn', 'grid-label'],
-        classNameBindings: ['model.isSelected::btn-primary'],
+        classNameBindings: ['model.isSelected:btn-primary'],
         model: null,
+        showEdit: false,
+        didClick: null,
         click: function() {
-            this.toggleProperty('model.isSelected');
-
-            this.sendAction('action');
+            this.didClick();
         }
     });
 });

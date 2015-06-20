@@ -16,7 +16,7 @@ define(function(require) {
                 this.get('fileSystem.labels').forEach(function(label) {
                     name = label.get('name');
 
-                    if (utilities.includes(name, query)) {
+                    if (utilities.isMatch(name, query)) {
                         suggestions.pushObject({
                             value: name
                         });
@@ -32,30 +32,55 @@ define(function(require) {
                 sortProperties: ['name']
             });
         }.property('labels'),
-        selectedSnippets: function() {
-            return this.get('fileSystem.snippets').filterBy('isSelected');
-        }.property('fileSystem.snippets.@each.isSelected'),
         labels: function() {
-            var selectedSnippets = this.get('selectedSnippets'),
-                labels = this.get('fileSystem.labels'),
+            var selectedSnippets = this.get('session.selectedSnippets'),
+                labels = [],
+                name,
                 isEvery;
 
-            labels = labels.filter(function(label) {
-                return utilities.includes(label.get('name'), this.get('query'));
+            this.get('fileSystem.labels').forEach(function(label) {
+                name = label.get('name');
+
+                if (utilities.isMatch(name, this.get('query'))) {
+                    if (selectedSnippets.get('length')) {
+                        isEvery = selectedSnippets.every(function(snippet) {
+                            return snippet.get('labels').contains(name);
+                        });
+
+                        label.set('isSelected', isEvery);
+                    }
+
+                    labels.pushObject(label);
+                }
             }.bind(this));
 
-            if (selectedSnippets.get('length')) {
-                labels.forEach(function(label) {
-                    isEvery = selectedSnippets.every(function(snippet) {
-                        return snippet.get('labels').contains(label.get('name'));
-                    });
-
-                    label.set('isSelected', isEvery);
-                });
-            }
-
             return labels;
-        }.property('fileSystem.labels.@each.name', 'selectedSnippets.@each', 'query'),
+        }.property('fileSystem.labels.@each.name', 'session.selectedSnippets.@each', 'query'),
+        didClick: function() {
+            var selectedSnippets = this.get('session.selectedSnippets'),
+                labels,
+                label;
+
+            return function() {
+                label = this.get('model');
+
+                label.toggleProperty('isSelected');
+
+                if (selectedSnippets.get('length')) {
+                    selectedSnippets.forEach(function(snippet) {
+                        labels = snippet.get('labels');
+
+                        if (label.get('isSelected')) {
+                            labels.pushObject(label.get('name'));
+                        } else {
+                            labels.removeObject(label.get('name'));
+                        }
+                    });
+                } else {
+                    // TODO: implement
+                }
+            };
+        }.property('session.selectedSnippets.@each'),
         actions: {
             search: function() {
                 this.set('query', this.get('liveQuery'));
@@ -75,24 +100,6 @@ define(function(require) {
                 }
 
                 this.set('query', '');
-            },
-            clickLabel: function(label) {
-                var selectedSnippets = this.get('selectedSnippets'),
-                    labels;
-
-                if (selectedSnippets.get('length')) {
-                    selectedSnippets.forEach(function(snippet) {
-                        labels = snippet.get('labels');
-
-                        if (label.get('isSelected')) {
-                            labels.pushObject(label.get('name'));
-                        } else {
-                            labels.removeObject(label.get('name'));
-                        }
-                    });
-                } else {
-                    // TODO: implement
-                }
             },
             removeLabel: function(label) {
                 this.get('fileSystem.snippets').forEach(function(snippet) {
