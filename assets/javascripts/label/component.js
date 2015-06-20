@@ -10,8 +10,13 @@ define(function(require) {
         model: null,
         showEdit: false,
         didClick: null,
-        click: function() {
-            this.didClick();
+        actions: {
+            click: function() {
+                this.didClick();
+            },
+            remove: function() {
+                // TODO: Implement
+            }
         }
     });
 });

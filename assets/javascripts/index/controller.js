@@ -28,15 +28,13 @@ define(function(require) {
 
                 if (this.get('searchOffline')) {
                     this.get('fileSystem.snippets').forEach(function(snippet) {
-                        title = snippet.get('title');
-
-                        matches = snippet.match(query).map(function() {
-                            return {
-                                value: title
-                            };
+                        snippet.match(query).forEach(function(match) {
+                            if (!suggestions.contains(match)) {
+                                suggestions.pushObject({
+                                    value: match
+                                });
+                            }
                         });
-
-                        suggestions.pushObjects(matches);
                     });
 
                     callback(suggestions);

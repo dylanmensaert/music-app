@@ -50,19 +50,44 @@ define(function(require) {
         isQueued: function() {
             return this.get('fileSystem.queue').contains(this.get('id'));
         }.property('fileSystem.queue.@each', 'id'),
-        match: function(value) {
+        match: function(query) {
             var matches = [],
-                title = this.get('title');
+                title = this.get('title'),
+                labels = this.get('labels'),
+                queryParts;
 
-            if (utilities.isMatch(title, value)) {
-                matches.pushObject(title);
-            }
+            queryParts = query.trim().split(' ').map(function(part) {
+                return Ember.Object.create({
+                    value: part,
+                    isMaching: false
+                });
+            });
 
-            this.get('labels').forEach(function(label) {
-                if (utilities.isMatch(label, value)) {
-                    matches.pushObject(label);
+            queryParts.forEach(function(queryPart) {
+                if (utilities.isMatch(title, queryPart.get('value'))) {
+                    if (!matches.contains(title)) {
+                        matches.pushObject(title);
+                    }
+
+                    queryPart.set('isMaching', true);
                 }
             });
+
+            queryParts.forEach(function(queryPart) {
+                labels.forEach(function(label) {
+                    if (utilities.isMatch(label, queryPart.get('value'))) {
+                        if (!matches.contains(label)) {
+                            matches.pushObject(title);
+                        }
+
+                        queryPart.set('isMaching', true);
+                    }
+                });
+            });
+
+            if (queryParts.isAny('isMaching', false)) {
+                matches = [];
+            }
 
             return matches;
         },
