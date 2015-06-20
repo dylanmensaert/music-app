@@ -58,12 +58,14 @@ define(function(require) {
         }.property('fileSystem.labels.@each.name', 'session.selectedSnippets.@each', 'query'),
         didClick: function() {
             var selectedSnippets = this.get('session.selectedSnippets'),
+                snippets = this.get('fileSystem.snippets'),
                 labels,
                 label;
 
             return function() {
                 label = this.get('model');
 
+                // TODO: Put in label component, depending on implementation edit mode
                 label.toggleProperty('isSelected');
 
                 if (selectedSnippets.get('length')) {
@@ -72,6 +74,10 @@ define(function(require) {
 
                         if (label.get('isSelected')) {
                             labels.pushObject(label.get('name'));
+
+                            if (!snippets.isAny('id', snippet.get('id'))) {
+                                snippets.pushObject(snippet);
+                            }
                         } else {
                             labels.removeObject(label.get('name'));
                         }
@@ -80,7 +86,7 @@ define(function(require) {
                     // TODO: implement
                 }
             };
-        }.property('session.selectedSnippets.@each'),
+        }.property('session.selectedSnippets.@each', 'fileSystem.snippets'),
         actions: {
             search: function() {
                 this.set('query', this.get('liveQuery'));

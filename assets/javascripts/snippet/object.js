@@ -27,10 +27,15 @@ define(function(require) {
     };
 
     return Ember.Object.extend({
+        init: function() {
+            this._super();
+
+            this.set('labels', []);
+        },
         id: null,
         title: null,
         extension: null,
-        labels: [],
+        labels: null,
         audio: null,
         thumbnail: null,
         fileSystem: null,
