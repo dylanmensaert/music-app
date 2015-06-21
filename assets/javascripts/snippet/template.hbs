@@ -1,5 +1,5 @@
 <div {{action 'click'}} class="col-xs-10 inner-fill">
-    <a {{bind-attr class=':list-group-item :audio-list :outer-panel model.isSelected:active'}}>
+    <div {{bind-attr class=':list-group-item :audio-list :outer-panel model.isSelected:active'}}>
         <div class="media-left media-middle">
             <div class="outer-image">
                 <img class="media-object inner-image" {{bind-attr src=model.thumbnail}} />
@@ -7,15 +7,17 @@
         </div>
 
         <div class="media-body">
-            <div class="list-group-item-heading">
+            <div>
                 {{model.title}}
             </div>
 
-            {{#if model.isLoading}}
-                <i class="fa fa-spinner fa-pulse"></i>
-            {{/if}}
+            <div>
+                {{#if model.isLoading}}
+                    <i class="fa fa-spinner fa-pulse"></i>
+                {{/if}}
+            </div>
         </div>
-    </a>
+    </div>
 </div>
 
 <div {{action 'toggleSelection'}} class="col-xs-2 handle" />

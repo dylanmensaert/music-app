@@ -1,8 +1,7 @@
 define(function(require) {
     'use strict';
 
-    var Ember = require('ember'),
-        meta = require('meta-data');
+    var Ember = require('ember');
 
     // TODO: Implement as focus-input
     // TODO: send action on suggestion click

@@ -209,9 +209,6 @@ define(function(require) {
                         snippet.save();
                     }
                 });
-            },
-            toggle: function(property) {
-                this.toggleProperty(property);
             }
         }
     });

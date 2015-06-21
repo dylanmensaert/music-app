@@ -1,14 +1,50 @@
-<div class="btn-group btn-group-justified">
-    <div {{action 'toggle' 'searchOnline'}} {{bind-attr class=':btn searchOnline:btn-primary'}}>
-        Online
-    </div>
-    <div {{action 'toggle' 'searchMusicOnly'}} {{bind-attr class=':btn searchMusicOnly:btn-primary'}}>
-        Music only
-    </div>
-    <div {{action 'toggle' 'searchOffline'}} {{bind-attr class=':btn searchOffline:btn-primary'}}>
-        Offline
+<div class="container">
+    <div class="row">
+        <div class="col-xs-6">
+            <div class="checkbox">
+                <label>
+                    {{input type='checkbox' checked=searchOnline}}
+
+                    <span class="checkbox-material">
+                        <span class="check" />
+                    </span>
+
+                    Online
+                </label>
+            </div>
+
+            {{#if searchOnline}}
+                <div class="checkbox">
+                    <label>
+                        {{input type='checkbox' checked=searchMusicOnly}}
+
+                        <span class="checkbox-material">
+                            <span class="check" />
+                        </span>
+
+                        Music only
+                    </label>
+                </div>
+            {{/if}}
+        </div>
+
+        <div class="col-xs-6">
+            <div class="checkbox">
+                <label>
+                    {{input type='checkbox' checked=searchOffline}}
+
+                    <span class="checkbox-material">
+                        <span class="check" />
+                    </span>
+
+                    Offline
+                </label>
+            </div>
+        </div>
     </div>
 </div>
+
+<button class="btn btn-default">Button</button>
 
 <div class="form-group">
     <div {{bind-attr class='liveQuery:input-group'}}>
@@ -28,6 +64,8 @@
 <div class="list-group">
     {{#each snippet in sortedSnippets}}
         {{app-snippet model=snippet action='play' swipeleft='pushToDownload' swiperight='pushToQueue' param=snippet}}
+
+        <div class="list-group-separator" />
     {{/each}}
 </div>
 
