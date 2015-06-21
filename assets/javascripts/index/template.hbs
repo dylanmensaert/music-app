@@ -27,7 +27,7 @@
 
 <div class="list-group">
     {{#each snippet in sortedSnippets}}
-        {{app-snippet model=snippet action='play' param=snippet}}
+        {{app-snippet model=snippet action='play' swipeleft='pushToDownload' swiperight='pushToQueue' param=snippet}}
     {{/each}}
 </div>
 

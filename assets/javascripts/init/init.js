@@ -14,6 +14,8 @@ define(function(require) {
     require('droppable');
     require('sortable');
 
+    require('touch');
+
     var App = require('init/app');
 
     App.advanceReadiness();

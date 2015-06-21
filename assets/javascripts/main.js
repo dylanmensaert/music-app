@@ -16,6 +16,10 @@
             draggable: '../bower_components/jquery-ui/ui/draggable',
             droppable: '../bower_components/jquery-ui/ui/droppable',
             sortable: '../bower_components/jquery-ui/ui/sortable',
+            'jquery.mobile.vmouse': '../bower_components/jquery-mobile/js/jquery.mobile.vmouse',
+            'jquery.mobile.ns': '../bower_components/jquery-mobile/js/jquery.mobile.ns',
+            'jquery.mobile.support.touch': '../bower_components/jquery-mobile/js/jquery.mobile.support.touch',
+            touch: '../bower_components/jquery-mobile/js/events/touch',
             bootstrap: '../bower_components/bootstrap/dist/js/bootstrap',
             'bootstrap-slider': '../bower_components/seiyria-bootstrap-slider/js/bootstrap-slider',
             moment: '../bower_components/momentjs/moment',
@@ -64,6 +68,15 @@
             },
             sortable: {
                 deps: ['core', 'mouse', 'widget'],
+                exports: 'jQuery'
+            },
+            'jquery.mobile.support.touch': {
+                deps: ['jquery.mobile.ns'],
+                exports: 'jQuery'
+            },
+            // TODO: Had to change touch.js file to make dependency work. "../jquery.mobile.vmouse" -> "./jquery.mobile.vmouse". Look into correct way of implementing this
+            touch: {
+                deps: ['jquery.mobile.support.touch', 'jquery.mobile.vmouse'],
                 exports: 'jQuery'
             }
         },

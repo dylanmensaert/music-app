@@ -75,6 +75,18 @@ define(function(require) {
         actions: {
             search: function() {
                 this.set('query', this.get('liveQuery'));
+            },
+            removeFromQueue: function(snippet) {
+                var queue = this.get('fileSystem.queue'),
+                    id = snippet.get('id');
+
+                if (queue.get('firstObject') === id) {
+                    queue.removeObject(id);
+
+                    snippet = this.get('fileSystem.snippets').findBy('id', queue.get('firstObject'));
+
+                    audio.play(snippet);
+                }
             }
         }
     });

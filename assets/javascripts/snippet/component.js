@@ -11,6 +11,19 @@ define(function(require) {
             return this.get('model.id');
         }.property('model.id'),
         model: null,
+        didInsertElement: function() {
+            this.$().on('swipeleft', function() {
+                this.sendAction('swipeleft', this.get('model'));
+            }.bind(this));
+
+            this.$().on('swiperight', function() {
+                this.sendAction('swiperight', this.get('model'));
+            }.bind(this));
+        },
+        didDestroyElement: function() {
+            this.$().off('swipeleft');
+            this.$().off('swiperight');
+        },
         actions: {
             toggleSelection: function() {
                 this.get('model').toggleProperty('isSelected');

@@ -181,17 +181,24 @@ define(function(require) {
             search: function() {
                 this.set('query', this.get('liveQuery'));
             },
-            /*TODO: Figure out if will select on snippet drag? else implement snippets.pushObject(snippet);*/
-            pushToQueue: function(snippet) {
-                var snippets = this.get('snippets').filterBy('isSelected');
-
-                snippets.forEach(function(snippet) {
-                    if (!snippet.get('isSaved')) {
+            pushToDownload: function(snippet) {
+                //TODO: Implement wifi check
+                if (!snippet.get('isSaved')) {
+                    if (true) {
                         snippet.save();
+                    } else {
+                        snippet.get('labels').pushObject('download-later');
                     }
+                } else {
+                    // TODO: show message: already been saved..
+                }
+            },
+            pushToQueue: function(snippet) {
+                if (!snippet.get('isSaved')) {
+                    snippet.save();
+                }
 
-                    this.get('fileSystem.queue').pushObject(snippet.get('id'));
-                }.bind(this));
+                this.get('fileSystem.queue').pushObject(snippet.get('id'));
             },
             save: function(snippet) {
                 var snippets = this.get('fileSystem.snippets').filterBy('isSelected');
