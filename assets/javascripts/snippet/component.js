@@ -5,7 +5,7 @@ define(function(require) {
 
     return Ember.Component.extend({
         layoutName: 'snippet',
-        classNames: ['row', 'row-fill'],
+        classNames: ['row', 'snippet-item', 'withripple'],
         attributeBindings: ['name'],
         name: function() {
             return this.get('model.id');
@@ -19,6 +19,8 @@ define(function(require) {
             this.$().on('swiperight', function() {
                 this.sendAction('swiperight', this.get('model'));
             }.bind(this));
+
+            Ember.$.material.ripples(this.$());
         },
         didDestroyElement: function() {
             this.$().off('swipeleft');

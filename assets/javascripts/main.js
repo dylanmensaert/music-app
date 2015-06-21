@@ -23,6 +23,7 @@
             bootstrap: '../bower_components/bootstrap/dist/js/bootstrap',
             nouislider: '../bower_components/nouislider/distribute/jquery.nouislider',
             'bootstrap-material-design': '../bower_components/bootstrap-material-design/dist/js/material',
+            ripples: '../bower_components/bootstrap-material-design/dist/js/ripples',
             moment: '../bower_components/momentjs/moment',
             typeahead: '../bower_components/typeahead.js/dist/typeahead.jquery',
             'meta-data': 'meta/data'
@@ -55,8 +56,12 @@
                 deps: ['jquery'],
                 exports: 'jQuery'
             },
-            'bootstrap-material-design': {
+            ripples: {
                 deps: ['jquery'],
+                exports: 'jQuery'
+            },
+            'bootstrap-material-design': {
+                deps: ['ripples'],
                 exports: 'jQuery'
             },
             typeahead: {

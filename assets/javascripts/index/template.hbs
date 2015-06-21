@@ -44,8 +44,6 @@
     </div>
 </div>
 
-<button class="btn btn-default">Button</button>
-
 <div class="form-group">
     <div {{bind-attr class='liveQuery:input-group'}}>
         {{#if liveQuery}}
@@ -65,7 +63,7 @@
     {{#each snippet in sortedSnippets}}
         {{app-snippet model=snippet action='play' swipeleft='pushToDownload' swiperight='pushToQueue' param=snippet}}
 
-        <div class="list-group-separator" />
+        <div class="list-group-separator snippet-separator" />
     {{/each}}
 </div>
 

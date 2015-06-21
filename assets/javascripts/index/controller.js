@@ -83,7 +83,7 @@ define(function(require) {
         }.property('snippets.@each', 'offlineSnippets.@each.id'),
         // TODO: save musicOnly label state (and others) in fileSystem someway
         searchOnline: false,
-        searchMusicOnly: false,
+        searchMusicOnly: true,
         searchOffline: true,
         snippets: function() {
             var snippets = [];
