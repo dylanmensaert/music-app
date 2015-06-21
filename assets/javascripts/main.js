@@ -21,7 +21,8 @@
             'jquery.mobile.support.touch': '../bower_components/jquery-mobile/js/jquery.mobile.support.touch',
             touch: '../bower_components/jquery-mobile/js/events/touch',
             bootstrap: '../bower_components/bootstrap/dist/js/bootstrap',
-            'bootstrap-slider': '../bower_components/seiyria-bootstrap-slider/js/bootstrap-slider',
+            nouislider: '../bower_components/nouislider/distribute/jquery.nouislider',
+            'bootstrap-material-design': '../bower_components/bootstrap-material-design/dist/js/material',
             moment: '../bower_components/momentjs/moment',
             typeahead: '../bower_components/typeahead.js/dist/typeahead.jquery',
             'meta-data': 'meta/data'
@@ -50,7 +51,11 @@
                 deps: ['jquery'],
                 exports: 'jQuery'
             },
-            'bootstrap-slider': {
+            nouislider: {
+                deps: ['jquery'],
+                exports: 'jQuery'
+            },
+            'bootstrap-material-design': {
                 deps: ['jquery'],
                 exports: 'jQuery'
             },

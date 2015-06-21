@@ -11,11 +11,16 @@ define(function(require) {
         onSlideStop: null,
         setValue: function(value) {
             if (!this.get('isDragged')) {
-                this.get('element').slider('setValue', value, true);
+                this.get('element').val(value);
             }
         },
         updateMax: function() {
-            this.get('element').slider('setAttribute', 'max', this.get('max'));
+            this.get('element').noUiSlider({
+                range: {
+                    'min': 0,
+                    'max': this.get('max')
+                }
+            }, true);
         }.observes('max')
     });
 });

@@ -26,6 +26,7 @@ module.exports = function (grunt) {
         components: 'assets/bower_components',
         bootstrapFonts: 'assets/bower_components/bootstrap/dist/fonts',
         fontawesomeFonts: 'assets/bower_components/fontawesome/fonts',
+        bootstrapMaterialDesignFonts: 'assets/bower_components/bootstrap-material-design/fonts',
         indexHtml: '.tmp/public/index.html',
         indexJade: 'assets/index.jade',
         zip: '.tmp/public/music-app.zip'
@@ -79,6 +80,11 @@ module.exports = function (grunt) {
                     expand: true,
                     cwd: '<%= paths.fontawesomeFonts %>',
                     src: ['**', '!FontAwesome.otf'],
+                    dest: '<%= paths.prodFonts %>'
+                }, {
+                    expand: true,
+                    cwd: '<%= paths.bootstrapMaterialDesignFonts %>',
+                    src: ['**'],
                     dest: '<%= paths.prodFonts %>'
                 }]
             },

@@ -5,8 +5,9 @@ define(function(require) {
         moment = require('moment');
 
     require('bootstrap');
-    require('bootstrap-slider');
+    require('nouislider');
     require('typeahead');
+    require('bootstrap-material-design');
 
     require('components/init');
 
