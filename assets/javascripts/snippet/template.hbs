@@ -1,23 +1,21 @@
-<div {{action 'click'}} class="col-xs-10 inner-fill">
-    <div {{bind-attr class=':list-group-item :audio-list :outer-panel model.isSelected:active'}}>
-        <div class="media-left media-middle">
-            <div class="outer-image">
-                <img class="media-object inner-image" {{bind-attr src=model.thumbnail}} />
-            </div>
-        </div>
-
-        <div class="media-body">
-            <div>
-                {{model.title}}
-            </div>
-
-            <div>
-                {{#if model.isLoading}}
-                    <i class="fa fa-spinner fa-pulse"></i>
-                {{/if}}
-            </div>
-        </div>
+<div class="media-left media-middle snippet-part">
+    <div class="outer-image">
+        <img class="media-object inner-image" {{bind-attr src=model.thumbnail}} />
     </div>
 </div>
 
-<div {{action 'toggleSelection'}} class="col-xs-2 handle" />
+<div class="media-body snippet-part">
+    <div>
+        {{model.title}}
+    </div>
+
+    <div>
+        {{#if model.isLoading}}
+            <i class="fa fa-spinner fa-pulse"></i>
+        {{/if}}
+    </div>
+</div>
+
+<div class="media-right media-middle snippet-part">
+    <i class="mdi-navigation-more-vert"></i>
+</div>

@@ -5,7 +5,7 @@ define(function(require) {
 
     return Ember.Component.extend({
         layoutName: 'snippet',
-        classNames: ['row', 'snippet-item', 'withripple'],
+        classNames: ['list-group-item', 'snippet-item', 'withripple'],
         attributeBindings: ['name'],
         name: function() {
             return this.get('model.id');
