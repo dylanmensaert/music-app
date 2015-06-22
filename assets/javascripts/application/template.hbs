@@ -85,4 +85,8 @@
     </div>
 {{/if}}
 
+{{#if session.message}}
+    {{message-bar content=session.message}}
+{{/if}}
+
 {{view audio-component audio=audio}}

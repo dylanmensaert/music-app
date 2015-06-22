@@ -135,13 +135,15 @@ define(function(require) {
         save: function() {
             this.set('status', 'loading');
 
-            if (Ember.isEmpty(this.get('audio'))) {
-                this.fetchDownload().then(function(url) {
-                    this.insert();
-                }.bind(this));
-            } else {
-                this.insert();
-            }
+            return new Ember.RSVP.Promise(function(resolve, reject) {
+                if (Ember.isEmpty(this.get('audio'))) {
+                    this.fetchDownload().then(function(url) {
+                        this.insert().then(resolve, reject);
+                    }.bind(this));
+                } else {
+                    this.insert().then(resolve, reject);
+                }
+            }.bind(this));
         },
         insert: function() {
             var audio = this.createFilePath('audio', this.get('extension')),
@@ -155,19 +157,24 @@ define(function(require) {
                 thumbnail: this.download(this.get('thumbnail'), thumbnail)
             };
 
-            Ember.RSVP.hash(promises).then(function(hash) {
-                this.set('audio', hash.audio);
-                this.set('thumbnail', hash.thumbnail);
+            return new Ember.RSVP.Promise(function(resolve, reject) {
+                Ember.RSVP.hash(promises).then(function(hash) {
+                    this.set('audio', hash.audio);
+                    this.set('thumbnail', hash.thumbnail);
 
-                this.get('labels').pushObject('saved');
+                    this.get('labels').pushObject('saved');
 
-                // TODO: update offline labels and snippets in 1 write action
-                // TODO: only perform this
-                this.get('fileSystem.snippets').pushObject(this);
+                    // TODO: update offline labels and snippets in 1 write action
+                    // TODO: only perform this
+                    this.get('fileSystem.snippets').pushObject(this);
 
-                this.set('status', null);
+                    this.set('status', null);
+
+                    resolve();
+                }.bind(this), function(reason) {
+                    reject(reason.message);
+                });
             }.bind(this));
-            // TODO: Implement every error by showing a message for few seconds
         },
         download: function(url, source) {
             var fileSystem = this.get('fileSystem'),
@@ -206,9 +213,13 @@ define(function(require) {
                 thumbnail: fileSystem.remove(this.get('thumbnail'))
             };
 
-            Ember.RSVP.all(promises).then(function() {
-                fileSystem.get('snippets').removeObject(this);
-            }.bind(this));
+            return new Ember.RSVP.Promise(function(resolve, reject) {
+                Ember.RSVP.all(promises).then(function() {
+                    fileSystem.get('snippets').removeObject(this);
+
+                    resolve();
+                }.bind(this), reject);
+            });
         },
         strip: function() {
             return this.getProperties('id', 'title', 'extension', 'labels', 'thumbnail');

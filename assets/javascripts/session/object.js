@@ -4,6 +4,7 @@ define(function(require) {
     var Ember = require('ember');
 
     return Ember.Object.extend({
-        selectedSnippets: []
+        selectedSnippets: [],
+        message: null
     });
 });

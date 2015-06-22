@@ -49,6 +49,12 @@ define(function(require) {
                 return snippet.get('isQueued') && snippet.match(query).get('length');
             });
         }.property('query', 'fileSystem.snippets.@each.title', 'fileSystem.queue.@each'),
+        // TODO: Implement - avoid triggering on init?
+        /*updateMessage: function() {
+            if (!this.get('snippets.length')) {
+                this.set('session.message', 'No songs found');
+            }
+        }.observes('snippets.length'),*/
         didUpdate: function(snippetIds) {
             var firstSnippetId = snippetIds.get('firstObject'),
                 hasChangedFirst = this.get('fileSystem.queue.firstObject') !== firstSnippetId,
@@ -86,7 +92,11 @@ define(function(require) {
                     snippet = this.get('fileSystem.snippets').findBy('id', queue.get('firstObject'));
 
                     audio.play(snippet);
+                } else {
+                    queue.removeObject(id);
                 }
+
+                this.set('session.message', 'Removed from queue');
             }
         }
     });

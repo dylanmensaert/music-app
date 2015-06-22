@@ -98,6 +98,12 @@ define(function(require) {
 
             return snippets;
         }.property('offlineSnippets.@each', 'onlineSnippets.@each'),
+        // TODO: Implement - avoid triggering on init?
+        /*updateMessage: function() {
+            if (!this.get('snippets.length')) {
+                this.set('session.message', 'No songs found');
+            }
+        }.observes('snippets.length'),*/
         offlineSnippets: function() {
             var snippets = [],
                 query,
@@ -182,23 +188,37 @@ define(function(require) {
                 this.set('query', this.get('liveQuery'));
             },
             pushToDownload: function(snippet) {
+                var session = this.get('session');
+
                 //TODO: Implement wifi check
                 if (!snippet.get('isSaved')) {
                     if (true) {
-                        snippet.save();
+                        snippet.save().then(function() {
+                            session.set('message', 'download successful');
+                        }, function(error) {
+                            // TODO: show error?
+                            session.set('message', 'download aborted');
+                        });
                     } else {
                         snippet.get('labels').pushObject('download-later');
                     }
                 } else {
-                    // TODO: show message: already been saved..
+                    session.set('message', 'already saved');
                 }
             },
             pushToQueue: function(snippet) {
+                var session = this.get('session');
+
                 if (!snippet.get('isSaved')) {
-                    snippet.save();
+                    snippet.save().then(function() {}, function(error) {
+                        // TODO: show error?
+                        session.set('message', 'Download aborted');
+                    });
                 }
 
                 this.get('fileSystem.queue').pushObject(snippet.get('id'));
+
+                this.set('session.message', 'Added to queue');
             },
             save: function(snippet) {
                 var snippets = this.get('fileSystem.snippets').filterBy('isSelected');
