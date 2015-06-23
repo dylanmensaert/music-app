@@ -1,5 +1,5 @@
 @audio-height: 50px;
-@menu-height: 42px;
+@menu-height: 46px;
 
 /* TODO: Fix when writing in search */
 html {
@@ -140,23 +140,20 @@ html {
     user-select: none;
 }
 
-.menu-bar.nav-tabs.nav-justified {
+.menu-bar {
     .bar;
-    top: 0;
-    background-color: #eeeeee;
+    margin-top: 0;
+    padding: 0;
 
-    li {
-        display: table-cell;
-        width: 1%;
-
-        a {
-            border-bottom: 1px solid #ddd;
-            border-radius: 4px 4px 0 0;
-            margin-bottom: 0;
-        }
+    .btn.active {
+        /* TODO: should work via material-design */
+        color: rgba(255,255,255,.84);
     }
-    .active a {
-        border-bottom-color: #fff;
+
+    .btn.btn-default {
+        &, &:hover {
+            background-color: #eeeeee;
+        }
     }
 }
 
@@ -166,4 +163,12 @@ html {
 
 .grid-label {
     margin: 3px 2px 3px 2px;
+}
+
+.float-input {
+    margin-top: 10px;
+}
+
+.btn-inline {
+    padding: 0 15px 0 15px;
 }

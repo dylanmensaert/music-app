@@ -11,25 +11,19 @@
     </div>
 {{/if}}
 
-<ul class="nav nav-tabs nav-justified menu-bar">
-    {{#link-li}}
-        {{#link-to 'labels'}}
-            Labels
-        {{/link-to}}
-    {{/link-li}}
+<div class="btn-group btn-group-justified menu-bar">
+    {{#link-to 'labels'}}
+        Labels
+    {{/link-to}}
 
-    {{#link-li}}
-        {{#link-to 'index'}}
-            Search
-        {{/link-to}}
-    {{/link-li}}
+    {{#link-to 'index'}}
+        Search
+    {{/link-to}}
 
-    {{#link-li}}
-        {{#link-to 'queue'}}
-            Queue
-        {{/link-to}}
-    {{/link-li}}
-</ul>
+    {{#link-to 'queue'}}
+        Queue
+    {{/link-to}}
+</div>
 
 <div class="menu-placeholder" />
 

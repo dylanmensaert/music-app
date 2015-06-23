@@ -44,7 +44,7 @@
     </div>
 </div>
 
-<div class="form-group">
+<div class="form-group float-input">
     <div {{bind-attr class='liveQuery:input-group'}}>
         {{#if liveQuery}}
             {{clear-addon text=liveQuery}}
@@ -54,12 +54,12 @@
     </div>
 </div>
 
-<button class="btn btn-default btn-file">
+<button class="btn btn-default btn-file btn-raised">
     Import audio
     {{file-input}}
 </button>
 
-<div class="list-group">
+<div class="list-group float-input">
     {{#each snippet in sortedSnippets}}
         {{app-snippet model=snippet action='play' swipeleft='pushToDownload' swiperight='pushToQueue' param=snippet}}
 

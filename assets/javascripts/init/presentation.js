@@ -19,6 +19,14 @@ define(function(require) {
         classNames: ['form-control']
     });
 
+    Ember.LinkView.reopen({
+        classNames: ['btn'],
+        classNameBindings: ['active:btn-primary:btn-default'],
+        didInsertElement: function() {
+            Ember.$.material.ripples(this.$());
+        }
+    });
+
     Ember.Handlebars.registerBoundHelper('time', function(seconds) {
         return moment.utc(seconds * 1000).format('mm:ss');
     });

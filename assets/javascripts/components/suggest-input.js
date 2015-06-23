@@ -6,7 +6,7 @@ define(function(require) {
     // TODO: Implement as focus-input
     // TODO: send action on suggestion click
     return Ember.TextField.extend({
-        classNames: ['form-control'],
+        classNames: ['form-control', 'floating-label'],
         attributeBindings: ['placeholder'],
         insertNewline: function() {
             this.sendAction('insert-newline');
@@ -21,6 +21,8 @@ define(function(require) {
             }, {
                 source: this.get('fetchSuggestions')
             });
+
+            Ember.$.material.input(this.$());
         },
         willDestroyElement: function() {
             this.$().typeahead('destroy');

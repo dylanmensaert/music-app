@@ -7,6 +7,9 @@ define(function(require) {
         layoutName: 'clearAddon',
         classNames: ['input-group-btn'],
         text: '',
+        didInsertElement: function() {
+            Ember.$.material.ripples(this.$());
+        },
         actions: {
             clear: function() {
                 this.set('text', '');
