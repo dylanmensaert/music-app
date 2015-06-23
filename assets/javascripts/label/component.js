@@ -5,8 +5,8 @@ define(function(require) {
 
     return Ember.Component.extend({
         layoutName: 'label',
-        classNames: ['btn', 'grid-label'],
-        classNameBindings: ['model.isSelected:btn-primary'],
+        classNames: ['btn', 'grid-label', 'btn-raised'],
+        classNameBindings: ['model.isSelected:btn-primary:btn-default'],
         model: null,
         showEdit: false,
         didClick: null,
