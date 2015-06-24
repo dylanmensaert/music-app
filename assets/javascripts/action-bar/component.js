@@ -45,7 +45,7 @@ define(function(require) {
             return this.get('models').filterBy('isSaved', false);
         }.property('models.@each.isSaved'),
         hasSingle: function() {
-            return this.get('models.length');
+            return this.get('models.length') === 1;
         }.property('models.length'),
         actions: {
             edit: function() {
