@@ -11,12 +11,10 @@ define(function(require) {
         didInsertElement: function() {
             Ember.$.material.ripples(this.$());
         },
-        actions: {
-            click: function() {
-                this.toggleProperty('model.isSelected');
+        click: function() {
+            this.toggleProperty('model.isSelected');
 
-                this.sendAction('action', this.get('model'));
-            }
+            this.sendAction('action', this.get('model'));
         }
     });
 });

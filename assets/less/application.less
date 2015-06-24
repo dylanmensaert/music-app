@@ -145,11 +145,6 @@ html {
     margin-top: 0;
     padding: 0;
 
-    .btn.active {
-        /* TODO: should work via material-design */
-        color: rgba(255,255,255,.84);
-    }
-
     .btn.btn-default {
         &, &:hover {
             background-color: #eeeeee;
@@ -171,4 +166,9 @@ html {
 
 .btn-inline {
     padding: 0 15px 0 15px;
+}
+
+/* TODO: should work via native material-design */
+.btn:not(.btn-default){
+    color: rgba(255,255,255,.84) !important;
 }
