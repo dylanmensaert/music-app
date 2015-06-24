@@ -54,47 +54,6 @@ define(function(require) {
         isQueued: function() {
             return this.get('fileSystem.queue').contains(this.get('id'));
         }.property('fileSystem.queue.@each', 'id'),
-        match: function(query) {
-            var matches = [],
-                title = this.get('title'),
-                labels = this.get('labels'),
-                queryParts;
-
-            queryParts = query.trim().split(' ').map(function(part) {
-                return Ember.Object.create({
-                    value: part,
-                    isMaching: false
-                });
-            });
-
-            queryParts.forEach(function(queryPart) {
-                if (utilities.isMatch(title, queryPart.get('value'))) {
-                    if (!matches.contains(title)) {
-                        matches.pushObject(title);
-                    }
-
-                    queryPart.set('isMaching', true);
-                }
-            });
-
-            queryParts.forEach(function(queryPart) {
-                labels.forEach(function(label) {
-                    if (utilities.isMatch(label, queryPart.get('value'))) {
-                        if (!matches.contains(label)) {
-                            matches.pushObject(title);
-                        }
-
-                        queryPart.set('isMaching', true);
-                    }
-                });
-            });
-
-            if (queryParts.isAny('isMaching', false)) {
-                matches = [];
-            }
-
-            return matches;
-        },
         createFilePath: function(type, extension) {
             var fileName = this.get('id') + '.' + extension,
                 directory = pluralizations[type];

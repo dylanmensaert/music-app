@@ -22,19 +22,29 @@ define(function(require) {
 
             return function(query, callback) {
                 var suggestions = [],
-                    matches;
+                    key;
 
                 lastQuery = query;
 
                 if (this.get('searchOffline')) {
+                    this.get('fileSystem.labels').forEach(function(label) {
+                        key = label.get('name');
+
+                        if (utilities.isMatch(key, query)) {
+                            suggestions.pushObject({
+                                value: key
+                            });
+                        }
+                    });
+
                     this.get('fileSystem.snippets').forEach(function(snippet) {
-                        snippet.match(query).forEach(function(match) {
-                            if (!suggestions.contains(match)) {
-                                suggestions.pushObject({
-                                    value: match
-                                });
-                            }
-                        });
+                        key = snippet.get('title');
+
+                        if (utilities.isMatch(key, query)) {
+                            suggestions.pushObject({
+                                value: key
+                            });
+                        }
                     });
 
                     callback(suggestions);
@@ -107,16 +117,18 @@ define(function(require) {
         offlineSnippets: function() {
             var snippets = [],
                 query,
-                offlineSnippets;
+                matchAnyLabel;
 
             if (this.get('searchOffline')) {
                 query = this.get('query');
 
-                offlineSnippets = this.get('fileSystem.snippets').filter(function(snippet) {
-                    return snippet.match(query).get('length');
-                });
+                snippets = this.get('fileSystem.snippets').filter(function(snippet) {
+                    matchAnyLabel = snippet.get('labels').any(function(label) {
+                        return utilities.isMatch(label, query);
+                    });
 
-                snippets = offlineSnippets;
+                    return matchAnyLabel || utilities.isMatch(snippet.get('title'), query);
+                });
             }
 
             return snippets;

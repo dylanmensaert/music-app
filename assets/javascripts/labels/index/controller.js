@@ -36,19 +36,21 @@ define(function(require) {
             var selectedSnippets = this.get('session.selectedSnippets'),
                 labels = [],
                 name,
-                isEvery;
+                isSelected;
 
             this.get('fileSystem.labels').forEach(function(label) {
                 name = label.get('name');
 
                 if (utilities.isMatch(name, this.get('query'))) {
                     if (selectedSnippets.get('length')) {
-                        isEvery = selectedSnippets.every(function(snippet) {
+                        isSelected = selectedSnippets.every(function(snippet) {
                             return snippet.get('labels').contains(name);
                         });
-
-                        label.set('isSelected', isEvery);
+                    } else {
+                        isSelected = false;
                     }
+
+                    label.set('isSelected', isSelected);
 
                     labels.pushObject(label);
                 }
