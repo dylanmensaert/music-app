@@ -6,11 +6,12 @@ define(function(require) {
     return Ember.Component.extend({
         layoutName: 'snippet',
         classNames: ['list-group-item', 'snippet-item'],
+        classNameBindings: ['model.isSelected:btn-material-orange-300'],
         attributeBindings: ['name'],
+        model: null,
         name: function() {
             return this.get('model.id');
         }.property('model.id'),
-        model: null,
         didInsertElement: function() {
             this.$().on('swipeleft', function() {
                 this.sendAction('swipeleft', this.get('model'));

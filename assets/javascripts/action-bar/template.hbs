@@ -1,39 +1,48 @@
 <div class="row">
-    <div class="col-xs-2">
+    <div {{bind-attr class=cellClass}}>
         <span class="badge">
-            {{snippets.length}}
+            {{models.length}}
         </span>
     </div>
 
-    {{#if unsavedSnippets}}
-        <div class="col-xs-2">
-            {{#unless isEveryUnsaved}}
-                <span class="badge">
-                    {{unsavedSnippets.length}}
-                </span>
-            {{/unless}}
-
-            <i {{action 'save'}} class="btn fa fa-download"></i>
-        </div>
-    {{/if}}
-
-    <div class="col-xs-2">
-              <i class="btn fa fa-tag"></i>
+    <!-- TODO: Toggle label tag vs search? -->
+    <div {{bind-attr class=cellClass}}>
+        <i class="mdi-maps-local-offer"></i>
     </div>
 
-    {{#if savedSnippets}}
-        <div class="col-xs-2">
-            {{#unless isEverySaved}}
+    {{#if unsavedModel}}
+        <div {{action 'save'}} {{bind-attr class=cellClass}}>
+            {{#unless isEveryUnsaved}}
                 <span class="badge">
-                    {{savedSnippets.length}}
+                    {{unsavedModel.length}}
                 </span>
             {{/unless}}
 
-            <i {{action 'remove'}} class="btn fa fa-trash-o"></i>
+            <i class="mdi-file-file-download"></i>
         </div>
     {{/if}}
 
-    <div class="col-xs-6">
-        <i {{action 'deselect'}} class="btn fa fa-times action-cancel"></i>
+    {{#if hasSingle}}
+        <div {{action 'edit'}} {{bind-attr class=cellClass}}>
+            <span class="badge" />
+
+            <i class="mdi-editor-mode-edit"></i>
+        </div>
+    {{/if}}
+
+    {{#if savedModel}}
+        <div {{bind-attr class=cellClass}}>
+            {{#unless isEverySaved}}
+                <span class="badge">
+                    {{savedModel.length}}
+                </span>
+            {{/unless}}
+
+            <i {{action 'remove'}} class="mdi-action-delete"></i>
+        </div>
+    {{/if}}
+
+    <div {{bind-attr class=lastCellClass}}>
+        <i {{action 'deselect'}} class="mdi-navigation-cancel"></i>
     </div>
 </div>
