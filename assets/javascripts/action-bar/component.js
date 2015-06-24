@@ -7,31 +7,6 @@ define(function(require) {
         layoutName: 'actionBar',
         classNames: ['action-bar', 'btn-primary', 'container', 'text-center'],
         models: null,
-        numberOfCells: function() {
-            var numberOfCells = 3;
-
-            if (this.get('unsavedModel')) {
-                numberOfCells += 1;
-            }
-
-            if (this.get('hasSingle')) {
-                numberOfCells += 1;
-            }
-
-            if (this.get('savedModel')) {
-                numberOfCells += 1;
-            }
-
-            return numberOfCells;
-        }.property('unsavedModel', 'hasSingle', 'savedModel'),
-        cellClass: function() {
-            return 'col-xs-' + Math.floor(12 / this.get('numberOfCells'));
-        }.property('numberOfCells'),
-        lastCellClass: function() {
-            var numberOfCells = this.get('numberOfCells');
-
-            return 'text-right col-xs-' + (12 - (numberOfCells - 1) * Math.floor(12 / numberOfCells));
-        }.property('numberOfCells'),
         isEverySaved: function() {
             return this.get('models').isEvery('isSaved');
         }.property('models.@each.isSaved'),

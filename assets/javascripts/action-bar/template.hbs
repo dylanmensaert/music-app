@@ -1,37 +1,37 @@
 <div class="row">
-    <div {{bind-attr class=cellClass}}>
+    <div class="col-xs-2 text-left">
         <span class="badge">
             {{models.length}}
         </span>
     </div>
 
     <!-- TODO: Toggle label tag vs search? -->
-    <div {{bind-attr class=cellClass}}>
+    <div class="col-xs-2">
         <i class="mdi-maps-local-offer menu-label"></i>
     </div>
 
-    {{#if unsavedModel}}
-        <div {{action 'save'}} {{bind-attr class=cellClass}}>
+    <div class="col-xs-2">
+        {{#if unsavedModel}}
             {{#unless isEveryUnsaved}}
                 <span class="badge">
                     {{unsavedModel.length}}
                 </span>
             {{/unless}}
 
-            <i class="mdi-file-file-download menu-label"></i>
-        </div>
-    {{/if}}
+            <i {{action 'save'}} class="mdi-file-file-download menu-label"></i>
+        {{/if}}
+    </div>
 
-    {{#if hasSingle}}
-        <div {{action 'edit'}} {{bind-attr class=cellClass}}>
+    <div class="col-xs-2">
+        {{#if hasSingle}}
             <span class="badge" />
 
-            <i class="mdi-editor-mode-edit menu-label"></i>
-        </div>
-    {{/if}}
+            <i {{action 'edit'}} class="mdi-editor-mode-edit menu-label"></i>
+        {{/if}}
+    </div>
 
-    {{#if savedModel}}
-        <div {{bind-attr class=cellClass}}>
+    <div class="col-xs-2">
+        {{#if savedModel}}
             {{#unless isEverySaved}}
                 <span class="badge">
                     {{savedModel.length}}
@@ -39,10 +39,10 @@
             {{/unless}}
 
             <i {{action 'remove'}} class="mdi-action-delete menu-label"></i>
-        </div>
-    {{/if}}
+        {{/if}}
+    </div>
 
-    <div {{bind-attr class=lastCellClass}}>
+    <div class="col-xs-2 text-right">
         <i {{action 'deselect'}} class="mdi-navigation-cancel menu-label"></i>
     </div>
 </div>
