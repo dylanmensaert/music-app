@@ -27,8 +27,8 @@
 
 <div class="menu-placeholder" />
 
-{{#if session.selectedSnippets}}
-    {{action-bar snippets=session.selectedSnippets}}
+{{#if cache.selectedSnippets}}
+    {{action-bar snippets=cache.selectedSnippets}}
 {{/if}}
 
 {{outlet}}
@@ -79,8 +79,8 @@
     </div>
 {{/if}}
 
-{{#if session.message}}
-    {{message-bar content=session.message}}
+{{#if cache.message}}
+    {{message-bar content=cache.message}}
 {{/if}}
 
 {{view audio-component audio=audio}}

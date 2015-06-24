@@ -111,7 +111,7 @@ define(function(require) {
         // TODO: Implement - avoid triggering on init?
         /*updateMessage: function() {
             if (!this.get('snippets.length')) {
-                this.set('session.message', 'No songs found');
+                this.set('cache.message', 'No songs found');
             }
         }.observes('snippets.length'),*/
         offlineSnippets: function() {
@@ -193,44 +193,44 @@ define(function(require) {
         updateSelectedSnippets: function() {
             var selectedSnippets = this.get('snippets').filterBy('isSelected');
 
-            this.set('session.selectedSnippets', selectedSnippets);
+            this.set('cache.selectedSnippets', selectedSnippets);
         }.observes('snippets.@each.isSelected'),
         actions: {
             search: function() {
                 this.set('query', this.get('liveQuery'));
             },
             pushToDownload: function(snippet) {
-                var session = this.get('session');
+                var cache = this.get('cache');
 
                 //TODO: Implement wifi check
                 if (!snippet.get('isSaved')) {
                     if (true) {
                         snippet.save().then(function() {
-                            session.set('message', 'download successful');
+                            cache.set('message', 'download successful');
                         }, function(error) {
                             // TODO: show error?
-                            session.set('message', 'download aborted');
+                            cache.set('message', 'download aborted');
                         });
                     } else {
                         snippet.get('labels').pushObject('download-later');
                     }
                 } else {
-                    session.set('message', 'already saved');
+                    cache.set('message', 'already saved');
                 }
             },
             pushToQueue: function(snippet) {
-                var session = this.get('session');
+                var cache = this.get('cache');
 
                 if (!snippet.get('isSaved')) {
                     snippet.save().then(function() {}, function(error) {
                         // TODO: show error?
-                        session.set('message', 'Download aborted');
+                        cache.set('message', 'Download aborted');
                     });
                 }
 
                 this.get('fileSystem.queue').pushObject(snippet.get('id'));
 
-                this.set('session.message', 'Added to queue');
+                this.set('cache.message', 'Added to queue');
             },
             save: function(snippet) {
                 var snippets = this.get('fileSystem.snippets').filterBy('isSelected');

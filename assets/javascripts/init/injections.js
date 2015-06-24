@@ -4,11 +4,11 @@ define(function(require) {
     var Ember = require('ember'),
         injectAudio = require('audio/inject'),
         injectFileSystem = require('file-system/inject'),
-        injectSession = require('session/inject');
+        injectCache = require('cache/inject');
 
     Ember.onLoad('Ember.Application', function(Application) {
         injectAudio(Application);
         injectFileSystem(Application);
-        injectSession(Application);
+        injectCache(Application);
     });
 });

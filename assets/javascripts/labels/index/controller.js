@@ -33,7 +33,7 @@ define(function(require) {
             });
         }.property('labels'),
         labels: function() {
-            var selectedSnippets = this.get('session.selectedSnippets'),
+            var selectedSnippets = this.get('cache.selectedSnippets'),
                 labels = [],
                 name,
                 isSelected;
@@ -57,7 +57,7 @@ define(function(require) {
             }.bind(this));
 
             return labels;
-        }.property('fileSystem.labels.@each.name', 'session.selectedSnippets.@each', 'query'),
+        }.property('fileSystem.labels.@each.name', 'cache.selectedSnippets.@each', 'query'),
         actions: {
             search: function() {
                 this.set('query', this.get('liveQuery'));
@@ -87,7 +87,7 @@ define(function(require) {
                 this.get('fileSystem.labels').removeObject(label);
             },*/
             toggleLabel: function(label) {
-                var selectedSnippets = this.get('session.selectedSnippets'),
+                var selectedSnippets = this.get('cache.selectedSnippets'),
                     snippets = this.get('fileSystem.snippets'),
                     labels;
 
@@ -101,11 +101,11 @@ define(function(require) {
                             snippets.pushObject(snippet);
                         }
 
-                        this.set('session.message', 'Added label');
+                        this.set('cache.message', 'Added label');
                     } else {
                         labels.removeObject(label.get('name'));
 
-                        this.set('session.message', 'Removed label');
+                        this.set('cache.message', 'Removed label');
                     }
                 });
             }

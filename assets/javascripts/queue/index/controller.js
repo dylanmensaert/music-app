@@ -52,7 +52,7 @@ define(function(require) {
         // TODO: Implement - avoid triggering on init?
         /*updateMessage: function() {
             if (!this.get('snippets.length')) {
-                this.set('session.message', 'No songs found');
+                this.set('cache.message', 'No songs found');
             }
         }.observes('snippets.length'),*/
         didUpdate: function(snippetIds) {
@@ -76,7 +76,7 @@ define(function(require) {
         updateSelectedSnippets: function() {
             var selectedSnippets = this.get('snippets').filterBy('isSelected');
 
-            this.set('session.selectedSnippets', selectedSnippets);
+            this.set('cache.selectedSnippets', selectedSnippets);
         }.observes('snippets.@each.isSelected'),
         actions: {
             search: function() {
@@ -96,7 +96,7 @@ define(function(require) {
                     queue.removeObject(id);
                 }
 
-                this.set('session.message', 'Removed from queue');
+                this.set('cache.message', 'Removed from queue');
             }
         }
     });

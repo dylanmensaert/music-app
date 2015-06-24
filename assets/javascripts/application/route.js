@@ -3,8 +3,7 @@ define(function(require) {
     'use strict';
 
     var Ember = require('ember'),
-        Slider = require('slider/object'),
-        sessionId = 'singleton';
+        Slider = require('slider/object');
 
     return Ember.Route.extend(require('helpers/update-title'), {
         title: 'music',
