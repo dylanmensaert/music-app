@@ -8,14 +8,14 @@ define(function(require) {
         classNames: ['btn', 'grid-label', 'btn-raised'],
         classNameBindings: ['model.isSelected:btn-primary:btn-default'],
         model: null,
-        showEdit: false,
-        didClick: null,
+        didInsertElement: function() {
+            Ember.$.material.ripples(this.$());
+        },
         actions: {
             click: function() {
-                this.didClick();
-            },
-            remove: function() {
-                // TODO: Implement
+                this.toggleProperty('model.isSelected');
+
+                this.sendAction('action', this.get('model'));
             }
         }
     });

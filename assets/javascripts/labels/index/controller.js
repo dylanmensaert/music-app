@@ -56,37 +56,6 @@ define(function(require) {
 
             return labels;
         }.property('fileSystem.labels.@each.name', 'session.selectedSnippets.@each', 'query'),
-        didClick: function() {
-            var selectedSnippets = this.get('session.selectedSnippets'),
-                snippets = this.get('fileSystem.snippets'),
-                labels,
-                label;
-
-            return function() {
-                label = this.get('model');
-
-                // TODO: Put in label component, depending on implementation edit mode
-                label.toggleProperty('isSelected');
-
-                if (selectedSnippets.get('length')) {
-                    selectedSnippets.forEach(function(snippet) {
-                        labels = snippet.get('labels');
-
-                        if (label.get('isSelected')) {
-                            labels.pushObject(label.get('name'));
-
-                            if (!snippets.isAny('id', snippet.get('id'))) {
-                                snippets.pushObject(snippet);
-                            }
-                        } else {
-                            labels.removeObject(label.get('name'));
-                        }
-                    });
-                } else {
-                    // TODO: implement
-                }
-            };
-        }.property('session.selectedSnippets.@each', 'fileSystem.snippets'),
         actions: {
             search: function() {
                 this.set('query', this.get('liveQuery'));
@@ -107,12 +76,36 @@ define(function(require) {
 
                 this.set('query', '');
             },
-            removeLabel: function(label) {
+            // TODO: Implement via actionbar (selectedLabels)
+            /*removeLabel: function(label) {
                 this.get('fileSystem.snippets').forEach(function(snippet) {
                     snippet.get('labels').removeObject(label.get('name'));
                 });
 
                 this.get('fileSystem.labels').removeObject(label);
+            },*/
+            toggleLabel: function(label) {
+                var selectedSnippets = this.get('session.selectedSnippets'),
+                    snippets = this.get('fileSystem.snippets'),
+                    labels;
+
+                selectedSnippets.forEach(function(snippet) {
+                    labels = snippet.get('labels');
+
+                    if (label.get('isSelected')) {
+                        labels.pushObject(label.get('name'));
+
+                        if (!snippets.isAny('id', snippet.get('id'))) {
+                            snippets.pushObject(snippet);
+                        }
+
+                        this.set('session.message', 'Added label');
+                    } else {
+                        labels.removeObject(label.get('name'));
+
+                        this.set('session.message', 'Removed label');
+                    }
+                });
             }
         }
     });
