@@ -5,7 +5,7 @@ define(function(require) {
 
     return Ember.Component.extend({
         layoutName: 'actionBar',
-        classNames: ['action-bar', 'btn-material-amber-100', 'container', 'text-center'],
+        classNames: ['action-bar', 'btn-primary', 'container', 'text-center'],
         models: null,
         numberOfCells: function() {
             var numberOfCells = 3;
