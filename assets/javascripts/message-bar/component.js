@@ -17,10 +17,8 @@ define(function(require) {
                 this.set('fading', false);
                 this.set('visible', false)
             }.bind(this));
-            console.log('3');
         },
         update: function() {
-            console.log('4');
             if (!Ember.isEmpty(this.get('content'))) {
                 if (this.get('fading')) {
                     this.$().stop(true, true).fadeOut();
