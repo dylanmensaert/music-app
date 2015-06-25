@@ -61,10 +61,6 @@ define(function(require) {
         hasSingle: function() {
             return this.get('selectedLabels.length') === 1;
         }.property('selectedLabels.length'),
-        linkToProperties: {
-            tagName: 'div',
-            classNames: ['inner-label']
-        },
         actions: {
             search: function() {
                 this.set('query', this.get('liveQuery'));

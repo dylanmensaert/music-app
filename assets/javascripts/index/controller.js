@@ -210,10 +210,6 @@ define(function(require) {
         hasSingle: function() {
             return this.get('cache.selectedSnippets.length') === 1;
         }.property('cache.selectedSnippets.length'),
-        linkToProperties: {
-            tagName: 'div',
-            classNames: ['inner-label']
-        },
         actions: {
             search: function() {
                 this.set('query', this.get('liveQuery'));

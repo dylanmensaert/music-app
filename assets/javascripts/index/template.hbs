@@ -1,7 +1,7 @@
 {{#if cache.selectedSnippets}}
     {{#action-bar models=cache.selectedSnippets}}
         <div class="col-xs-2 outer-label">
-            {{#link-to 'labels' properties=linkToProperties}}
+            {{#link-to 'labels' tagName='div' class='inner-label'}}
                 <i class="mdi-maps-local-offer"></i>
             {{/link-to}}
         </div>
