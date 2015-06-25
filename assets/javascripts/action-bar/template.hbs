@@ -5,50 +5,11 @@
         </span>
     </div>
 
-    <!-- TODO: Toggle label tag vs search? -->
-    <div class="col-xs-2">
-        {{#link-to 'labels' properties=linkToProperties}}
-            <i class="mdi-maps-local-offer menu-label"></i>
-        {{/link-to}}
-
-        {{#link-to 'index' properties=linkToProperties}}
-            <i class="mdi-navigation-arrow-back menu-label"></i>
-        {{/link-to}}
-    </div>
-
-    <div class="col-xs-2">
-        {{#if unsavedModel}}
-            {{#unless isEveryUnsaved}}
-                <span class="badge">
-                    {{unsavedModel.length}}
-                </span>
-            {{/unless}}
-
-            <i {{action 'save'}} class="mdi-file-file-download menu-label"></i>
-        {{/if}}
-    </div>
-
-    <div class="col-xs-2">
-        {{#if hasSingle}}
-            <span class="badge" />
-
-            <i {{action 'edit'}} class="mdi-editor-mode-edit menu-label"></i>
-        {{/if}}
-    </div>
-
-    <div class="col-xs-2">
-        {{#if savedModel}}
-            {{#unless isEverySaved}}
-                <span class="badge">
-                    {{savedModel.length}}
-                </span>
-            {{/unless}}
-
-            <i {{action 'remove'}} class="mdi-action-delete menu-label"></i>
-        {{/if}}
-    </div>
+    {{yield}}
 
     <div class="col-xs-2 text-right">
-        <i {{action 'deselect'}} class="mdi-navigation-cancel menu-label"></i>
+        <div {{action 'deselect'}} class="inner-label">
+            <i class="mdi-navigation-cancel"></i>
+        </div>
     </div>
 </div>

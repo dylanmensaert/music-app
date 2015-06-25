@@ -1,3 +1,41 @@
+{{#if cache.selectedSnippets}}
+    {{#action-bar models=cache.selectedSnippets}}
+        <div class="col-xs-2 outer-label">
+            {{#link-to 'index' properties=linkToProperties}}
+                <i class="mdi-navigation-arrow-back"></i>
+            {{/link-to}}
+        </div>
+
+        <div class="col-xs-6">
+            &nbsp;
+        </div>
+    {{/action-bar}}
+{{else}}
+    {{#if selectedLabels}}
+        {{#action-bar models=selectedLabels}}
+            <div class="col-xs-4">
+                &nbsp;
+            </div>
+
+            <div class="col-xs-2 outer-label">
+                {{#if hasSingle}}
+                    <div {{action 'edit'}} class="inner-label">
+                        <i class="mdi-editor-mode-edit"></i>
+                    </div>
+                {{else}}
+                    &nbsp;
+                {{/if}}
+            </div>
+
+            <div class="col-xs-2 outer-label">
+                <div{{action 'remove'}}  class="inner-label">
+                    <i class="mdi-action-delete"></i>
+                </div>
+            </div>
+        {{/action-bar}}
+    {{/if}}
+{{/if}}
+
 <div class="form-group float-input">
     <div class="input-group">
         {{#if liveQuery}}

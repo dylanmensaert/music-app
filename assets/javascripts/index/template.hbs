@@ -1,3 +1,55 @@
+{{#if cache.selectedSnippets}}
+    {{#action-bar models=cache.selectedSnippets}}
+        <div class="col-xs-2 outer-label">
+            {{#link-to 'labels' properties=linkToProperties}}
+                <i class="mdi-maps-local-offer"></i>
+            {{/link-to}}
+        </div>
+
+        <div class="col-xs-2 outer-label">
+            {{#if unsavedSnippets}}
+                <div {{action 'save'}} class="inner-label">
+                    {{#unless isEveryUnsaved}}
+                        <span class="badge">
+                            {{unsavedSnippets.length}}
+                        </span>
+                    {{/unless}}
+
+                    <i class="mdi-file-file-download"></i>
+                </div>
+            {{else}}
+                &nbsp;
+            {{/if}}
+        </div>
+
+        <div class="col-xs-2 outer-label">
+            {{#if hasSingle}}
+                <div {{action 'edit'}} class="inner-label">
+                    <i class="mdi-editor-mode-edit"></i>
+                </div>
+            {{else}}
+                &nbsp;
+            {{/if}}
+        </div>
+
+        <div class="col-xs-2 outer-label">
+            {{#if savedSnippets}}
+                <div {{action 'remove'}} class="inner-label">
+                    {{#unless isEverySaved}}
+                        <span class="badge">
+                            {{savedSnippets.length}}
+                        </span>
+                    {{/unless}}
+
+                    <i class="mdi-action-delete"></i>
+                </div>
+            {{else}}
+                &nbsp;
+            {{/if}}
+        </div>
+    {{/action-bar}}
+{{/if}}
+
 <div class="container">
     <div class="row">
         <div class="col-xs-6">

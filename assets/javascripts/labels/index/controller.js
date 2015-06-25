@@ -58,6 +58,13 @@ define(function(require) {
 
             return labels;
         }.property('fileSystem.labels.@each.name', 'cache.selectedSnippets.@each', 'query'),
+        hasSingle: function() {
+            return this.get('selectedLabels.length') === 1;
+        }.property('selectedLabels.length'),
+        linkToProperties: {
+            tagName: 'div',
+            classNames: ['inner-label']
+        },
         actions: {
             search: function() {
                 this.set('query', this.get('liveQuery'));
@@ -78,14 +85,13 @@ define(function(require) {
 
                 this.set('query', '');
             },
-            // TODO: Implement via actionbar (selectedLabels)
-            /*removeLabel: function(label) {
-                this.get('fileSystem.snippets').forEach(function(snippet) {
-                    snippet.get('labels').removeObject(label.get('name'));
-                });
+            remove: function() {
+                var labels = this.get('fileSystem.labels');
 
-                this.get('fileSystem.labels').removeObject(label);
-            },*/
+                this.get('selectedLabels').forEach(function(label) {
+                    labels.removeObject(label);
+                });
+            },
             toggleLabel: function(label) {
                 var selectedSnippets = this.get('cache.selectedSnippets'),
                     snippets = this.get('fileSystem.snippets'),

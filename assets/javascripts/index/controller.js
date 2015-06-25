@@ -195,6 +195,25 @@ define(function(require) {
 
             this.set('cache.selectedSnippets', selectedSnippets);
         }.observes('snippets.@each.isSelected'),
+        isEverySaved: function() {
+            return this.get('cache.selectedSnippets').isEvery('isSaved');
+        }.property('cache.selectedSnippets.@each.isSaved'),
+        isEveryUnsaved: function() {
+            return this.get('cache.selectedSnippets').isEvery('isSaved', false);
+        }.property('cache.selectedSnippets.@each.isSaved'),
+        savedSnippets: function() {
+            return this.get('cache.selectedSnippets').filterBy('isSaved');
+        }.property('cache.selectedSnippets.@each.isSaved'),
+        unsavedSnippets: function() {
+            return this.get('cache.selectedSnippets').filterBy('isSaved', false);
+        }.property('cache.selectedSnippets.@each.isSaved'),
+        hasSingle: function() {
+            return this.get('cache.selectedSnippets.length') === 1;
+        }.property('cache.selectedSnippets.length'),
+        linkToProperties: {
+            tagName: 'div',
+            classNames: ['inner-label']
+        },
         actions: {
             search: function() {
                 this.set('query', this.get('liveQuery'));
@@ -241,7 +260,14 @@ define(function(require) {
                         snippet.save();
                     }
                 });
-            }
+            },
+            remove: function() {
+                var snippets = this.get('fileSystem.snippets');
+
+                this.get('cache.selectedSnippets').forEach(function(snippet) {
+                    snippets.removeObject(snippet);
+                });
+            },
         }
     });
 });
