@@ -7,7 +7,13 @@
 
     <!-- TODO: Toggle label tag vs search? -->
     <div class="col-xs-2">
-        <i class="mdi-maps-local-offer menu-label"></i>
+        {{#link-to 'labels' properties=linkToProperties}}
+            <i class="mdi-maps-local-offer menu-label"></i>
+        {{/link-to}}
+
+        {{#link-to 'index' properties=linkToProperties}}
+            <i class="mdi-navigation-arrow-back menu-label"></i>
+        {{/link-to}}
     </div>
 
     <div class="col-xs-2">

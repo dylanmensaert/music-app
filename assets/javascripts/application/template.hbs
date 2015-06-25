@@ -12,15 +12,15 @@
 {{/if}}
 
 <div class="btn-group btn-group-justified menu-bar">
-    {{#link-to 'labels'}}
+    {{#link-to 'labels' properties=linkToProperties}}
         Labels
     {{/link-to}}
 
-    {{#link-to 'index'}}
-        Search
+    {{#link-to 'index' properties=linkToProperties}}
+        Explore
     {{/link-to}}
 
-    {{#link-to 'queue'}}
+    {{#link-to 'queue' properties=linkToProperties}}
         Queue
     {{/link-to}}
 </div>
@@ -79,8 +79,6 @@
     </div>
 {{/if}}
 
-{{#if cache.message}}
-    {{message-bar content=cache.message}}
-{{/if}}
+{{message-bar content=cache.message}}
 
 {{view audio-component audio=audio}}

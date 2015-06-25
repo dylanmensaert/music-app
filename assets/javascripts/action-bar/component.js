@@ -7,6 +7,10 @@ define(function(require) {
         layoutName: 'actionBar',
         classNames: ['action-bar', 'btn-primary', 'container', 'text-center'],
         models: null,
+        linkToProperties: {
+            tagName: 'span',
+            classNameBindings: ['active:hidden'],
+        },
         isEverySaved: function() {
             return this.get('models').isEvery('isSaved');
         }.property('models.@each.isSaved'),

@@ -8,6 +8,10 @@ define(function(require) {
         'slider-component': require('slider/component'),
         slider: null,
         isLoading: false,
+        linkToProperties: {
+            classNames: ['btn'],
+            classNameBindings: ['active:btn-primary:btn-default'],
+        },
         actions: {
             dismissAlert: function() {
                 this.set('error', null);

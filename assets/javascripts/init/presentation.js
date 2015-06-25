@@ -20,8 +20,12 @@ define(function(require) {
     });
 
     Ember.LinkView.reopen({
-        classNames: ['btn'],
-        classNameBindings: ['active:btn-primary:btn-default'],
+        init: function() {
+            this.setProperties(this.get('properties'));
+
+            this._super();
+        },
+        properties: null,
         didInsertElement: function() {
             Ember.$.material.ripples(this.$());
         }

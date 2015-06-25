@@ -101,13 +101,13 @@ define(function(require) {
                             snippets.pushObject(snippet);
                         }
 
-                        this.set('cache.message', 'Added label');
+                        this.set('cache.message', 'Added to label <strong>' + label.get('name') + '</strong>');
                     } else {
                         labels.removeObject(label.get('name'));
 
-                        this.set('cache.message', 'Removed label');
+                        this.set('cache.message', 'Removed from label <strong>' + label.get('name') + '</strong>');
                     }
-                });
+                }.bind(this));
             }
         }
     });
