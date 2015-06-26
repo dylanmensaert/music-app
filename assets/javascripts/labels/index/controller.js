@@ -32,6 +32,9 @@ define(function(require) {
                 sortProperties: ['name']
             });
         }.property('labels'),
+        selectedLabels: function() {
+            return this.get('labels').filterBy('isSelected');
+        }.property('labels.@each.isSelected'),
         labels: function() {
             var selectedSnippets = this.get('cache.selectedSnippets'),
                 labels = [],
@@ -65,7 +68,7 @@ define(function(require) {
             search: function() {
                 this.set('query', this.get('liveQuery'));
             },
-            createLabel: function() {
+            create: function() {
                 var liveQuery = this.get('liveQuery'),
                     labels = this.get('fileSystem.labels');
 
@@ -79,7 +82,15 @@ define(function(require) {
                     }
                 }
 
-                this.set('query', '');
+                this.set('liveQuery', '');
+            },
+            setupEdit: function() {
+                var name = this.get('selectedLabels.firstObject.name');
+
+                this.set('liveQuery', name);
+            },
+            saveEdit: function() {
+                this.set('selectedLabels.firstObject.name', this.get('liveQuery'));
             },
             remove: function() {
                 var labels = this.get('fileSystem.labels');
@@ -88,7 +99,7 @@ define(function(require) {
                     labels.removeObject(label);
                 });
             },
-            toggleLabel: function(label) {
+            toggle: function(label) {
                 var selectedSnippets = this.get('cache.selectedSnippets'),
                     snippets = this.get('fileSystem.snippets'),
                     labels;
