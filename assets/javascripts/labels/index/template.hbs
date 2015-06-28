@@ -17,6 +17,7 @@
                 &nbsp;
             </div>
 
+            <!-- TODO: duplicate with labels index -->
             <div class="col-xs-2 outer-label">
                 {{#if hasSingle}}
                     {{#if isEditMode}}
@@ -49,7 +50,7 @@
         {{/if}}
 
         {{#if isEditMode}}
-            {{suggest-input value=liveQuery placeholder=editLabelPlaceholder fetchSuggestions=fetchSuggestions insert-newline='saveEdit'}}
+            {{suggest-input value=liveQuery placeholder=editPlaceholder fetchSuggestions=fetchSuggestions insert-newline='saveEdit'}}
         {{else}}
             {{suggest-input value=liveQuery placeholder='Search or create label' fetchSuggestions=fetchSuggestions insert-newline='search'}}
         {{/if}}

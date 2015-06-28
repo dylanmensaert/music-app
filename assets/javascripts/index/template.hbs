@@ -1,5 +1,5 @@
 {{#if cache.selectedSnippets}}
-    {{#action-bar models=cache.selectedSnippets}}
+    {{#action-bar models=cache.selectedSnippets deselect='exitEdit'}}
         <div class="col-xs-2 outer-label">
             {{#link-to 'labels' tagName='div' class='inner-label'}}
                 <i class="mdi-maps-local-offer"></i>
@@ -22,11 +22,18 @@
             {{/if}}
         </div>
 
+        <!-- TODO: duplicate with labels index -->
         <div class="col-xs-2 outer-label">
             {{#if hasSingle}}
-                <div {{action 'edit'}} class="inner-label">
-                    <i class="mdi-editor-mode-edit"></i>
-                </div>
+                {{#if isEditMode}}
+                    <div {{action 'exitEdit'}} class="inner-label">
+                        <i class="mdi-content-clear"></i>
+                    </div>
+                {{else}}
+                    <div {{action 'setupEdit'}} class="inner-label">
+                        <i class="mdi-editor-mode-edit"></i>
+                    </div>
+                {{/if}}
             {{else}}
                 &nbsp;
             {{/if}}
@@ -102,7 +109,11 @@
             {{clear-addon text=liveQuery}}
         {{/if}}
 
-        {{suggest-input value=liveQuery placeholder='Search' fetchSuggestions=fetchSuggestions insert-newline='search'}}
+        {{#if isEditMode}}
+            {{suggest-input value=liveQuery placeholder=editPlaceholder fetchSuggestions=fetchSuggestions insert-newline='saveEdit'}}
+        {{else}}
+            {{suggest-input value=liveQuery placeholder='Search' fetchSuggestions=fetchSuggestions insert-newline='search'}}
+        {{/if}}
     </div>
 </div>
 

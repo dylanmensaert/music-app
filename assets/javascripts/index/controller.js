@@ -210,6 +210,9 @@ define(function(require) {
         hasSingle: function() {
             return this.get('cache.selectedSnippets.length') === 1;
         }.property('cache.selectedSnippets.length'),
+        // TODO: duplicate with labels index controller
+        isEditMode: false,
+        editPlaceholder: null,
         actions: {
             search: function() {
                 this.set('query', this.get('liveQuery'));
@@ -264,6 +267,23 @@ define(function(require) {
                     snippets.removeObject(snippet);
                 });
             },
+            // TODO: duplicate with labels index controller
+            setupEdit: function() {
+                var title = this.get('cache.selectedSnippets.firstObject.title');
+
+                this.set('liveQuery', title);
+                this.set('editPlaceholder', 'Edit: ' + title);
+                this.set('isEditMode', true)
+            },
+            saveEdit: function() {
+                this.set('cache.selectedSnippets.firstObject.title', this.get('liveQuery'));
+
+                this.send('exitEdit');
+            },
+            exitEdit: function() {
+                this.set('liveQuery', '');
+                this.set('isEditMode', false);
+            }
         }
     });
 });

@@ -35,7 +35,6 @@ define(function(require) {
         selectedLabels: function() {
             return this.get('labels').filterBy('isSelected');
         }.property('labels.@each.isSelected'),
-        isEditMode: false,
         labels: function() {
             var selectedSnippets = this.get('cache.selectedSnippets'),
                 labels = [],
@@ -65,7 +64,9 @@ define(function(require) {
         hasSingle: function() {
             return this.get('selectedLabels.length') === 1;
         }.property('selectedLabels.length'),
-        editLabelPlaceholder: null,
+        // TODO: duplicate with index controller
+        isEditMode: false,
+        editPlaceholder: null,
         actions: {
             search: function() {
                 this.set('query', this.get('liveQuery'));
@@ -86,11 +87,12 @@ define(function(require) {
 
                 this.set('liveQuery', '');
             },
+            // TODO: duplicate with index controller
             setupEdit: function() {
                 var name = this.get('selectedLabels.firstObject.name');
 
                 this.set('liveQuery', name);
-                this.set('editLabelPlaceholder', 'Edit label: ' + name);
+                this.set('editPlaceholder', 'Edit: ' + name);
                 this.set('isEditMode', true)
             },
             saveEdit: function() {
