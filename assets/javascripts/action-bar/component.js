@@ -13,6 +13,8 @@ define(function(require) {
         actions: {
             deselect: function() {
                 this.get('models').setEach('isSelected', false);
+
+                this.sendAction('deselect');
             }
         }
     });

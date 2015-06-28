@@ -12,16 +12,22 @@
     {{/action-bar}}
 {{else}}
     {{#if selectedLabels}}
-        {{#action-bar models=selectedLabels}}
+        {{#action-bar models=selectedLabels deselect='exitEdit'}}
             <div class="col-xs-4">
                 &nbsp;
             </div>
 
             <div class="col-xs-2 outer-label">
                 {{#if hasSingle}}
-                    <div {{action 'setupEdit'}} class="inner-label">
-                        <i class="mdi-editor-mode-edit"></i>
-                    </div>
+                    {{#if isEditMode}}
+                        <div {{action 'exitEdit'}} class="inner-label">
+                            <i class="mdi-content-clear"></i>
+                        </div>
+                    {{else}}
+                        <div {{action 'setupEdit'}} class="inner-label">
+                            <i class="mdi-editor-mode-edit"></i>
+                        </div>
+                    {{/if}}
                 {{else}}
                     &nbsp;
                 {{/if}}
@@ -37,26 +43,28 @@
 {{/if}}
 
 <div class="form-group float-input">
-    <div class="input-group">
+    <div {{bind-attr class='liveQuery:input-group'}}>
         {{#if liveQuery}}
             {{clear-addon text=liveQuery}}
         {{/if}}
 
-        {{suggest-input value=liveQuery placeholder='Create or search label' fetchSuggestions=fetchSuggestions}}
-
-        <div {{action 'create'}} class="input-group-btn">
-            <div class="btn btn-primary">
-                <i class="fa fa-plus"></i>
-            </div>
-        </div>
+        {{#if isEditMode}}
+            {{suggest-input value=liveQuery placeholder=editLabelPlaceholder fetchSuggestions=fetchSuggestions insert-newline='saveEdit'}}
+        {{else}}
+            {{suggest-input value=liveQuery placeholder='Search or create label' fetchSuggestions=fetchSuggestions insert-newline='search'}}
+        {{/if}}
     </div>
 </div>
 
-<div class="text-right">
+{{#if isEditMode}}
+    <div {{action 'create'}} class="btn btn-primary">
+        <i class="fa fa-plus"></i>
+    </div>
+
     <div class="btn btn-primary">
         <i class="fa fa-search"></i>
     </div>
-</div>
+{{/if}}
 
 {{#each label in sortedLabels}}
     {{app-label model=label action='toggle' param=label}}

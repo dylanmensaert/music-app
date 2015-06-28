@@ -35,6 +35,7 @@ define(function(require) {
         selectedLabels: function() {
             return this.get('labels').filterBy('isSelected');
         }.property('labels.@each.isSelected'),
+        isEditMode: false,
         labels: function() {
             var selectedSnippets = this.get('cache.selectedSnippets'),
                 labels = [],
@@ -64,6 +65,7 @@ define(function(require) {
         hasSingle: function() {
             return this.get('selectedLabels.length') === 1;
         }.property('selectedLabels.length'),
+        editLabelPlaceholder: null,
         actions: {
             search: function() {
                 this.set('query', this.get('liveQuery'));
@@ -88,9 +90,17 @@ define(function(require) {
                 var name = this.get('selectedLabels.firstObject.name');
 
                 this.set('liveQuery', name);
+                this.set('editLabelPlaceholder', 'Edit label: ' + name);
+                this.set('isEditMode', true)
             },
             saveEdit: function() {
                 this.set('selectedLabels.firstObject.name', this.get('liveQuery'));
+
+                this.send('exitEdit');
+            },
+            exitEdit: function() {
+                this.set('liveQuery', '');
+                this.set('isEditMode', false);
             },
             remove: function() {
                 var labels = this.get('fileSystem.labels');
