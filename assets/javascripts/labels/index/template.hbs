@@ -51,7 +51,7 @@
     </div>
 </div>
 
-{{#if isEditMode}}
+{{#unless isEditMode}}
     <div {{action 'create'}} class="btn btn-primary">
         <i class="fa fa-plus"></i>
     </div>
@@ -59,7 +59,7 @@
     <div class="btn btn-primary">
         <i class="fa fa-search"></i>
     </div>
-{{/if}}
+{{/unless}}
 
 {{#each label in sortedLabels}}
     {{app-label model=label action='toggle' param=label}}
