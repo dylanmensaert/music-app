@@ -3,7 +3,6 @@ define(function(require) {
 
     var Ember = require('ember');
 
-    // TODO: Implement as focus-input
     // TODO: send action on suggestion click
     return Ember.TextField.extend({
         classNames: ['form-control', 'floating-label'],
@@ -23,6 +22,7 @@ define(function(require) {
             });
 
             Ember.$.material.input(this.$());
+            this.$().focus();
         },
         willDestroyElement: function() {
             this.$().typeahead('destroy');

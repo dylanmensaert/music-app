@@ -3,7 +3,6 @@ define(function(require) {
 
     var App = require('init/app');
 
-    App.FocusInputComponent = require('components/focus-input');
     App.SuggestInputComponent = require('components/suggest-input');
     App.FileInputComponent = require('components/file-input');
     App.ClearAddonComponent = require('clear-addon/component');
