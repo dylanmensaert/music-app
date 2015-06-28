@@ -11,4 +11,5 @@ define(function(require) {
     App.AppSnippetComponent = require('snippet/component');
     App.ActionBarComponent = require('action-bar/component');
     App.MessageBarComponent = require('message-bar/component');
+    App.MenuIconComponent = require('menu-icon/component');
 });

@@ -7,9 +7,7 @@
 
     {{yield}}
 
-    <div class="col-xs-2 text-right">
-        <div {{action 'deselect'}} class="inner-label">
-            <i class="mdi-navigation-cancel"></i>
-        </div>
+    <div class="col-xs-2 outer-label">
+        {{menu-icon action='deselect' icon='mdi-navigation-cancel'}}
     </div>
 </div>

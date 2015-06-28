@@ -7,9 +7,6 @@ define(function(require) {
         layoutName: 'actionBar',
         classNames: ['action-bar', 'btn-primary', 'container', 'text-center'],
         models: null,
-        didInsertElement: function() {
-            Ember.$.material.ripples(this.$());
-        },
         actions: {
             deselect: function() {
                 this.get('models').setEach('isSelected', false);

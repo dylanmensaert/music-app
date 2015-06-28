@@ -21,13 +21,9 @@
             <div class="col-xs-2 outer-label">
                 {{#if hasSingle}}
                     {{#if isEditMode}}
-                        <div {{action 'exitEdit'}} class="inner-label">
-                            <i class="mdi-content-clear"></i>
-                        </div>
+                        {{menu-icon action='exitEdit' icon='mdi-content-clear'}}
                     {{else}}
-                        <div {{action 'setupEdit'}} class="inner-label">
-                            <i class="mdi-editor-mode-edit"></i>
-                        </div>
+                        {{menu-icon action='setupEdit' icon='mdi-editor-mode-edit'}}
                     {{/if}}
                 {{else}}
                     &nbsp;
@@ -35,9 +31,7 @@
             </div>
 
             <div class="col-xs-2 outer-label">
-                <div{{action 'remove'}}  class="inner-label">
-                    <i class="mdi-action-delete"></i>
-                </div>
+                {{menu-icon action='remove' icon='mdi-action-delete'}}
             </div>
         {{/action-bar}}
     {{/if}}
