@@ -5,9 +5,7 @@ define(function(require) {
         Label = require('label/object'),
         utilities = require('helpers/utilities');
 
-    return Ember.Controller.extend({
-        liveQuery: '',
-        query: '',
+    return Ember.Controller.extend(require('helpers/actions-mixin'), {
         fetchSuggestions: function() {
             return function(query, callback) {
                 var suggestions = [],
@@ -61,16 +59,14 @@ define(function(require) {
 
             return labels;
         }.property('fileSystem.labels.@each.name', 'cache.selectedSnippets.@each', 'query'),
+        originals: Ember.computed.alias('fileSystem.labels'),
+        selected: function() {
+            return this.get('labels').filterBy('isSelected');
+        }.property('labels.@each.isSelected'),
         hasSingle: function() {
             return this.get('selectedLabels.length') === 1;
         }.property('selectedLabels.length'),
-        // TODO: duplicate with index controller
-        isEditMode: false,
-        editPlaceholder: null,
         actions: {
-            search: function() {
-                this.set('query', this.get('liveQuery'));
-            },
             create: function() {
                 var liveQuery = this.get('liveQuery'),
                     labels = this.get('fileSystem.labels');
@@ -86,30 +82,6 @@ define(function(require) {
                 }
 
                 this.set('liveQuery', '');
-            },
-            // TODO: duplicate with index controller
-            setupEdit: function() {
-                var name = this.get('selectedLabels.firstObject.name');
-
-                this.set('liveQuery', name);
-                this.set('editPlaceholder', 'Edit: ' + name);
-                this.set('isEditMode', true)
-            },
-            saveEdit: function() {
-                this.set('selectedLabels.firstObject.name', this.get('liveQuery'));
-
-                this.send('exitEdit');
-            },
-            exitEdit: function() {
-                this.set('liveQuery', '');
-                this.set('isEditMode', false);
-            },
-            remove: function() {
-                var labels = this.get('fileSystem.labels');
-
-                this.get('selectedLabels').forEach(function(label) {
-                    labels.removeObject(label);
-                });
             },
             toggle: function(label) {
                 var selectedSnippets = this.get('cache.selectedSnippets'),

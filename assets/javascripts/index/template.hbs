@@ -1,52 +1,5 @@
 {{#if cache.selectedSnippets}}
-    {{#action-bar models=cache.selectedSnippets deselect='exitEdit'}}
-        <div class="col-xs-2 outer-label">
-            {{#link-to 'labels' tagName='div' class='inner-label'}}
-                <i class="mdi-maps-local-offer"></i>
-            {{/link-to}}
-        </div>
-
-        <div class="col-xs-2 outer-label">
-            {{#if unsavedSnippets}}
-                {{#menu-icon action='save' icon='mdi-file-file-download'}}
-                    {{#unless isEveryUnsaved}}
-                        <span class="badge">
-                            {{unsavedSnippets.length}}
-                        </span>
-                    {{/unless}}
-                {{/menu-icon}}
-            {{else}}
-                &nbsp;
-            {{/if}}
-        </div>
-
-        <!-- TODO: duplicate with labels index -->
-        <div class="col-xs-2 outer-label">
-            {{#if hasSingle}}
-                {{#if isEditMode}}
-                    {{menu-icon action='exitEdit' icon='mdi-content-clear'}}
-                {{else}}
-                    {{menu-icon action='setupEdit' icon='mdi-editor-mode-edit'}}
-                {{/if}}
-            {{else}}
-                &nbsp;
-            {{/if}}
-        </div>
-
-        <div class="col-xs-2 outer-label">
-            {{#if savedSnippets}}
-                {{#menu-icon action='remove' icon='mdi-action-delete'}}
-                    {{#unless isEverySaved}}
-                        <span class="badge">
-                            {{savedSnippets.length}}
-                        </span>
-                    {{/unless}}
-                {{/menu-icon}}
-            {{else}}
-                &nbsp;
-            {{/if}}
-        </div>
-    {{/action-bar}}
+    {{snippet-action-bar snippets=cache.selectedSnippets originals=fileSystem.snippets}}
 {{/if}}
 
 <div class="container">

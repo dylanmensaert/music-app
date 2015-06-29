@@ -1,10 +1,18 @@
+{{#if cache.selectedSnippets}}
+    {{snippet-action-bar snippets=cache.selectedSnippets originals=fileSystem.snippets}}
+{{/if}}
+
 <div class="form-group float-input">
     <div {{bind-attr class='liveQuery:input-group'}}>
         {{#if liveQuery}}
             {{clear-addon text=liveQuery}}
         {{/if}}
 
-        {{suggest-input value=liveQuery placeholder='Search' fetchSuggestions=fetchSuggestions insert-newline='search'}}
+        {{#if isEditMode}}
+            {{suggest-input value=liveQuery placeholder=editPlaceholder fetchSuggestions=fetchSuggestions insert-newline='saveEdit'}}
+        {{else}}
+            {{suggest-input value=liveQuery placeholder='Search' fetchSuggestions=fetchSuggestions insert-newline='search'}}
+        {{/if}}
     </div>
 </div>
 

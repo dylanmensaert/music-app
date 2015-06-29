@@ -5,20 +5,29 @@ define(function(require) {
         utilities = require('helpers/utilities');
 
     /*TODO: lot of duplication with index controller. Maybe implement via mixin*/
-    return Ember.Controller.extend({
-        query: '',
-        liveQuery: '',
+    return Ember.Controller.extend(require('helpers/actions-mixin'), {
         fetchSuggestions: function() {
             return function(query, callback) {
-                var title,
-                    suggestions = [];
+                var suggestions = [],
+                    key;
+
+                // TODO: check if label contains a snippet which is queued?
+                this.get('fileSystem.labels').forEach(function(label) {
+                    key = label.get('name');
+
+                    if (utilities.isMatch(key, query)) {
+                        suggestions.pushObject({
+                            value: key
+                        });
+                    }
+                });
 
                 this.get('fileSystem.snippets').forEach(function(snippet) {
-                    if (snippet.get('isQueued')) {
-                        suggestions = snippet.match(query).map(function() {
-                            return {
-                                value: snippet.get('title')
-                            };
+                    key = snippet.get('title');
+
+                    if (snippet.get('isQueued') && utilities.isMatch(key, query)) {
+                        suggestions.pushObject({
+                            value: key
                         });
                     }
                 });
@@ -43,10 +52,16 @@ define(function(require) {
             });
         }.property('snippets.@each', 'fileSystem.queue.@each'),
         snippets: function() {
-            var query = this.get('query');
+            var snippets = [],
+                query = this.get('query'),
+                matchAnyLabel;
 
             return this.get('fileSystem.snippets').filter(function(snippet) {
-                return snippet.get('isQueued') && snippet.match(query).get('length');
+                matchAnyLabel = snippet.get('labels').any(function(label) {
+                    return utilities.isMatch(label, query);
+                });
+
+                return snippet.get('isQueued') && (matchAnyLabel || utilities.isMatch(snippet.get('title'), query));
             });
         }.property('query', 'fileSystem.snippets.@each.title', 'fileSystem.queue.@each'),
         // TODO: Implement - avoid triggering on init?
@@ -78,10 +93,9 @@ define(function(require) {
 
             this.set('cache.selectedSnippets', selectedSnippets);
         }.observes('snippets.@each.isSelected'),
+        originals: Ember.computed.alias('fileSystem.snippets'),
+        selected: Ember.computed.alias('cache.selectedSnippets'),
         actions: {
-            search: function() {
-                this.set('query', this.get('liveQuery'));
-            },
             removeFromQueue: function(snippet) {
                 var queue = this.get('fileSystem.queue'),
                     id = snippet.get('id');
