@@ -13,9 +13,9 @@ define(function(require) {
         isEveryUnsaved: function() {
             return this.get('snippets').isEvery('isSaved', false);
         }.property('snippets.@each.isSaved'),
-        savedSnippets: function() {
-            return this.get('snippets').filterBy('isSaved');
-        }.property('snippets.@each.isSaved'),
+        offlineSnippets: function() {
+            return this.get('snippets').filterBy('isOffline');
+        }.property('snippets.@each.isOffline'),
         unsavedSnippets: function() {
             return this.get('snippets').filterBy('isSaved', false);
         }.property('snippets.@each.isSaved'),

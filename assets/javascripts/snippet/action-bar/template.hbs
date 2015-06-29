@@ -9,7 +9,7 @@
         {{#if unsavedSnippets}}
             {{#menu-icon action='save' icon='mdi-file-file-download'}}
                 {{#unless isEveryUnsaved}}
-                    <span class="badge">
+                    <span class="menu-text">
                         {{unsavedSnippets.length}}
                     </span>
                 {{/unless}}
@@ -32,11 +32,11 @@
     </div>
 
     <div class="col-xs-2 outer-label">
-        {{#if savedSnippets}}
+        {{#if offlineSnippets}}
             {{#menu-icon action='remove' icon='mdi-action-delete'}}
-                {{#unless isEverySaved}}
-                    <span class="badge">
-                        {{savedSnippets.length}}
+                {{#unless isEveryOffline}}
+                    <span class="menu-text">
+                        {{offlineSnippets.length}}
                     </span>
                 {{/unless}}
             {{/menu-icon}}

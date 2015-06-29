@@ -29,7 +29,7 @@ define(function(require) {
                 this.set('isEditMode', true)
             },
             saveEdit: function() {
-                var singleSelected = this.set('selected.firstObject');
+                var singleSelected = this.get('selected.firstObject');
 
                 singleSelected.set('name', this.get('liveQuery'));
 

@@ -41,10 +41,9 @@ define(function(require) {
         fileSystem: null,
         isSelected: false,
         status: null,
-        // TODO: Implement?
-        /*isOffline: function() {
+        isOffline: function() {
             return this.get('fileSystem.snippets').isAny('id', this.get('id'));
-        }.property('fileSystem.snippets.@each'),*/
+        }.property('fileSystem.snippets.@each'),
         isLoading: function() {
             return this.get('status') === 'loading';
         }.property('status'),
