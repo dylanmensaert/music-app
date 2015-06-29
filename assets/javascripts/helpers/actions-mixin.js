@@ -29,7 +29,13 @@ define(function(require) {
                 this.set('isEditMode', true)
             },
             saveEdit: function() {
-                this.set('selected.firstObject.name', this.get('liveQuery'));
+                var singleSelected = this.set('selected.firstObject');
+
+                singleSelected.set('name', this.get('liveQuery'));
+
+                if (!this.get('originals').isAny('id', singleSelected.get('id'))) {
+                    this.get('originals').pushObject(singleSelected);
+                }
 
                 this.send('exitEdit');
             },

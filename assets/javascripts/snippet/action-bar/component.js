@@ -6,6 +6,7 @@ define(function(require) {
     return Ember.Component.extend({
         layoutName: 'snippet/action_bar',
         snippets: null,
+        isEditMode: null,
         isEverySaved: function() {
             return this.get('snippets').isEvery('isSaved');
         }.property('snippets.@each.isSaved'),
@@ -22,6 +23,9 @@ define(function(require) {
             return this.get('snippets.length') === 1;
         }.property('snippets.length'),
         actions: {
+            save: function() {
+                this.sendAction('save');
+            },
             remove: function() {
                 this.sendAction('remove');
             },
