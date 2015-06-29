@@ -4,7 +4,7 @@ define(function(require) {
     var Ember = require('ember');
 
     return Ember.Component.extend({
-        layoutName: 'clearAddon',
+        layoutName: 'clear_addon',
         classNames: ['input-group-btn'],
         text: '',
         didInsertElement: function() {

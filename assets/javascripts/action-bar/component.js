@@ -4,7 +4,7 @@ define(function(require) {
     var Ember = require('ember');
 
     return Ember.Component.extend({
-        layoutName: 'actionBar',
+        layoutName: 'action_bar',
         classNames: ['action-bar', 'btn-primary', 'container', 'text-center'],
         models: null,
         actions: {

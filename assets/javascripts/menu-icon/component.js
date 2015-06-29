@@ -4,7 +4,7 @@ define(function(require) {
     var Ember = require('ember');
 
     return Ember.Component.extend({
-        layoutName: 'menuIcon',
+        layoutName: 'menu_icon',
         classNames: ['inner-label'],
         icon: null,
         didInsertElement: function() {

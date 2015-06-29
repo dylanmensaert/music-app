@@ -4,8 +4,7 @@ define(function(require) {
     var Ember = require('ember');
 
     return Ember.Component.extend({
-        // TODO: nested folders is not supported in template compiler?
-        layoutName: 'snippetActionBar',
+        layoutName: 'snippet_action_bar',
         snippets: null,
         isEverySaved: function() {
             return this.get('snippets').isEvery('isSaved');

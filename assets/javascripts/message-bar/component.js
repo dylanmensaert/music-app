@@ -5,7 +5,7 @@ define(function(require) {
         debouncer;
 
     return Ember.Component.extend({
-        layoutName: 'messageBar',
+        layoutName: 'message_bar',
         classNames: ['message-bar'],
         content: null,
         fading: false,
