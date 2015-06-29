@@ -7,9 +7,9 @@ define(function(require) {
         layoutName: 'snippet/action_bar',
         snippets: null,
         isEditMode: null,
-        isEverySaved: function() {
-            return this.get('snippets').isEvery('isSaved');
-        }.property('snippets.@each.isSaved'),
+        isEveryOffline: function() {
+            return this.get('snippets').isEvery('isOffline');
+        }.property('snippets.@each.isOffline'),
         isEveryUnsaved: function() {
             return this.get('snippets').isEvery('isSaved', false);
         }.property('snippets.@each.isSaved'),
