@@ -19,10 +19,6 @@
     {{#link-to 'index' class='btn' properties=linkToProperties}}
         Explore
     {{/link-to}}
-
-    {{#link-to 'queue' class='btn' properties=linkToProperties}}
-        Queue
-    {{/link-to}}
 </div>
 
 <div class="menu-placeholder" />
@@ -38,19 +34,13 @@
 
     <div class="container audio-bar">
         <div class="row">
-            <div class="col-xs-2">
-                <div class="audio-timer">
-                    {{time slider.value}}
-                </div>
-            </div>
-
-            <div class="col-xs-6">
+            {{#link-to 'queue' class='col-xs-9 audio-name-outer' tagName='div'}}
                 <div class="audio-name">
                     {{audio.snippet.name}}
                 </div>
-            </div>
+            {{/link-to}}
 
-            <div class="col-xs-2">
+            {{#app-ripple class='col-xs-3 text-center'}}
                 <div class="audio-icon">
                     {{#if audio.isLoading}}
                         <i class="fa fa-spinner fa-pulse"></i>
@@ -64,13 +54,7 @@
                         <i class="fa fa-play" {{action 'play'}}></i>
                     {{/if}}
                 </div>
-            </div>
-
-            <div class="col-xs-2">
-                <div class="audio-timer text-right">
-                    {{time slider.max}}
-                </div>
-            </div>
+            {{/app-ripple}}
         </div>
     </div>
 {{/if}}

@@ -11,7 +11,6 @@ define(function(require) {
         linkToProperties: {
             classNameBindings: ['active:btn-primary:btn-default'],
         },
-        classNameBindings: ['active:btn-primary:btn-default'],
         actions: {
             dismissAlert: function() {
                 this.set('error', null);
