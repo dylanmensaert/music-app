@@ -6,11 +6,11 @@
     </div>
 
     <div class="col-xs-2 outer-label">
-        {{#if unsavedSnippets}}
-            {{#menu-icon action='save' icon='mdi-file-file-download'}}
-                {{#unless isEveryUnsaved}}
+        {{#if undownloadedSnippets}}
+            {{#menu-icon action='download' icon='mdi-file-file-download'}}
+                {{#unless isEveryUndownloaded}}
                     <span class="menu-text">
-                        {{unsavedSnippets.length}}
+                        {{undownloadedSnippets.length}}
                     </span>
                 {{/unless}}
             {{/menu-icon}}

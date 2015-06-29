@@ -199,9 +199,9 @@ define(function(require) {
                 var cache = this.get('cache');
 
                 //TODO: Implement wifi check
-                if (!snippet.get('isSaved')) {
+                if (!snippet.get('isDownloaded')) {
                     if (true) {
-                        snippet.save().then(function() {
+                        snippet.download().then(function() {
                             cache.set('message', 'download successful');
                         }, function(error) {
                             // TODO: show error?
@@ -211,12 +211,12 @@ define(function(require) {
                         snippet.get('labels').pushObject('download-later');
                     }
                 } else {
-                    cache.set('message', 'already saved');
+                    cache.set('message', 'already downloaded');
                 }
             },
             pushToQueue: function(snippet) {
-                if (!snippet.get('isSaved')) {
-                    snippet.save().then(function() {}, function(error) {
+                if (!snippet.get('isDownloaded')) {
+                    snippet.download().then(function() {}, function(error) {
                         // TODO: show error?
                         this.set('cache.message', 'Download aborted');
                     }.bind(this));

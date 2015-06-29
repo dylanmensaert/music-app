@@ -33,7 +33,7 @@ define(function(require) {
                         id: fileName.value,
                         name: fileName.value,
                         extension: fileName.extension,
-                        labels: ['saved']
+                        labels: ['downloaded']
                     });
                 });
 

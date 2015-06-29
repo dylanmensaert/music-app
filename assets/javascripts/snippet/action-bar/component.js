@@ -10,21 +10,21 @@ define(function(require) {
         isEveryOffline: function() {
             return this.get('snippets').isEvery('isOffline');
         }.property('snippets.@each.isOffline'),
-        isEveryUnsaved: function() {
-            return this.get('snippets').isEvery('isSaved', false);
-        }.property('snippets.@each.isSaved'),
+        isEveryUndownloaded: function() {
+            return this.get('snippets').isEvery('isDownloaded', false);
+        }.property('snippets.@each.isDownloaded'),
         offlineSnippets: function() {
             return this.get('snippets').filterBy('isOffline');
         }.property('snippets.@each.isOffline'),
-        unsavedSnippets: function() {
-            return this.get('snippets').filterBy('isSaved', false);
-        }.property('snippets.@each.isSaved'),
+        undownloadedSnippets: function() {
+            return this.get('snippets').filterBy('isDownloaded', false);
+        }.property('snippets.@each.isDownloaded'),
         hasSingle: function() {
             return this.get('snippets.length') === 1;
         }.property('snippets.length'),
         actions: {
-            save: function() {
-                this.sendAction('save');
+            download: function() {
+                this.sendAction('download');
             },
             remove: function() {
                 this.sendAction('remove');

@@ -98,7 +98,7 @@ define(function(require) {
                 }, function() {
                     // TODO: write following via 1 action
                     this.get('labels').pushObject(Label.create({
-                        name: 'saved',
+                        name: 'downloaded',
                         isReadOnly: true
                     }));
 

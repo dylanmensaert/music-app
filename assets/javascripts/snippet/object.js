@@ -44,11 +44,11 @@ define(function(require) {
         isOffline: function() {
             return this.get('fileSystem.snippets').isAny('id', this.get('id'));
         }.property('fileSystem.snippets.@each'),
-        isLoading: function() {
-            return this.get('status') === 'loading';
+        isDownloading: function() {
+            return this.get('status') === 'downloading';
         }.property('status'),
-        isSaved: function() {
-            return this.get('labels').contains('saved');
+        isDownloaded: function() {
+            return this.get('labels').contains('downloaded');
         }.property('labels.@each'),
         isQueued: function() {
             return this.get('fileSystem.queue').contains(this.get('id'));
@@ -90,8 +90,8 @@ define(function(require) {
                 }.bind(this));
             }.bind(this));
         },
-        save: function() {
-            this.set('status', 'loading');
+        download: function() {
+            this.set('status', 'downloading');
 
             return new Ember.RSVP.Promise(function(resolve, reject) {
                 if (Ember.isEmpty(this.get('audio'))) {
@@ -110,9 +110,9 @@ define(function(require) {
 
             promises = {
                 // TODO: No 'Access-Control-Allow-Origin' header because the requested URL redirects to another domain
-                audio: this.download(this.get('audio'), audio),
+                audio: this._download(this.get('audio'), audio),
                 // TODO: write to filesystem on snippet property change
-                thumbnail: this.download(this.get('thumbnail'), thumbnail)
+                thumbnail: this._download(this.get('thumbnail'), thumbnail)
             };
 
             return new Ember.RSVP.Promise(function(resolve, reject) {
@@ -120,7 +120,7 @@ define(function(require) {
                     this.set('audio', hash.audio);
                     this.set('thumbnail', hash.thumbnail);
 
-                    this.get('labels').pushObject('saved');
+                    this.get('labels').pushObject('downloaded');
 
                     // TODO: update offline labels and snippets in 1 write action
                     // TODO: only perform this
@@ -134,7 +134,7 @@ define(function(require) {
                 });
             }.bind(this));
         },
-        download: function(url, source) {
+        _download: function(url, source) {
             var fileSystem = this.get('fileSystem'),
                 xhr = new XMLHttpRequest(),
                 response;
