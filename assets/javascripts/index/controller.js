@@ -12,7 +12,7 @@ define(function(require) {
     };
 
     /*TODO: lot of duplication with queue controller. Maybe implement via mixin*/
-    return Ember.Controller.extend(require('helpers/actions-mixin'), {
+    return Ember.Controller.extend(require('helpers/actions-mixin'), require('snippet/actions-mixin'), {
         fetchSuggestions: function() {
             var url,
                 lastQuery;
@@ -215,28 +215,16 @@ define(function(require) {
                 }
             },
             pushToQueue: function(snippet) {
-                var cache = this.get('cache');
-
                 if (!snippet.get('isSaved')) {
                     snippet.save().then(function() {}, function(error) {
                         // TODO: show error?
-                        cache.set('message', 'Download aborted');
-                    });
+                        this.set('cache.message', 'Download aborted');
+                    }.bind(this));
                 }
 
                 this.get('fileSystem.queue').pushObject(snippet.get('id'));
 
                 this.set('cache.message', 'Added to queue');
-            },
-            save: function(snippet) {
-                var snippets = this.get('fileSystem.snippets').filterBy('isSelected');
-
-                snippets.forEach(function(snippet) {
-                    /*TODO: Check if wifi, else add label and this.get('fileSystem.snippets').push.. Also make compatible with browser*/
-                    if (!snippet.get('isSaved')) {
-                        snippet.save();
-                    }
-                });
             }
         }
     });

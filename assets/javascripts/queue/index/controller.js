@@ -5,7 +5,7 @@ define(function(require) {
         utilities = require('helpers/utilities');
 
     /*TODO: lot of duplication with index controller. Maybe implement via mixin*/
-    return Ember.Controller.extend(require('helpers/actions-mixin'), {
+    return Ember.Controller.extend(require('helpers/actions-mixin'), require('snippet/actions-mixin'), {
         fetchSuggestions: function() {
             return function(query, callback) {
                 var suggestions = [],

@@ -28,9 +28,6 @@ define(function(require) {
             setupEdit: function() {
                 this.sendAction('setupEdit');
             },
-            saveEdit: function() {
-                this.sendAction('saveEdit');
-            },
             exitEdit: function() {
                 this.sendAction('exitEdit');
             }
