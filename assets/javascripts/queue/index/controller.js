@@ -23,7 +23,7 @@ define(function(require) {
                 });
 
                 this.get('fileSystem.snippets').forEach(function(snippet) {
-                    key = snippet.get('title');
+                    key = snippet.get('name');
 
                     if (snippet.get('isQueued') && utilities.isMatch(key, query)) {
                         suggestions.pushObject({
@@ -34,11 +34,11 @@ define(function(require) {
 
                 callback(suggestions);
             }.bind(this);
-        }.property('fileSystem.snippets.@each.title', 'fileSystem.queue.@each'),
+        }.property('fileSystem.snippets.@each.name', 'fileSystem.queue.@each'),
         sortedSnippets: function() {
             return Ember.ArrayProxy.createWithMixins(Ember.SortableMixin, {
                 content: this.get('snippets'),
-                sortProperties: ['title', 'id'],
+                sortProperties: ['name', 'id'],
                 orderBy: function(snippet, other) {
                     var queue = this.get('fileSystem.queue'),
                         result = -1;
@@ -61,9 +61,9 @@ define(function(require) {
                     return utilities.isMatch(label, query);
                 });
 
-                return snippet.get('isQueued') && (matchAnyLabel || utilities.isMatch(snippet.get('title'), query));
+                return snippet.get('isQueued') && (matchAnyLabel || utilities.isMatch(snippet.get('name'), query));
             });
-        }.property('query', 'fileSystem.snippets.@each.title', 'fileSystem.queue.@each'),
+        }.property('query', 'fileSystem.snippets.@each.name', 'fileSystem.queue.@each'),
         // TODO: Implement - avoid triggering on init?
         /*updateMessage: function() {
             if (!this.get('snippets.length')) {

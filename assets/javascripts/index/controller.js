@@ -35,7 +35,7 @@ define(function(require) {
                     });
 
                     this.get('fileSystem.snippets').forEach(function(snippet) {
-                        key = snippet.get('title');
+                        key = snippet.get('name');
 
                         if (utilities.isMatch(key, query)) {
                             suggestions.pushObject({
@@ -67,11 +67,11 @@ define(function(require) {
                     })(lastQuery);
                 }
             }.bind(this);
-        }.property('searchOffline', 'searchOnline', 'fileSystem.snippets.@each.title'),
+        }.property('searchOffline', 'searchOnline', 'fileSystem.snippets.@each.name'),
         sortedSnippets: function() {
             return Ember.ArrayProxy.createWithMixins(Ember.SortableMixin, {
                 content: this.get('snippets'),
-                sortProperties: ['title', 'id'],
+                sortProperties: ['name', 'id'],
                 orderBy: function(snippet, other) {
                     var offlineSnippets = this.get('offlineSnippets'),
                         isOffline = offlineSnippets.isAny('id', snippet.get('id')),
@@ -79,8 +79,8 @@ define(function(require) {
                         snippets = this.get('snippets'),
                         result = -1;
 
-                    if ((!isOffline && otherIsOffline) || (isOffline && otherIsOffline && snippet.get('title') > other.get(
-                            'title')) || (!isOffline && !otherIsOffline && snippets.indexOf(snippet) > snippets.indexOf(other))) {
+                    if ((!isOffline && otherIsOffline) || (isOffline && otherIsOffline && snippet.get('name') > other.get(
+                            'name')) || (!isOffline && !otherIsOffline && snippets.indexOf(snippet) > snippets.indexOf(other))) {
                         result = 1;
                     }
 
@@ -124,12 +124,12 @@ define(function(require) {
                         return utilities.isMatch(label, query);
                     });
 
-                    return matchAnyLabel || utilities.isMatch(snippet.get('title'), query);
+                    return matchAnyLabel || utilities.isMatch(snippet.get('name'), query);
                 });
             }
 
             return snippets;
-        }.property('query', 'fileSystem.snippets.@each.title', 'searchOffline'),
+        }.property('query', 'fileSystem.snippets.@each.name', 'searchOffline'),
         nextPageToken: null,
         isLoading: false,
         onlineSnippets: [],
@@ -157,7 +157,7 @@ define(function(require) {
                     snippets = response.items.map(function(item) {
                         return Snippet.create({
                             id: item.id.videoId,
-                            title: item.snippet.title,
+                            name: item.snippet.title,
                             extension: 'mp3',
                             thumbnail: convertImageUrl(item.snippet.thumbnails.high.url),
                             // TODO: Remove if possible

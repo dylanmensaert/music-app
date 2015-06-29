@@ -4,7 +4,7 @@ define(function(require) {
     var Ember = require('ember');
 
     return Ember.Component.extend({
-        layoutName: 'snippet_action_bar',
+        layoutName: 'snippet/action_bar',
         snippets: null,
         isEverySaved: function() {
             return this.get('snippets').isEvery('isSaved');

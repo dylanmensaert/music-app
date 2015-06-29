@@ -33,7 +33,7 @@ define(function(require) {
             this.set('labels', []);
         },
         id: null,
-        title: null,
+        name: null,
         extension: null,
         labels: null,
         audio: null,
@@ -181,7 +181,7 @@ define(function(require) {
             });
         },
         strip: function() {
-            return this.getProperties('id', 'title', 'extension', 'labels', 'thumbnail');
+            return this.getProperties('id', 'name', 'extension', 'labels', 'thumbnail');
         }
     });
 });

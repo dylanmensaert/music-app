@@ -9,7 +9,7 @@ define(function(require) {
         var lastIndex = fileName.lastIndexOf('.');
 
         return {
-            title: fileName.substr(0, lastIndex),
+            value: fileName.substr(0, lastIndex),
             extension: fileName.substr(lastIndex + 1, fileName.length)
         };
     };
@@ -30,8 +30,8 @@ define(function(require) {
                     fileName = split(file.name);
 
                     return Snippet.create({
-                        id: fileName.title,
-                        title: fileName.title,
+                        id: fileName.value,
+                        name: fileName.value,
                         extension: fileName.extension,
                         labels: ['saved']
                     });

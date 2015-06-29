@@ -30,9 +30,6 @@ define(function(require) {
                 sortProperties: ['name']
             });
         }.property('labels'),
-        selectedLabels: function() {
-            return this.get('labels').filterBy('isSelected');
-        }.property('labels.@each.isSelected'),
         labels: function() {
             var selectedSnippets = this.get('cache.selectedSnippets'),
                 labels = [],
@@ -64,8 +61,8 @@ define(function(require) {
             return this.get('labels').filterBy('isSelected');
         }.property('labels.@each.isSelected'),
         hasSingle: function() {
-            return this.get('selectedLabels.length') === 1;
-        }.property('selectedLabels.length'),
+            return this.get('selected.length') === 1;
+        }.property('selected.length'),
         actions: {
             create: function() {
                 var liveQuery = this.get('liveQuery'),
