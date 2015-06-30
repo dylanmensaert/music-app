@@ -97,20 +97,19 @@ define(function(require) {
         selected: Ember.computed.alias('cache.selectedSnippets'),
         actions: {
             removeFromQueue: function(snippet) {
-                var queue = this.get('fileSystem.queue'),
-                    id = snippet.get('id');
-
-                if (queue.get('firstObject') === id) {
-                    queue.removeObject(id);
-
-                    snippet = this.get('fileSystem.snippets').findBy('id', queue.get('firstObject'));
-
-                    audio.play(snippet);
-                } else {
-                    queue.removeObject(id);
+                if (snippet.get('isPlaying')) {
+                    this.send('next');
                 }
 
+                this.get('fileSystem.queue').removeObject(snippet.get('id'));
+
                 this.set('cache.message', 'Removed from queue');
+            },
+            repeat: function() {
+                this.set('fileSystem.queueState', 'repeat');
+            },
+            shuffle: function() {
+                this.set('fileSystem.queueState', 'shuffle');
             }
         }
     });

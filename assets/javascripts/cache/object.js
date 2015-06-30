@@ -5,6 +5,8 @@ define(function(require) {
 
     return Ember.Object.extend({
         selectedSnippets: [],
-        message: null
+        playedSnippetIds: [],
+        message: null,
+        slider: null
     });
 });

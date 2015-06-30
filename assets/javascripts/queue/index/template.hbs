@@ -1,18 +1,50 @@
+<div class="row menu-bar text-center">
+    <div class="col-xs-2 outer-label">
+        {{#link-to 'explorer.index' tagName='div' class='inner-label'}}
+            <i class="mdi-navigation-arrow-back"></i>
+        {{/link-to}}
+    </div>
+
+    <div class="col-xs-8">
+        <div class="audio-name">
+            {{audio.snippet.name}}
+        </div>
+    </div>
+
+    <div class="col-xs-2 outer-label">
+        {{menu-icon action='scrollToTop' icon='mdi-navigation-expand-less'}}
+    </div>
+</div>
+
 {{#if cache.selectedSnippets}}
     {{snippet-action-bar snippets=cache.selectedSnippets isEditMode=isEditMode download='download' remove='remove' setupEdit='setupEdit' exitEdit='exitEdit'}}
 {{/if}}
 
 <div class="form-group float-input">
     <div {{bind-attr class='liveQuery:input-group'}}>
-        {{#if liveQuery}}
-            {{clear-addon text=liveQuery}}
-        {{/if}}
-
         {{#if isEditMode}}
             {{suggest-input value=liveQuery placeholder=editPlaceholder fetchSuggestions=fetchSuggestions insert-newline='saveEdit'}}
         {{else}}
             {{suggest-input value=liveQuery placeholder='Search' fetchSuggestions=fetchSuggestions insert-newline='search'}}
         {{/if}}
+
+        {{#if liveQuery}}
+            {{clear-addon text=liveQuery}}
+        {{/if}}
+    </div>
+</div>
+
+<div class="row text-center">
+    <div class="col-xs-6">
+        {{#app-ripple action='repeat' classNameBindings='fileSystem.isRepeating:text-active'}}
+            <i class="mdi-av-repeat"></i>
+        {{/app-ripple}}
+    </div>
+
+    <div class="col-xs-6">
+        {{#app-ripple action='shuffle' classNameBindings='fileSystem.isShuffling:text-active'}}
+            <i class="mdi-av-shuffle"></i>
+        {{/app-ripple}}
     </div>
 </div>
 
@@ -25,7 +57,7 @@
 </div>
 
 {{#if isLoading}}
-    <div class="text-center audio-icon">
+    <div class="text-center audio-icon-large">
         <i class="fa fa-spinner fa-pulse"></i>
     </div>
 {{/if}}

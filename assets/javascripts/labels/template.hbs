@@ -38,14 +38,14 @@
 
 <div class="form-group float-input">
     <div {{bind-attr class='liveQuery:input-group'}}>
-        {{#if liveQuery}}
-            {{clear-addon text=liveQuery}}
-        {{/if}}
-
         {{#if isEditMode}}
             {{suggest-input value=liveQuery placeholder=editPlaceholder fetchSuggestions=fetchSuggestions insert-newline='saveEdit'}}
         {{else}}
             {{suggest-input value=liveQuery placeholder='Search or create label' fetchSuggestions=fetchSuggestions insert-newline='search'}}
+        {{/if}}
+
+        {{#if liveQuery}}
+            {{clear-addon text=liveQuery}}
         {{/if}}
     </div>
 </div>

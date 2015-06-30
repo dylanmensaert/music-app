@@ -11,8 +11,9 @@ define(function(require) {
             var audio = this.get('audio'),
                 slider,
                 queue,
-                snippet,
-                snippetId;
+                currentIndex,
+                nextIndex,
+                nextSnippet;
 
             slider = Slider.create({
                 onSlideStop: function(value) {
@@ -28,23 +29,60 @@ define(function(require) {
                 slider.set('max', this.get('duration'));
             });
 
-            controller.set('slider', slider);
+            this.set('cache.slider', slider);
 
-            audio.set('didEnd', function() {
-                queue = this.get('fileSystem.queue');
-                snippet = audio.get('snippet');
-                snippetId = snippet.get('id');
-
-                queue.removeObject(snippetId);
-                queue.pushObject(snippetId);
-
-                snippetId = this.get('firstObject');
-                snippet = this.get('fileSystem.snippets').findBy('id', snippetId);
-
-                audio.play(snippet);
-            }.bind(this));
+            audio.set('didEnd', this.next.bind(this));
 
             this._super(controller, model);
+        },
+        previous: function() {
+            var audio = this.get('audio'),
+                queue = this.get('fileSystem.queue'),
+                currentIndex = queue.indexOf(audio.get('snippet.id')),
+                previousIndex,
+                previousSnippet;
+
+            if (currentIndex > 0) {
+                previousIndex = currentIndex - 1;
+            } else {
+                previousIndex = queue.get('length');
+            }
+
+            previousSnippet = this.get('fileSystem.snippets').findBy('id', queue.objectAt(previousIndex));
+
+            this.play(previousSnippet);
+        },
+        next: function() {
+            var audio = this.get('audio'),
+                queue = this.get('fileSystem.queue'),
+                currentIndex = queue.indexOf(audio.get('snippet.id')),
+                nextIndex,
+                nextSnippet;
+
+            if (currentIndex < queue.get('length')) {
+                nextIndex = currentIndex + 1;
+            } else {
+                nextIndex = 0;
+            }
+
+            nextSnippet = this.get('fileSystem.snippets').findBy('id', queue.objectAt(nextIndex));
+
+            this.play(nextSnippet);
+        },
+        play: function(snippet) {
+            var playedSnippetIds,
+                id;
+
+            if (!Ember.isEmpty(snippet)) {
+                playedSnippetIds = this.get('cache.playedSnippetIds');
+                id = snippet.get('id');
+
+                if (!playedSnippetIds.contains(id)) {
+                    playedSnippetIds.pushObject(id);
+                }
+            }
+
+            this.get('audio').play(snippet);
         },
         actions: {
             loading: function() {
@@ -68,11 +106,19 @@ define(function(require) {
                 document.title = tokens.join(' - ');
             },
             play: function(snippet) {
-                if (!Ember.isEmpty(snippet)) {
-                    this.get('fileSystem.queue').unshiftObject(snippet.get('id'));
-                }
-
-                this.get('audio').play(snippet);
+                this.play(snippet);
+            },
+            pause: function() {
+                this.get('audio').pause();
+            },
+            scrollToTop: function() {
+                window.scrollTo(0, 0);
+            },
+            previous: function() {
+                this.previous();
+            },
+            next: function() {
+                this.next();
             }
         }
     });

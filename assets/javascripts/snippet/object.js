@@ -47,6 +47,9 @@ define(function(require) {
         isDownloading: function() {
             return this.get('status') === 'downloading';
         }.property('status'),
+        isPlaying: function() {
+            return this.get('status') === 'playing';
+        }.property('status'),
         isDownloaded: function() {
             return this.get('labels').contains('downloaded');
         }.property('labels.@each'),

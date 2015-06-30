@@ -2,6 +2,20 @@
     {{snippet-action-bar snippets=cache.selectedSnippets isEditMode=isEditMode download='download' remove='remove' setupEdit='setupEdit' exitEdit='exitEdit'}}
 {{/if}}
 
+<div class="form-group float-input">
+    <div {{bind-attr class='liveQuery:input-group'}}>
+        {{#if isEditMode}}
+            {{suggest-input value=liveQuery placeholder=editPlaceholder fetchSuggestions=fetchSuggestions insert-newline='saveEdit'}}
+        {{else}}
+            {{suggest-input value=liveQuery placeholder='Search' fetchSuggestions=fetchSuggestions insert-newline='search'}}
+        {{/if}}
+
+        {{#if liveQuery}}
+            {{clear-addon text=liveQuery}}
+        {{/if}}
+    </div>
+</div>
+
 <div class="container">
     <div class="row">
         <div class="col-xs-6">
@@ -48,20 +62,6 @@
     </div>
 </div>
 
-<div class="form-group float-input">
-    <div {{bind-attr class='liveQuery:input-group'}}>
-        {{#if liveQuery}}
-            {{clear-addon text=liveQuery}}
-        {{/if}}
-
-        {{#if isEditMode}}
-            {{suggest-input value=liveQuery placeholder=editPlaceholder fetchSuggestions=fetchSuggestions insert-newline='saveEdit'}}
-        {{else}}
-            {{suggest-input value=liveQuery placeholder='Search' fetchSuggestions=fetchSuggestions insert-newline='search'}}
-        {{/if}}
-    </div>
-</div>
-
 <button class="btn btn-default btn-file btn-raised">
     Import audio
     {{file-input}}
@@ -76,7 +76,7 @@
 </div>
 
 {{#if isLoading}}
-    <div class="text-center audio-icon">
+    <div class="text-center audio-icon-large">
         <i class="fa fa-spinner fa-pulse"></i>
     </div>
 {{/if}}

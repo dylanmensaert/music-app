@@ -1,5 +1,5 @@
 @audio-height: 50px;
-@menu-height: 46px;
+@menu-height: 36px;
 
 /* TODO: Fix when writing in search */
 html {
@@ -86,6 +86,12 @@ html {
 }
 
 .audio-icon {
+    font-size: 24px;
+}
+
+.audio-icon-large {
+    .audio-icon;
+
     font-size: 34px;
 }
 
@@ -143,7 +149,7 @@ html {
 
 .menu-bar {
     .bar;
-    margin-top: 0;
+    margin: 0 0 10px 0;
     padding: 0;
     top: 0;
 
@@ -155,7 +161,7 @@ html {
 }
 
 .menu-placeholder {
-    height: @menu-height;
+    height: @menu-height + 5px;
 }
 
 .grid-label {
@@ -181,7 +187,7 @@ html {
 }
 
 .inner-label {
-    margin-top: 11px;
+    margin-top: 6px;
 }
 
 .menu-text {
@@ -189,6 +195,18 @@ html {
     color: white;
 }
 
+.outer-btn-group {
+    padding: 0;
+}
+
+.inner-btn-group {
+    margin: 0;
+}
+
 .audio-name-outer {
     padding-right: 0;
+}
+
+.text-active {
+    color: #ff9800;
 }
