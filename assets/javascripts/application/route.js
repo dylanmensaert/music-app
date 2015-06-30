@@ -71,7 +71,6 @@ define(function(require) {
             var queue = this.get('fileSystem.queue'),
                 currentIndex,
                 nextIndex,
-                playedSnippetIds,
                 snippetId,
                 nextSnippet;
 
@@ -86,11 +85,9 @@ define(function(require) {
 
                 snippetId = queue.objectAt(nextIndex);
             } else if (this.get('fileSystem.isShuffling')) {
-                playedSnippetIds = this.get('cache.playedSnippetIds');
-
                 unplayedSnippetIds = queue.filter(function(snippetId) {
-                    return !playedSnippetIds.contains(snippetId);
-                });
+                    return !this.get('cache.playedSnippetIds').contains(snippetId);
+                }.bind(this));
 
                 if (!unplayedSnippetIds.get('length')) {
                     this.set('cache.playedSnippetIds', []);
@@ -108,25 +105,28 @@ define(function(require) {
             this.play(nextSnippet);
         },
         play: function(snippet) {
-            var history,
+            var offlineSnippets = this.get('fileSystem.snippets'),
+                history,
                 playedSnippetIds,
-                id;
-
-            if (!Ember.isEmpty(snippet)) {
-                playedSnippetIds = this.get('cache.playedSnippetIds');
                 id = snippet.get('id');
 
-                if (!playedSnippetIds.contains(id)) {
-                    playedSnippetIds.pushObject(id);
-                }
+            if (!offlineSnippets.isAny('id', id)) {
+                offlineSnippets.pushObject(snippet);
+            }
 
+            if (!Ember.isEmpty(snippet)) {
                 history = this.get('fileSystem.history');
+                playedSnippetIds = this.get('cache.playedSnippetIds');
 
                 if (history.contains(id)) {
                     history.removeObject(id);
                 }
 
                 history.pushObject(id);
+
+                if (!playedSnippetIds.contains(id)) {
+                    playedSnippetIds.pushObject(id);
+                }
             }
 
             this.get('audio').play(snippet);
