@@ -11,54 +11,16 @@
     </div>
 {{/if}}
 
-<div class="btn-group btn-group-justified menu-bar">
-    {{#link-to 'labels' class='btn' properties=linkToProperties}}
-        Labels
-    {{/link-to}}
-
-    {{#link-to 'index' class='btn' properties=linkToProperties}}
-        Explore
-    {{/link-to}}
-</div>
-
 <div class="menu-placeholder" />
 
 {{outlet}}
 
-{{#if audio.snippet}}
-    <div class="audio-stamp" />
+{{message-bar content=cache.message}}
 
+{{#if audio.snippet}}
     <div class="audio-slider">
         {{view slider-component slider=slider}}
     </div>
-
-    <div class="container audio-bar">
-        <div class="row">
-            {{#link-to 'queue' class='col-xs-9 audio-name-outer' tagName='div'}}
-                <div class="audio-name">
-                    {{audio.snippet.name}}
-                </div>
-            {{/link-to}}
-
-            {{#app-ripple class='col-xs-3 text-center'}}
-                <div class="audio-icon">
-                    {{#if audio.isLoading}}
-                        <i class="fa fa-spinner fa-pulse"></i>
-                    {{/if}}
-
-                    {{#if audio.isPlaying}}
-                        <i class="fa fa-pause" {{action 'pause'}}></i>
-                    {{/if}}
-
-                    {{#if audio.isIdle}}
-                        <i class="fa fa-play" {{action 'play'}}></i>
-                    {{/if}}
-                </div>
-            {{/app-ripple}}
-        </div>
-    </div>
 {{/if}}
-
-{{message-bar content=cache.message}}
 
 {{view audio-component audio=audio}}

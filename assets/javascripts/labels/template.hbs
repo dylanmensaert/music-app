@@ -1,1 +1,67 @@
-{{outlet}}
+{{#if cache.selectedSnippets}}
+    {{#action-bar models=cache.selectedSnippets}}
+        <div class="col-xs-2 outer-label">
+            {{#link-to 'explorer.index' tagName='div' class='inner-label'}}
+                <i class="mdi-navigation-arrow-back"></i>
+            {{/link-to}}
+        </div>
+
+        <div class="col-xs-6">
+            &nbsp;
+        </div>
+    {{/action-bar}}
+{{else}}
+    {{#if selected}}
+        {{#action-bar models=selected deselect='exitEdit'}}
+            <div class="col-xs-4">
+                &nbsp;
+            </div>
+
+            <div class="col-xs-2 outer-label">
+                {{#if hasSingle}}
+                    {{#if isEditMode}}
+                        {{menu-icon action='exitEdit' icon='mdi-content-clear'}}
+                    {{else}}
+                        {{menu-icon action='setupEdit' icon='mdi-editor-mode-edit'}}
+                    {{/if}}
+                {{else}}
+                    &nbsp;
+                {{/if}}
+            </div>
+
+            <div class="col-xs-2 outer-label">
+                {{menu-icon action='remove' icon='mdi-action-delete'}}
+            </div>
+        {{/action-bar}}
+    {{/if}}
+{{/if}}
+
+<div class="form-group float-input">
+    <div {{bind-attr class='liveQuery:input-group'}}>
+        {{#if liveQuery}}
+            {{clear-addon text=liveQuery}}
+        {{/if}}
+
+        {{#if isEditMode}}
+            {{suggest-input value=liveQuery placeholder=editPlaceholder fetchSuggestions=fetchSuggestions insert-newline='saveEdit'}}
+        {{else}}
+            {{suggest-input value=liveQuery placeholder='Search or create label' fetchSuggestions=fetchSuggestions insert-newline='search'}}
+        {{/if}}
+    </div>
+</div>
+
+{{#unless isEditMode}}
+    <div>
+        <div {{action 'create'}} class="btn btn-primary">
+            <i class="fa fa-plus"></i>
+        </div>
+
+        <div class="btn btn-primary">
+            <i class="fa fa-search"></i>
+        </div>
+    </div>
+{{/unless}}
+
+{{#each label in sortedLabels}}
+    {{app-label model=label action='toggle' param=label}}
+{{/each}}

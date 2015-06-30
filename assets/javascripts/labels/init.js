@@ -5,7 +5,4 @@ define(function(require) {
 
     App.LabelsRoute = require('labels/route');
     App.LabelsController = require('labels/controller');
-
-    App.LabelsIndexRoute = require('labels/index/route');
-    App.LabelsIndexController = require('labels/index/controller');
 });

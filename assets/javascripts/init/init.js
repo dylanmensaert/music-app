@@ -7,6 +7,7 @@ define(function(require) {
 
     require('application/init');
     require('index/init');
+    require('explorer/init');
     require('labels/init');
     require('queue/init');
 
