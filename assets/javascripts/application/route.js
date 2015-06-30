@@ -70,7 +70,8 @@ define(function(require) {
             this.play(nextSnippet);
         },
         play: function(snippet) {
-            var playedSnippetIds,
+            var history,
+            playedSnippetIds,
                 id;
 
             if (!Ember.isEmpty(snippet)) {
@@ -80,6 +81,14 @@ define(function(require) {
                 if (!playedSnippetIds.contains(id)) {
                     playedSnippetIds.pushObject(id);
                 }
+
+                history = this.get('fileSystem.history');
+
+                if (history.contains(id)) {
+                    history.removeObject(id);
+                }
+
+                history.pushObject(id);
             }
 
             this.get('audio').play(snippet);

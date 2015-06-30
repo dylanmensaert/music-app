@@ -36,6 +36,7 @@ define(function(require) {
         labels: [],
         snippets: [],
         queue: [],
+        history: [],
         queueState: 'repeat',
         isShuffling: function() {
             return this.get('queueState') === 'shuffle';
@@ -74,7 +75,7 @@ define(function(require) {
 
             lastWriter = Ember.run.later(this, write, 100);
             /*TODO: snippets.@each.labels.@each needed?*/
-        }.observes('queueState', 'queue.@each', 'labels.@each', 'snippets.@each', 'snippets.@each.labels.@each'),
+        }.observes('queueState', 'queue.@each', 'history.@each', 'labels.@each', 'snippets.@each', 'snippets.@each.labels.@each'),
         remove: function(source) {
             return new Ember.RSVP.Promise(function(resolve) {
                 this.get('instance').root.getFile(source, {}, function(fileEntry) {
@@ -144,6 +145,7 @@ define(function(require) {
 
             data.queueState = this.get('queueState');
             data.queue = this.get('queue');
+            data.history = this.get('history');
 
             data.labels = this.get('labels').map(function(label) {
                 return label.strip();
