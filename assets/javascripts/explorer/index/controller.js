@@ -27,7 +27,7 @@ define(function(require) {
                     this.get('fileSystem.labels').forEach(function(label) {
                         key = label.get('name');
 
-                        if (utilities.isMatch(key, query)) {
+                        if (!label.get('isHidden') && utilities.isMatch(key, query)) {
                             suggestions.pushObject({
                                 value: key
                             });

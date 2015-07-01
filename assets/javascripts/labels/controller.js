@@ -14,12 +14,12 @@ define(function(require) {
                 this.get('fileSystem.labels').forEach(function(label) {
                     name = label.get('name');
 
-                    if (utilities.isMatch(name, query)) {
+                    if (this.showLabel(label) && utilities.isMatch(name, query)) {
                         suggestions.pushObject({
                             value: name
                         });
                     }
-                });
+                }.bind(this));
 
                 callback(suggestions);
             }.bind(this);
@@ -39,7 +39,8 @@ define(function(require) {
             this.get('fileSystem.labels').forEach(function(label) {
                 name = label.get('name');
 
-                if (utilities.isMatch(name, this.get('query'))) {
+                if (this.showLabel(label) && utilities.isMatch(
+                        name, this.get('query'))) {
                     if (selectedSnippets.get('length')) {
                         isSelected = selectedSnippets.every(function(snippet) {
                             return snippet.get('labels').contains(name);
@@ -63,6 +64,9 @@ define(function(require) {
         hasSingle: function() {
             return this.get('selected.length') === 1;
         }.property('selected.length'),
+        showLabel: function(label) {
+            return !label.get('isHidden') && (!label.get('isReadOnly') || this.get('cache.selectedSnippets.length'));
+        },
         actions: {
             create: function() {
                 var liveQuery = this.get('liveQuery'),

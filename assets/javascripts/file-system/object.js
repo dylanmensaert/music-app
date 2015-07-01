@@ -104,15 +104,14 @@ define(function(require) {
                 instance.root.getFile('data.json', {
                     create: true
                 }, function() {
-                    // TODO: write following via 1 action
                     this.get('labels').pushObject(Label.create({
                         name: 'downloaded',
-                        isReadOnly: true
+                        permission: 'hidden'
                     }));
 
                     this.get('labels').pushObject(Label.create({
                         name: 'download-later',
-                        isReadOnly: true
+                        permission: 'read-only'
                     }));
                 }.bind(this));
             }.bind(this));
