@@ -107,6 +107,7 @@ define(function(require) {
         play: function(snippet) {
             var offlineSnippets = this.get('fileSystem.snippets'),
                 history,
+                queue,
                 playedSnippetIds,
                 id = snippet.get('id');
 
@@ -116,17 +117,26 @@ define(function(require) {
 
             if (!Ember.isEmpty(snippet)) {
                 history = this.get('fileSystem.history');
+                queue = this.get('fileSystem.queue');
                 playedSnippetIds = this.get('cache.playedSnippetIds');
 
                 if (history.contains(id)) {
                     history.removeObject(id);
                 }
 
-                if(history.get('length') === 50) {
+                if (history.get('length') === 50) {
                     history.removeAt(0);
                 }
 
                 history.pushObject(id);
+
+                if (!queue.contains(id)) {
+                    if (Ember.isEmpty(this.get('audio.snippet.id'))) {
+                        queue.pushObject(id);
+                    } else {
+                        queue.insertAt(queue.indexOf(this.get('audio.snippet.id')) + 1, id);
+                    }
+                }
 
                 if (!playedSnippetIds.contains(id)) {
                     playedSnippetIds.pushObject(id);
