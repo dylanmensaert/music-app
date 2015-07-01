@@ -78,7 +78,7 @@ define(function(require) {
                             name: liveQuery
                         }));
                     } else {
-                        // TODO: Error when label already exists
+                        this.set('cache.message', 'Label <strong>' + liveQuery + '</strong> already exists');
                     }
                 }
 
