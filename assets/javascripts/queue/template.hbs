@@ -5,41 +5,35 @@
 
     <div class="container audio-bar text-center">
         <div class="row">
-            <div class="col-xs-2 text-left">
+            <div class="col-xs-3 text-left">
                 <div class="audio-timer">
                     {{time cache.slider.value}}
                 </div>
             </div>
 
-            {{#app-ripple action='previous' class='col-xs-2 text-left'}}
-                <div class="audio-icon">
-                    <i class="fa fa-step-backward"></i>
-                </div>
+            {{#app-ripple action='previous' class='col-xs-2 text-left audio-icon'}}
+                <i class="fa fa-step-backward"></i>
             {{/app-ripple}}
 
-            {{#app-ripple class='col-xs-4'}}
-                <div class="audio-icon">
-                    {{#if audio.isLoading}}
-                        <i class="fa fa-spinner fa-pulse"></i>
-                    {{/if}}
+            {{#app-ripple class='col-xs-2 audio-icon'}}
+                {{#if audio.isLoading}}
+                    <i class="fa fa-spinner fa-pulse"></i>
+                {{/if}}
 
-                    {{#if audio.isPlaying}}
-                        <i class="fa fa-pause" {{action 'pause'}}></i>
-                    {{/if}}
+                {{#if audio.isPlaying}}
+                    <i class="fa fa-pause" {{action 'pause'}}></i>
+                {{/if}}
 
-                    {{#if audio.isIdle}}
-                        <i class="fa fa-play" {{action 'play'}}></i>
-                    {{/if}}
-                </div>
+                {{#if audio.isIdle}}
+                    <i class="fa fa-play" {{action 'play'}}></i>
+                {{/if}}
             {{/app-ripple}}
 
-            {{#app-ripple action='next' class='col-xs-2 text-right'}}
-                <div class="audio-icon">
-                    <i class="fa fa-step-forward"></i>
-                </div>
+            {{#app-ripple action='next' class='col-xs-2 text-right audio-icon'}}
+                <i class="fa fa-step-forward"></i>
             {{/app-ripple}}
 
-            <div class="col-xs-2 text-right">
+            <div class="col-xs-3 text-right">
                 <div class="audio-timer">
                     {{time cache.slider.max}}
                 </div>
