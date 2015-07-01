@@ -122,6 +122,10 @@ define(function(require) {
                     history.removeObject(id);
                 }
 
+                if(history.get('length') === 50) {
+                    history.removeAt(0);
+                }
+
                 history.pushObject(id);
 
                 if (!playedSnippetIds.contains(id)) {
