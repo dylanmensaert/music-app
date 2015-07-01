@@ -109,16 +109,17 @@ define(function(require) {
                 history,
                 queue,
                 playedSnippetIds,
-                id = snippet.get('id');
-
-            if (!offlineSnippets.isAny('id', id)) {
-                offlineSnippets.pushObject(snippet);
-            }
+                id;
 
             if (!Ember.isEmpty(snippet)) {
+                id = snippet.get('id');
                 history = this.get('fileSystem.history');
                 queue = this.get('fileSystem.queue');
                 playedSnippetIds = this.get('cache.playedSnippetIds');
+
+                if (!offlineSnippets.isAny('id', id)) {
+                    offlineSnippets.pushObject(snippet);
+                }
 
                 if (history.contains(id)) {
                     history.removeObject(id);
