@@ -6,9 +6,10 @@
     </div>
 
     <div class="col-xs-8">
-        <div class="audio-name">
+        <!-- TODO: marquee is not recalculated on window resize -->
+        <marquee class="audio-name" scrolldelay="200">
             {{audio.snippet.name}}
-        </div>
+        </marquee>
     </div>
 
     <div class="col-xs-2 outer-label action-top">
