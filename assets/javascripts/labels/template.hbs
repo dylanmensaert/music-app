@@ -36,7 +36,7 @@
     {{/if}}
 {{/if}}
 
-<div class="form-group float-input">
+<div class="form-group-material-grey-500 float-input">
     <div {{bind-attr class='liveQuery:input-group'}}>
         {{#if isEditMode}}
             {{suggest-input value=liveQuery placeholder=editPlaceholder fetchSuggestions=fetchSuggestions insert-newline='saveEdit'}}
@@ -52,7 +52,7 @@
 
 {{#unless isEditMode}}
     <div class="text-right">
-        <div {{action 'create'}} class="btn btn-primary btn-inline">
+        <div {{action 'create'}} class="btn btn-material-orange-200 btn-inline">
             <i class="fa fa-plus"></i>
         </div>
     </div>

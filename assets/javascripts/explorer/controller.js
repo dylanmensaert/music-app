@@ -5,7 +5,7 @@ define(function(require) {
 
     return Ember.Controller.extend({
         linkToProperties: {
-            classNameBindings: ['active:btn-primary:btn-default']
+            classNameBindings: ['active:btn-material-amber-A700:btn-default']
         }
     });
 });

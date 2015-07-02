@@ -2,7 +2,7 @@
     {{snippet-action-bar snippets=cache.selectedSnippets isEditMode=isEditMode download='download' remove='remove' setupEdit='setupEdit' exitEdit='exitEdit'}}
 {{/if}}
 
-<div class="form-group float-input">
+<div class="form-group-material-grey-500 float-input">
     <div {{bind-attr class='liveQuery:input-group'}}>
         {{#if isEditMode}}
             {{suggest-input value=liveQuery placeholder=editPlaceholder fetchSuggestions=fetchSuggestions insert-newline='saveEdit'}}
@@ -19,7 +19,7 @@
 <div class="container">
     <div class="row">
         <div class="col-xs-6">
-            <div class="checkbox checkbox-primary">
+            <div class="checkbox checkbox-material-orange-200">
                 <label>
                     {{input type='checkbox' checked=searchOnline}}
 
@@ -32,7 +32,7 @@
             </div>
 
             {{#if searchOnline}}
-                <div class="checkbox checkbox-primary">
+                <div class="checkbox checkbox-material-orange-200">
                     <label>
                         {{input type='checkbox' checked=searchMusicOnly}}
 
@@ -47,7 +47,7 @@
         </div>
 
         <div class="col-xs-6">
-            <div class="checkbox checkbox-primary">
+            <div class="checkbox checkbox-material-orange-200">
                 <label>
                     {{input type='checkbox' checked=searchOffline}}
 

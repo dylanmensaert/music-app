@@ -5,7 +5,7 @@ define(function(require) {
 
     return Ember.Component.extend({
         layoutName: 'action_bar',
-        classNames: ['action-bar', 'btn-primary', 'container', 'text-center'],
+        classNames: ['action-bar', 'btn-material-amber-A700', 'container', 'text-center'],
         models: null,
         actions: {
             deselect: function() {

@@ -6,7 +6,7 @@ define(function(require) {
     return Ember.Component.extend({
         layoutName: 'label',
         classNames: ['btn', 'grid-label', 'btn-raised'],
-        classNameBindings: ['model.isSelected:btn-primary:btn-default'],
+        classNameBindings: ['model.isSelected:btn-material-grey-300:btn-default'],
         model: null,
         didInsertElement: function() {
             Ember.$.material.ripples(this.$());

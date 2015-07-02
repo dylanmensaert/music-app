@@ -6,7 +6,7 @@ define(function(require) {
     return Ember.Component.extend({
         layoutName: 'snippet',
         classNames: ['list-group-item', 'snippet-item'],
-        classNameBindings: ['model.isSelected:btn-material-orange-300'],
+        classNameBindings: ['model.isSelected:btn-material-grey-300'],
         attributeBindings: ['name'],
         model: null,
         name: function() {
