@@ -64,6 +64,7 @@
                 deps: ['jquery'],
                 exports: 'jQuery'
             },
+            /*TODO: implementing punch crashes phone?*/
             /*'jqueryui-touch-punch': {
                 deps: ['jquery'],
                 exports: 'jQuery'

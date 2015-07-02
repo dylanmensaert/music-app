@@ -8,7 +8,7 @@ define(function(require) {
         write,
         lastWriter;
 
-    window.requestFileSystem  = window.requestFileSystem || window.webkitRequestFileSystem;
+    window.requestFileSystem = window.requestFileSystem || window.webkitRequestFileSystem;
 
     write = function() {
         var json = this.toJSON();
