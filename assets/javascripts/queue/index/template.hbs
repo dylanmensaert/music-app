@@ -6,10 +6,9 @@
     </div>
 
     <div class="col-xs-8">
-        <!-- TODO: marquee is not recalculated on window resize -->
-        <marquee class="audio-name" scrolldelay="200">
+        <div class="audio-name">
             {{audio.snippet.name}}
-        </marquee>
+        </div>
     </div>
 
     <div class="col-xs-2 outer-label action-top">
@@ -21,7 +20,7 @@
     {{snippet-action-bar snippets=cache.selectedSnippets isEditMode=isEditMode download='download' remove='remove' setupEdit='setupEdit' exitEdit='exitEdit'}}
 {{/if}}
 
-<div class="form-group-material-grey-500 float-input">
+<div class="form-group-material-grey-500 spaced-top">
     <div {{bind-attr class='liveQuery:input-group'}}>
         {{#if isEditMode}}
             {{suggest-input value=liveQuery placeholder=editPlaceholder fetchSuggestions=fetchSuggestions insert-newline='saveEdit'}}
@@ -35,7 +34,7 @@
     </div>
 </div>
 
-<div class="row text-center">
+<div class="row text-center spaced-top">
     <div class="col-xs-6">
         {{#app-ripple action='repeat' classNameBindings='fileSystem.isRepeating:text-active'}}
             <i class="mdi-av-repeat"></i>

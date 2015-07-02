@@ -2,7 +2,7 @@
     {{snippet-action-bar snippets=cache.selectedSnippets isEditMode=isEditMode download='download' remove='remove' setupEdit='setupEdit' exitEdit='exitEdit'}}
 {{/if}}
 
-<div class="form-group-material-grey-500 float-input">
+<div class="form-group-material-grey-500 spaced-top">
     <div {{bind-attr class='liveQuery:input-group'}}>
         {{#if isEditMode}}
             {{suggest-input value=liveQuery placeholder=editPlaceholder fetchSuggestions=fetchSuggestions insert-newline='saveEdit'}}
@@ -60,14 +60,14 @@
             </div>
         </div>
     </div>
+
+    <button class="btn btn-default btn-file btn-raised">
+        Import audio
+        {{file-input}}
+    </button>
 </div>
 
-<button class="btn btn-default btn-file btn-raised">
-    Import audio
-    {{file-input}}
-</button>
-
-<div class="list-group float-input">
+<div class="list-group spaced-top">
     {{#each snippet in sortedSnippets}}
         {{app-snippet model=snippet action='play' swipeleft='pushToDownload' swiperight='pushToQueue' param=snippet}}
 

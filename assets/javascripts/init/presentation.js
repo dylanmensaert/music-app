@@ -8,6 +8,7 @@ define(function(require) {
     require('nouislider');
     require('typeahead');
     require('bootstrap-material-design');
+    require('jqueryui-touch-punch');
 
     require('components/init');
 
@@ -18,6 +19,10 @@ define(function(require) {
     Ember.Select.reopen({
         classNames: ['form-control']
     });
+
+    require('touch');
+
+    Ember.$.event.special.swipe.horizontalDistanceThreshold = 100;
 
     Ember.LinkView.reopen({
         //TODO: init only needed because classNameBindings are execute in controller context instead of this

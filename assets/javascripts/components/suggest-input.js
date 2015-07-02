@@ -22,7 +22,6 @@ define(function(require) {
             });
 
             Ember.$.material.input(this.$());
-            this.$().focus();
         },
         willDestroyElement: function() {
             this.$().typeahead('destroy');

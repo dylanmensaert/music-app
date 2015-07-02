@@ -24,10 +24,9 @@
     <div class="container audio-bar">
         <div class="row">
             {{#link-to 'queue.index' class='col-xs-9 audio-name-outer' tagName='div'}}
-                <!-- TODO: marquee is not recalculated on window resize -->
-                <marquee class="audio-name" scrolldelay="200">
+                <div class="audio-name">
                     {{audio.snippet.name}}
-                </marquee>
+                </div>
             {{/link-to}}
 
             {{#app-ripple class='col-xs-3 text-center'}}

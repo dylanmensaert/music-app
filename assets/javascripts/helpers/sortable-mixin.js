@@ -9,11 +9,11 @@ define(function(require) {
                 update: this.didUpdate.bind(this),
                 revert: 200,
                 axis: 'y',
-                items: '.row',
+                items: '.list-group-item',
                 delay: 100,
                 helper: 'clone',
                 containment: this.$(),
-                handle: '.handle'
+                handle: '.media-right'
             });
         },
         willDestroyElement: function() {

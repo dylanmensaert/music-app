@@ -16,7 +16,8 @@
         "typeahead.js-bootstrap3.less": "0.2.3",
         "jquery-ui": "1.11.4",
         "jquery-mobile": "1.4.5",
-        "bootstrap-material-design": "0.3.0"
+        "bootstrap-material-design": "0.3.0",
+        "jqueryui-touch-punch": "https://raw.githubusercontent.com/furf/jquery-ui-touch-punch/master/jquery.ui.touch-punch.js"
     },
     "devDependencies": {
         "almond": "0.3.1"

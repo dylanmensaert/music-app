@@ -26,6 +26,7 @@
             ripples: '../bower_components/bootstrap-material-design/dist/js/ripples',
             moment: '../bower_components/momentjs/moment',
             typeahead: '../bower_components/typeahead.js/dist/typeahead.jquery',
+            'jqueryui-touch-punch': '../bower_components/jqueryui-touch-punch/index',
             // TODO: Implement on next release (when Ember 1.10 is supported)
             /*'ember-list-view': '../bower_components/ember-list-view/list-view',*/
             'meta-data': 'meta/data'
@@ -59,6 +60,10 @@
                 exports: 'jQuery'
             },
             ripples: {
+                deps: ['jquery'],
+                exports: 'jQuery'
+            },
+            'jqueryui-touch-punch': {
                 deps: ['jquery'],
                 exports: 'jQuery'
             },

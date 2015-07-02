@@ -36,7 +36,7 @@
     {{/if}}
 {{/if}}
 
-<div class="form-group-material-grey-500 float-input">
+<div class="form-group-material-grey-500 spaced-top">
     <div {{bind-attr class='liveQuery:input-group'}}>
         {{#if isEditMode}}
             {{suggest-input value=liveQuery placeholder=editPlaceholder fetchSuggestions=fetchSuggestions insert-newline='saveEdit'}}
@@ -58,6 +58,8 @@
     </div>
 {{/unless}}
 
-{{#each label in sortedLabels}}
-    {{app-label model=label action='toggle' param=label}}
-{{/each}}
+<div class="container">
+    {{#each label in sortedLabels}}
+        {{app-label model=label action='toggle' param=label}}
+    {{/each}}
+</div>
