@@ -8,6 +8,8 @@ define(function(require) {
         write,
         lastWriter;
 
+    window.requestFileSystem  = window.requestFileSystem || window.webkitRequestFileSystem;
+
     write = function() {
         var json = this.toJSON();
 
@@ -63,7 +65,7 @@ define(function(require) {
         },
         create: function(bytes) {
             return new Ember.RSVP.Promise(function(resolve) {
-                webkitRequestFileSystem(PERSISTENT, bytes, function(fileSystem) {
+                requestFileSystem(PERSISTENT, bytes, function(fileSystem) {
                     this.set('instance', fileSystem);
 
                     resolve(fileSystem);

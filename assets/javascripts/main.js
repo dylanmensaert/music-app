@@ -26,8 +26,8 @@
             ripples: '../bower_components/bootstrap-material-design/dist/js/ripples',
             moment: '../bower_components/momentjs/moment',
             typeahead: '../bower_components/typeahead.js/dist/typeahead.jquery',
-            /*TODO: check if sorting on phonegap build works without punch*/
-            'jqueryui-touch-punch': '../bower_components/jqueryui-touch-punch/index',
+            /*TODO: implementing punch crashes phone?*/
+            /*'jqueryui-touch-punch': '../bower_components/jqueryui-touch-punch/index',*/
             // TODO: Implement on next release (when Ember 1.10 is supported)
             /*'ember-list-view': '../bower_components/ember-list-view/list-view',*/
             'meta-data': 'meta/data'
@@ -64,10 +64,10 @@
                 deps: ['jquery'],
                 exports: 'jQuery'
             },
-            'jqueryui-touch-punch': {
+            /*'jqueryui-touch-punch': {
                 deps: ['jquery'],
                 exports: 'jQuery'
-            },
+            },*/
             'bootstrap-material-design': {
                 deps: ['ripples'],
                 exports: 'jQuery'

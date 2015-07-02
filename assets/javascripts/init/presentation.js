@@ -8,7 +8,7 @@ define(function(require) {
     require('nouislider');
     require('typeahead');
     require('bootstrap-material-design');
-    require('jqueryui-touch-punch');
+    /*require('jqueryui-touch-punch');*/
 
     require('components/init');
 
