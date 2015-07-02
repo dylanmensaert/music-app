@@ -198,15 +198,9 @@ define(function(require) {
             pushToDownload: function(snippet) {
                 var cache = this.get('cache');
 
-                //TODO: Implement wifi check
                 if (!snippet.get('isDownloaded')) {
-                    if (true) {
-                        snippet.download().then(function() {
-                            cache.set('message', 'download successful');
-                        }, function(error) {
-                            // TODO: show error?
-                            cache.set('message', 'download aborted');
-                        });
+                    if (!cache.isMobileConnection()) {
+                        snippet.download();
                     } else {
                         snippet.get('labels').pushObject('download-later');
                     }

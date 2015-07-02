@@ -7,6 +7,19 @@ define(function(require) {
         selectedSnippets: [],
         playedSnippetIds: [],
         message: null,
-        slider: null
+        slider: null,
+        isMobileConnection: function() {
+            var type,
+                isMobileConnection = false;
+
+            if (!Ember.isEmpty(navigator.connection)) {
+                type = navigator.connection.type;
+
+                isMobileConnection = type === Connection.CELL_2G || type === Connection.CELL_3G || type === Connection.CELL_4G || type ===
+                    Connection.CELL;
+            }
+
+            return isMobileConnection;
+        }
     });
 });
