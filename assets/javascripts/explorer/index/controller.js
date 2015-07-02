@@ -200,7 +200,12 @@ define(function(require) {
 
                 if (!snippet.get('isDownloaded')) {
                     if (!cache.isMobileConnection()) {
-                        snippet.download();
+                        snippet.download().then(function() {
+
+                        }, function(error) {
+                            // TODO: show error?
+                            cache.set('message', 'download aborted');
+                        });
                     } else {
                         snippet.get('labels').pushObject('download-later');
                     }
