@@ -23,11 +23,11 @@
 
     <div class="container audio-bar">
         <div class="row">
-            {{#link-to 'queue.index' class='col-xs-9 audio-name-outer' tagName='div'}}
+            {{#app-ripple action='transitionToQueue' class="col-xs-9 audio-name-outer"}}
                 <div class="audio-name">
                     {{audio.snippet.name}}
                 </div>
-            {{/link-to}}
+            {{/app-ripple}}
 
             {{#app-ripple class='col-xs-3 text-center'}}
                 <div class="audio-icon-large">

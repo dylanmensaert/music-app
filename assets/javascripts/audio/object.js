@@ -24,10 +24,14 @@ define(function(require) {
             this.get('element').currentTime = currentTime;
         },
         play: function(snippet) {
+            var element = this.get('element');
+
             if (Ember.isEmpty(snippet)) {
-                this.get('element').play();
+                element.play();
             } else {
-                this.load(snippet);
+                this.load(snippet).then(function() {
+                    element.play();
+                });
             }
         },
         pause: function() {
@@ -39,21 +43,25 @@ define(function(require) {
             this.set('status', 'loading');
             this.set('snippet', snippet);
 
-            if (Ember.isEmpty(audio)) {
-                snippet.fetchDownload().then(function(url) {
-                    this.start(url);
-                }.bind(this));
-            } else {
-                this.start(audio);
-            }
+            return new Ember.RSVP(function(resolve) {
+                if (Ember.isEmpty(audio)) {
+                    snippet.fetchDownload().then(function(url) {
+                        this.loadSource(url);
+
+                        resolve();
+                    }.bind(this));
+                } else {
+                    this.loadSource(audio);
+
+                    resolve();
+                }
+            }.bind(this));
         },
-        start: function(source) {
+        loadSource: function(source) {
             var element = this.get('element');
 
             element.src = source;
             element.load();
-
-            this.play();
         }
     });
 });

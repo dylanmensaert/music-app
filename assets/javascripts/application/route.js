@@ -13,12 +13,9 @@ define(function(require) {
     return Ember.Route.extend(require('helpers/update-title'), {
         title: 'music',
         setupController: function(controller, model) {
-            var audio = this.get('audio'),
-                slider,
-                queue,
-                currentIndex,
-                nextIndex,
-                nextSnippet;
+            var playingSnippetId = this.get('fileSystem.playingSnippetId'),
+                audio = this.get('audio'),
+                slider;
 
             slider = Slider.create({
                 onSlideStop: function(value) {
@@ -37,6 +34,10 @@ define(function(require) {
             this.set('cache.slider', slider);
 
             audio.set('didEnd', this.next.bind(this));
+
+            if (!Ember.isEmpty(playingSnippetId)) {
+                audio.load(this.get('fileSystem.snippets').findBy('id', playingSnippetId));
+            }
 
             this._super(controller, model);
         },
@@ -142,6 +143,8 @@ define(function(require) {
                 if (!playedSnippetIds.contains(id)) {
                     playedSnippetIds.pushObject(id);
                 }
+
+                this.set('fileSystem.playingSnippetId', id);
             }
 
             this.get('audio').play(snippet);

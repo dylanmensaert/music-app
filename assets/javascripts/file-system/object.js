@@ -39,6 +39,7 @@ define(function(require) {
         snippets: [],
         queue: [],
         history: [],
+        playingSnippetId: null,
         queueState: 'repeat',
         isShuffling: function() {
             return this.get('queueState') === 'shuffle';
@@ -77,7 +78,8 @@ define(function(require) {
 
             lastWriter = Ember.run.later(this, write, 100);
             /*TODO: snippets.@each.labels.@each needed?*/
-        }.observes('queueState', 'queue.@each', 'history.@each', 'labels.@each', 'snippets.@each', 'snippets.@each.labels.@each'),
+        }.observes('playingSnippetId', 'queueState', 'queue.@each', 'history.@each', 'labels.@each', 'snippets.@each',
+            'snippets.@each.labels.@each'),
         remove: function(source) {
             return new Ember.RSVP.Promise(function(resolve) {
                 this.get('instance').root.getFile(source, {}, function(fileEntry) {
@@ -142,11 +144,12 @@ define(function(require) {
             this.setProperties(parsedJSON);
         },
         toJSON: function() {
-            var data = {};
-
-            data.queueState = this.get('queueState');
-            data.queue = this.get('queue');
-            data.history = this.get('history');
+            var data = {
+                playingSnippetId: this.get('playingSnippetId'),
+                queueState: this.get('queueState'),
+                queue: this.get('queue'),
+                history: this.get('history')
+            };
 
             data.labels = this.get('labels').map(function(label) {
                 return label.strip();

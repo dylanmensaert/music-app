@@ -106,6 +106,10 @@ define(function(require) {
                         this.set('cache.message', 'Removed from label <strong>' + label.get('name') + '</strong>');
                     }
                 }.bind(this));
+
+                if (this.get('isEditMode')) {
+                    this.send('exitEdit');
+                }
             }
         }
     });

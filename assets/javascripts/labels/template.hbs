@@ -50,13 +50,11 @@
     </div>
 </div>
 
-{{#unless isEditMode}}
-    <div class="text-right">
-        <div {{action 'create'}} class="btn btn-material-orange-200 btn-inline">
-            <i class="fa fa-plus"></i>
-        </div>
+<div class="text-right">
+    <div {{action 'create'}} {{bind-attr class=':btn :btn-material-orange-200 :btn-inline isEditMode:undercover'}}>
+        <i class="fa fa-plus"></i>
     </div>
-{{/unless}}
+</div>
 
 <div class="container">
     {{#each label in sortedLabels}}
