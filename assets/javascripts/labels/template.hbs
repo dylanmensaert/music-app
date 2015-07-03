@@ -39,7 +39,7 @@
 <div class="form-group-material-grey-500 spaced-top">
     <div {{bind-attr class='liveQuery:input-group'}}>
         {{#if isEditMode}}
-            {{suggest-input value=liveQuery placeholder=editPlaceholder fetchSuggestions=fetchSuggestions insert-newline='saveEdit'}}
+            {{suggest-input value=liveQuery placeholder=editPlaceholder fetchSuggestions=fetchSuggestions insert-newline='saveEdit' focus=true}}
         {{else}}
             {{suggest-input value=liveQuery placeholder='Search or create label' fetchSuggestions=fetchSuggestions insert-newline='search'}}
         {{/if}}

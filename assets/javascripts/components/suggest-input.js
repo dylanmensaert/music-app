@@ -7,6 +7,7 @@ define(function(require) {
     return Ember.TextField.extend({
         classNames: ['form-control', 'floating-label'],
         attributeBindings: ['placeholder'],
+        focus: false,
         insertNewline: function() {
             this.sendAction('insert-newline');
 
@@ -22,6 +23,10 @@ define(function(require) {
             });
 
             Ember.$.material.input(this.$());
+
+            if (this.get('focus')) {
+                this.$().focus();
+            }
         },
         willDestroyElement: function() {
             this.$().typeahead('destroy');

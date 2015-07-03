@@ -214,16 +214,21 @@ define(function(require) {
                 }
             },
             pushToQueue: function(snippet) {
-                if (!snippet.get('isDownloaded')) {
-                    snippet.download().then(function() {}, function(error) {
-                        // TODO: show error?
-                        this.set('cache.message', 'Download aborted');
-                    }.bind(this));
+                var queue = this.get('fileSystem.queue');
+
+                if (!queue.contains(snippet.get('id'))) {
+                    if (!snippet.get('isDownloaded')) {
+                        snippet.download().then(function() {}, function(error) {
+                            // TODO: show error?
+                            this.set('cache.message', 'Download aborted');
+                        }.bind(this));
+                    }
+
+                    this.get('fileSystem.queue').pushObject(snippet.get('id'));
+
+                    this.set('cache.message', 'Added to queue');
                 }
-
-                this.get('fileSystem.queue').pushObject(snippet.get('id'));
-
-                this.set('cache.message', 'Added to queue');
+                // TODO: write else { message: already in queue } ?
             }
         }
     });
