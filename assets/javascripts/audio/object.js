@@ -43,7 +43,7 @@ define(function(require) {
             this.set('status', 'loading');
             this.set('snippet', snippet);
 
-            return new Ember.RSVP(function(resolve) {
+            return new Ember.RSVP.Promise(function(resolve) {
                 if (Ember.isEmpty(audio)) {
                     snippet.fetchDownload().then(function(url) {
                         this.loadSource(url);

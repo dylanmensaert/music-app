@@ -2,19 +2,7 @@
     {{snippet-action-bar snippets=cache.selectedSnippets isEditMode=isEditMode download='download' remove='remove' setupEdit='setupEdit' exitEdit='exitEdit'}}
 {{/if}}
 
-<div class="form-group-material-grey-500 spaced-top">
-    <div {{bind-attr class='liveQuery:input-group'}}>
-        {{#if isEditMode}}
-            {{suggest-input value=liveQuery placeholder=editPlaceholder fetchSuggestions=fetchSuggestions insert-newline='saveEdit' focus=true}}
-        {{else}}
-            {{suggest-input value=liveQuery placeholder='Search' fetchSuggestions=fetchSuggestions insert-newline='search'}}
-        {{/if}}
-
-        {{#if liveQuery}}
-            {{clear-addon text=liveQuery}}
-        {{/if}}
-    </div>
-</div>
+{{suggest-input-group liveQuery=liveQuery editPlaceholder=editPlaceholder fetchSuggestions=fetchSuggestions isEditMode=isEditMode}}
 
 <div class="container">
     <div class="row">
@@ -23,37 +11,15 @@
                 <label>
                     {{input type='checkbox' checked=searchOnline}}
 
-                    <span class="checkbox-material">
-                        <span class="check" />
-                    </span>
-
                     Online
                 </label>
             </div>
-
-            {{#if searchOnline}}
-                <div class="checkbox checkbox-material-orange-200">
-                    <label>
-                        {{input type='checkbox' checked=searchMusicOnly}}
-
-                        <span class="checkbox-material">
-                            <span class="check" />
-                        </span>
-
-                        Music only
-                    </label>
-                </div>
-            {{/if}}
         </div>
 
         <div class="col-xs-6">
             <div class="checkbox checkbox-material-orange-200">
                 <label>
                     {{input type='checkbox' checked=searchOffline}}
-
-                    <span class="checkbox-material">
-                        <span class="check" />
-                    </span>
 
                     Offline
                 </label>

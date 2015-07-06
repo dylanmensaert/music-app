@@ -70,36 +70,22 @@ define(function(require) {
         },
         next: function() {
             var queue = this.get('fileSystem.queue'),
-                currentIndex,
-                nextIndex,
                 snippetId,
                 nextSnippet;
 
-            if (this.get('fileSystem.isRepeating')) {
-                currentIndex = queue.indexOf(this.get('audio.snippet.id'));
+            unplayedSnippetIds = queue.filter(function(snippetId) {
+                return !this.get('cache.playedSnippetIds').contains(snippetId);
+            }.bind(this));
 
-                if (currentIndex < queue.get('length')) {
-                    nextIndex = currentIndex + 1;
-                } else {
-                    nextIndex = 0;
-                }
+            if (!unplayedSnippetIds.get('length')) {
+                this.set('cache.playedSnippetIds', []);
 
-                snippetId = queue.objectAt(nextIndex);
-            } else if (this.get('fileSystem.isShuffling')) {
-                unplayedSnippetIds = queue.filter(function(snippetId) {
-                    return !this.get('cache.playedSnippetIds').contains(snippetId);
-                }.bind(this));
+                unplayedSnippetIds.pushObjects(queue);
 
-                if (!unplayedSnippetIds.get('length')) {
-                    this.set('cache.playedSnippetIds', []);
-
-                    unplayedSnippetIds.pushObjects(queue);
-
-                    unplayedSnippetIds.removeObject(this.get('audio.snippet.id'));
-                }
-
-                snippetId = unplayedSnippetIds.objectAt(generateRandom(0, unplayedSnippetIds.get('length') - 1));
+                unplayedSnippetIds.removeObject(this.get('audio.snippet.id'));
             }
+
+            snippetId = unplayedSnippetIds.objectAt(generateRandom(0, unplayedSnippetIds.get('length') - 1));
 
             nextSnippet = this.get('fileSystem.snippets').findBy('id', snippetId);
 
@@ -177,7 +163,11 @@ define(function(require) {
                 this.get('audio').pause();
             },
             scrollToTop: function() {
-                window.scrollTo(0, 0);
+                if (Ember.$(window).scrollTop()) {
+                    window.scrollTo(0, 0);
+                } else {
+                    this.set('cache.message', 'Already scrolled to top');
+                }
             },
             previous: function() {
                 this.previous();

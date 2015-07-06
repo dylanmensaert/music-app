@@ -12,7 +12,9 @@
     </div>
 
     <div class="col-xs-2 outer-label">
-        {{menu-icon action='scrollToTop' icon='mdi-navigation-expand-less'}}
+        <div {{action 'scrollToTop'}} class="inner-label">
+            <i class="mdi-navigation-expand-less"></i>
+        </div>
     </div>
 </div>
 
@@ -20,33 +22,7 @@
     {{snippet-action-bar snippets=cache.selectedSnippets isEditMode=isEditMode download='download' remove='remove' setupEdit='setupEdit' exitEdit='exitEdit'}}
 {{/if}}
 
-<div class="form-group-material-grey-500 spaced-top">
-    <div {{bind-attr class='liveQuery:input-group'}}>
-        {{#if isEditMode}}
-            {{suggest-input value=liveQuery placeholder=editPlaceholder fetchSuggestions=fetchSuggestions insert-newline='saveEdit' focus=true}}
-        {{else}}
-            {{suggest-input value=liveQuery placeholder='Search' fetchSuggestions=fetchSuggestions insert-newline='search'}}
-        {{/if}}
-
-        {{#if liveQuery}}
-            {{clear-addon text=liveQuery}}
-        {{/if}}
-    </div>
-</div>
-
-<div class="row text-center spaced-top">
-    <div class="col-xs-6">
-        {{#app-ripple action='repeat' classNameBindings='fileSystem.isRepeating:text-active'}}
-            <i class="mdi-av-repeat"></i>
-        {{/app-ripple}}
-    </div>
-
-    <div class="col-xs-6">
-        {{#app-ripple action='shuffle' classNameBindings='fileSystem.isShuffling:text-active'}}
-            <i class="mdi-av-shuffle"></i>
-        {{/app-ripple}}
-    </div>
-</div>
+{{suggest-input-group liveQuery=liveQuery editPlaceholder=editPlaceholder fetchSuggestions=fetchSuggestions isEditMode=isEditMode}}
 
 <div class="list-group">
     {{#each snippet in sortedSnippets}}

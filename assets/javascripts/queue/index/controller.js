@@ -104,12 +104,6 @@ define(function(require) {
                 this.get('fileSystem.queue').removeObject(snippet.get('id'));
 
                 this.set('cache.message', 'Removed from queue');
-            },
-            repeat: function() {
-                this.set('fileSystem.queueState', 'repeat');
-            },
-            shuffle: function() {
-                this.set('fileSystem.queueState', 'shuffle');
             }
         }
     });

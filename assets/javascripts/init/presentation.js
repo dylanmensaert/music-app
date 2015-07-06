@@ -8,16 +8,9 @@ define(function(require) {
     require('nouislider');
     require('typeahead');
     require('bootstrap-material-design');
-    /*TODO: implementing punch crashes phone?*/
-    /*require('jqueryui-touch-punch');*/
-
     require('components/init');
 
     Ember.TextSupport.reopen({
-        classNames: ['form-control']
-    });
-
-    Ember.Select.reopen({
         classNames: ['form-control']
     });
 
@@ -32,10 +25,7 @@ define(function(require) {
 
             this._super();
         },
-        properties: null,
-        didInsertElement: function() {
-            Ember.$.material.ripples(this.$());
-        }
+        properties: null
     });
 
     Ember.Handlebars.registerBoundHelper('time', function(seconds) {

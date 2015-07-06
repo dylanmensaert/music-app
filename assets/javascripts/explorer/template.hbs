@@ -12,7 +12,9 @@
     </div>
 
     <div class="col-xs-2 outer-label action-top">
-        {{menu-icon action='scrollToTop' icon='mdi-navigation-expand-less'}}
+        <div {{action 'scrollToTop'}} class="inner-label">
+            <i class="mdi-navigation-expand-less"></i>
+        </div>
     </div>
 </div>
 
@@ -23,13 +25,13 @@
 
     <div class="container audio-bar">
         <div class="row">
-            {{#app-ripple action='transitionToQueue' class="col-xs-9 audio-name-outer"}}
+            <div {{action 'transitionToQueue'}} class="col-xs-9 audio-name-outer">
                 <div class="audio-name">
                     {{audio.snippet.name}}
                 </div>
-            {{/app-ripple}}
+            </div>
 
-            {{#app-ripple class='col-xs-3 text-center'}}
+            <div class='col-xs-3 text-center'>
                 <div class="audio-icon-large">
                     {{#if audio.isLoading}}
                         <i class="fa fa-spinner fa-pulse"></i>
@@ -43,7 +45,7 @@
                         <i class="fa fa-play" {{action 'play'}}></i>
                     {{/if}}
                 </div>
-            {{/app-ripple}}
+            </div>
         </div>
     </div>
 {{/if}}

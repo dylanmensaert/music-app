@@ -88,9 +88,8 @@ define(function(require) {
                 }.bind(this)
             });
         }.property('snippets.@each', 'offlineSnippets.@each.id'),
-        // TODO: save musicOnly label state (and others) in fileSystem someway
-        searchOnline: false,
-        searchMusicOnly: true,
+        // TODO: save label state in fileSystem someway
+        searchOnline: true,
         searchOffline: true,
         snippets: function() {
             var snippets = [];
@@ -134,17 +133,14 @@ define(function(require) {
         isLoading: false,
         onlineSnippets: [],
         updateOnlineSnippets: function(nextPageToken) {
-            var url,
-                snippets;
+            var snippets = [],
+                url;
 
             if (this.get('searchOnline')) {
                 url = meta.searchHost + '/youtube/v3/search?part=snippet&order=viewCount&type=video&maxResults=50';
                 this.set('isLoading', true);
 
                 // TODO: url += '&relatedToVideoId=' + this.get('videoId');
-                if (this.get('searchMusicOnly')) {
-                    url += '&videoCategoryId=10';
-                }
 
                 url += '&key=' + meta.key;
                 url += '&q=' + this.get('query');
@@ -181,11 +177,13 @@ define(function(require) {
 
                     this.set('isLoading', false);
                 }.bind(this));
+            } else {
+                this.set('onlineSnippets', snippets);
             }
         },
         scheduleUpdateOnlineSnippets: function() {
             Ember.run.once(this, this.updateOnlineSnippets);
-        }.observes('query', 'searchOnline', 'searchMusicOnly'),
+        }.observes('query', 'searchOnline'),
         /*TODO: Implement another way?*/
         updateSelectedSnippets: function() {
             var selectedSnippets = this.get('snippets').filterBy('isSelected');

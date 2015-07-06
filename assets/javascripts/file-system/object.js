@@ -40,13 +40,6 @@ define(function(require) {
         queue: [],
         history: [],
         playingSnippetId: null,
-        queueState: 'repeat',
-        isShuffling: function() {
-            return this.get('queueState') === 'shuffle';
-        }.property('queueState'),
-        isRepeating: function() {
-            return this.get('queueState') === 'repeat';
-        }.property('queueState'),
         // TODO: http://stackoverflow.com/questions/30109066/html-5-file-system-how-to-increase-persistent-storage
         forge: function() {
             navigator.webkitPersistentStorage.queryUsageAndQuota(function(usage, quota) {
@@ -78,7 +71,7 @@ define(function(require) {
 
             lastWriter = Ember.run.later(this, write, 100);
             /*TODO: snippets.@each.labels.@each needed?*/
-        }.observes('playingSnippetId', 'queueState', 'queue.@each', 'history.@each', 'labels.@each', 'snippets.@each',
+        }.observes('playingSnippetId', 'queue.@each', 'history.@each', 'labels.@each', 'snippets.@each',
             'snippets.@each.labels.@each'),
         remove: function(source) {
             return new Ember.RSVP.Promise(function(resolve) {
@@ -146,7 +139,6 @@ define(function(require) {
         toJSON: function() {
             var data = {
                 playingSnippetId: this.get('playingSnippetId'),
-                queueState: this.get('queueState'),
                 queue: this.get('queue'),
                 history: this.get('history')
             };

@@ -8,9 +8,6 @@ define(function(require) {
         classNames: ['btn', 'grid-label', 'btn-raised'],
         classNameBindings: ['model.isSelected:btn-material-grey-400:btn-default'],
         model: null,
-        didInsertElement: function() {
-            Ember.$.material.ripples(this.$());
-        },
         click: function() {
             this.toggleProperty('model.isSelected');
 

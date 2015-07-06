@@ -20,9 +20,13 @@
             <div class="col-xs-2 outer-label">
                 {{#if hasSingle}}
                     {{#if isEditMode}}
-                        {{menu-icon action='exitEdit' icon='mdi-content-clear'}}
+                        <div {{action 'exitEdit'}} class="inner-label">
+                            <i class="mdi-content-clear"></i>
+                        </div>
                     {{else}}
-                        {{menu-icon action='setupEdit' icon='mdi-editor-mode-edit'}}
+                        <div {{action 'setupEdit'}} class="inner-label">
+                            <i class="mdi-editor-mode-edit"></i>
+                        </div>
                     {{/if}}
                 {{else}}
                     &nbsp;
@@ -30,25 +34,15 @@
             </div>
 
             <div class="col-xs-2 outer-label">
-                {{menu-icon action='remove' icon='mdi-action-delete'}}
+                <div {{action 'remove'}} class="inner-label">
+                    <i class="mdi-action-delete"></i>
+                </div>
             </div>
         {{/action-bar}}
     {{/if}}
 {{/if}}
 
-<div class="form-group-material-grey-500 spaced-top">
-    <div {{bind-attr class='liveQuery:input-group'}}>
-        {{#if isEditMode}}
-            {{suggest-input value=liveQuery placeholder=editPlaceholder fetchSuggestions=fetchSuggestions insert-newline='saveEdit' focus=true}}
-        {{else}}
-            {{suggest-input value=liveQuery placeholder='Search or create label' fetchSuggestions=fetchSuggestions insert-newline='search'}}
-        {{/if}}
-
-        {{#if liveQuery}}
-            {{clear-addon text=liveQuery}}
-        {{/if}}
-    </div>
-</div>
+{{suggest-input-group liveQuery=liveQuery editPlaceholder=editPlaceholder fetchSuggestions=fetchSuggestions isEditMode=isEditMode}}
 
 <div class="text-right">
     <div {{action 'create'}} {{bind-attr class=':btn :btn-material-orange-200 :btn-inline isEditMode:undercover'}}>

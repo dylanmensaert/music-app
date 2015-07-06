@@ -11,11 +11,11 @@
                 </div>
             </div>
 
-            {{#app-ripple action='previous' class='col-xs-2 text-left audio-icon'}}
+            <div {{action 'previous'}} class='col-xs-2 text-left audio-icon'>
                 <i class="fa fa-step-backward"></i>
-            {{/app-ripple}}
+            </div>
 
-            {{#app-ripple class='col-xs-2 audio-icon'}}
+            <div class='col-xs-2 audio-icon'>
                 {{#if audio.isLoading}}
                     <i class="fa fa-spinner fa-pulse"></i>
                 {{/if}}
@@ -27,11 +27,11 @@
                 {{#if audio.isIdle}}
                     <i class="fa fa-play" {{action 'play'}}></i>
                 {{/if}}
-            {{/app-ripple}}
+            </div>
 
-            {{#app-ripple action='next' class='col-xs-2 text-right audio-icon'}}
+            <div {{action 'next'}} class='col-xs-2 text-right audio-icon'>
                 <i class="fa fa-step-forward"></i>
-            {{/app-ripple}}
+            </div>
 
             <div class="col-xs-3 text-right">
                 <div class="audio-timer">

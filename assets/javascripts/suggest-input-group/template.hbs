@@ -1,0 +1,15 @@
+<div {{bind-attr class='liveQuery:input-group'}}>
+    {{#if isEditMode}}
+        {{suggest-input value=liveQuery placeholder=editPlaceholder fetchSuggestions=fetchSuggestions insert-newline='saveEdit' focus=true}}
+    {{else}}
+        {{suggest-input value=liveQuery placeholder='Search' fetchSuggestions=fetchSuggestions insert-newline='search'}}
+    {{/if}}
+
+    {{#if liveQuery}}
+        <div class="input-group-btn">
+            <div {{action 'clear'}} class="btn btn-default btn-inline">
+                <i class="fa fa-times"></i>
+            </div>
+        </div>
+    {{/if}}
+</div>

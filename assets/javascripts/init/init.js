@@ -11,12 +11,6 @@ define(function(require) {
     require('labels/init');
     require('queue/init');
 
-    require('draggable');
-    require('droppable');
-    require('sortable');
-
-    require('touch');
-
     var App = require('init/app');
 
     App.advanceReadiness();

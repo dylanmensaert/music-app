@@ -20,8 +20,6 @@ define(function(require) {
             this.$().on('swiperight', function() {
                 this.sendAction('swiperight', this.get('model'));
             }.bind(this));
-
-            Ember.$.material.ripples(this.$());
         },
         didDestroyElement: function() {
             this.$().off('swipeleft');

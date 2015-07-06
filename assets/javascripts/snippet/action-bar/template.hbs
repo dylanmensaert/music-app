@@ -7,13 +7,15 @@
 
     <div class="col-xs-2 outer-label">
         {{#if undownloadedSnippets}}
-            {{#menu-icon action='download' icon='mdi-file-file-download'}}
+            <div {{action 'download'}} class="inner-label">
                 {{#unless isEveryUndownloaded}}
                     <span class="menu-text">
                         {{undownloadedSnippets.length}}
                     </span>
                 {{/unless}}
-            {{/menu-icon}}
+
+                <i class="mdi-file-file-download"></i>
+            </div>
         {{else}}
             &nbsp;
         {{/if}}
@@ -22,9 +24,13 @@
     <div class="col-xs-2 outer-label">
         {{#if hasSingle}}
             {{#if isEditMode}}
-                {{menu-icon action='exitEdit' icon='mdi-content-clear'}}
+                <div {{action 'exitEdit'}} class="inner-label">
+                    <i class="mdi-content-clear"></i>
+                </div>
             {{else}}
-                {{menu-icon action='setupEdit' icon='mdi-editor-mode-edit'}}
+                <div {{action 'setupEdit'}} class="inner-label">
+                    <i class="mdi-editor-mode-edit"></i>
+                </div>
             {{/if}}
         {{else}}
             &nbsp;
@@ -33,13 +39,15 @@
 
     <div class="col-xs-2 outer-label">
         {{#if offlineSnippets}}
-            {{#menu-icon action='remove' icon='mdi-action-delete'}}
+            <div {{action 'remove'}} class="inner-label">
                 {{#unless isEveryOffline}}
                     <span class="menu-text">
                         {{offlineSnippets.length}}
                     </span>
                 {{/unless}}
-            {{/menu-icon}}
+
+                <i class="mdi-action-delete"></i>
+            </div>
         {{else}}
             &nbsp;
         {{/if}}

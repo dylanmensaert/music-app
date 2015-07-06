@@ -8,5 +8,4 @@ define(function(require) {
 
     App.QueueIndexRoute = require('queue/index/route');
     App.QueueIndexController = require('queue/index/controller');
-    App.QueueIndexView = require('queue/index/view');
 });
