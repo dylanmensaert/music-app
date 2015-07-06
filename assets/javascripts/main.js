@@ -7,7 +7,6 @@
         baseUrl: 'javascripts',
         paths: {
             ember: '../bower_components/ember/ember.debug',
-            'ember-data': '../bower_components/ember-data/ember-data',
             handlebars: '../bower_components/handlebars/handlebars.runtime',
             moment: '../bower_components/momentjs/moment',
             jquery: '../bower_components/jquery/dist/jquery',
@@ -35,10 +34,6 @@
             ember: {
                 deps: ['jquery', 'handlebars'],
                 exports: 'Ember'
-            },
-            'ember-data': {
-                deps: ['ember'],
-                exports: 'DS'
             },
             handlebars: {
                 exports: 'Handlebars'
