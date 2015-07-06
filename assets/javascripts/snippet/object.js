@@ -127,7 +127,9 @@ define(function(require) {
 
                     // TODO: update offline labels and snippets in 1 write action
                     // TODO: only perform this
-                    this.get('fileSystem.snippets').pushObject(this);
+                    if (!this.get('isOffline')) {
+                        this.get('fileSystem.snippets').pushObject(this);
+                    }
 
                     this.set('status', null);
 
