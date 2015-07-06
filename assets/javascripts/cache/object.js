@@ -4,9 +4,12 @@ define(function(require) {
     var Ember = require('ember');
 
     return Ember.Object.extend({
+        init: function() {
+            this._super();
+        },
         selectedSnippets: [],
         playedSnippetIds: [],
-        message: null,
+        showMessage: null,
         slider: null,
         isMobileConnection: function() {
             var type,

@@ -78,7 +78,7 @@ define(function(require) {
                             name: liveQuery
                         }));
                     } else {
-                        this.set('cache.message', 'Label <strong>' + liveQuery + '</strong> already exists');
+                        this.get('cache').showMessage('Label <strong>' + liveQuery + '</strong> already exists');
                     }
                 }
 
@@ -99,11 +99,11 @@ define(function(require) {
                             snippets.pushObject(snippet);
                         }
 
-                        this.set('cache.message', 'Added to label <strong>' + label.get('name') + '</strong>');
+                        this.get('cache').showMessage('Added to label <strong>' + label.get('name') + '</strong>');
                     } else {
                         labels.removeObject(label.get('name'));
 
-                        this.set('cache.message', 'Removed from label <strong>' + label.get('name') + '</strong>');
+                        this.get('cache').showMessage('Removed from label <strong>' + label.get('name') + '</strong>');
                     }
                 }.bind(this));
 

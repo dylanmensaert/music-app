@@ -166,7 +166,7 @@ define(function(require) {
                 if (Ember.$(window).scrollTop()) {
                     window.scrollTo(0, 0);
                 } else {
-                    this.set('cache.message', 'Already scrolled to top');
+                    this.get('cache').showMessage('Already scrolled to top');
                 }
             },
             previous: function() {

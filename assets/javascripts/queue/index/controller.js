@@ -67,7 +67,7 @@ define(function(require) {
         // TODO: Implement - avoid triggering on init?
         /*updateMessage: function() {
             if (!this.get('snippets.length')) {
-                this.set('cache.message', 'No songs found');
+                this.get('cache').showMessage('No songs found');
             }
         }.observes('snippets.length'),*/
         didUpdate: function(snippetIds) {
@@ -103,7 +103,7 @@ define(function(require) {
 
                 this.get('fileSystem.queue').removeObject(snippet.get('id'));
 
-                this.set('cache.message', 'Removed from queue');
+                this.get('cache').showMessage('Removed from queue');
             }
         }
     });

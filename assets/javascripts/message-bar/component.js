@@ -7,7 +7,8 @@ define(function(require) {
     return Ember.Component.extend({
         layoutName: 'message_bar',
         classNames: ['message-bar'],
-        content: null,
+        showMessage: null,
+        message: null,
         fading: false,
         visible: false,
         fadeOut: function() {
@@ -15,22 +16,25 @@ define(function(require) {
 
             this.$().fadeOut(500, function() {
                 this.set('fading', false);
-                this.set('visible', false)
+                this.set('visible', false);
+
+                this.set('message', null);
             }.bind(this));
         },
-        update: function() {
-            if (!Ember.isEmpty(this.get('content'))) {
-                if (this.get('fading')) {
-                    this.$().stop(true, true).fadeOut();
-                }
+        show: function(message) {
+            this.set('message', message);
 
-                if (!this.get('visible')) {
-                    this.$().show();
-                }
-
-                debouncer = Ember.run.debounce(this, this.fadeOut, 2000);
+            if (this.get('fading')) {
+                this.$().stop(true, true).fadeOut();
             }
-        }.observes('content').on('didInsertElement'),
+
+            if (!this.get('visible')) {
+                this.$().show();
+                this.set('visible', true);
+            }
+
+            debouncer = Ember.run.debounce(this, this.fadeOut, 2000);
+        },
         click: function() {
             Ember.run.cancel(debouncer);
 
@@ -40,6 +44,8 @@ define(function(require) {
         },
         didInsertElement: function() {
             this.$().hide();
+
+            this.set('showMessage', this.show.bind(this));
         }
     });
 });
