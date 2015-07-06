@@ -13,6 +13,12 @@ define(function(require) {
         actions: {
             clear: function() {
                 this.set('liveQuery', '');
+            },
+            saveEdit: function() {
+                this.sendAction('saveEdit');
+            },
+            search: function() {
+                this.sendAction('search');
             }
         }
     });
