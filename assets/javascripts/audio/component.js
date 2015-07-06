@@ -31,13 +31,10 @@ define(function(require) {
             });
 
             element.addEventListener('error', function(event) {
+                // TODO: Show errors via cache.showMessage?
                 Ember.RSVP.reject(errors.get(event.target.error.code));
 
                 audio.set('status', 'idle');
-            });
-
-            element.addEventListener('stalled', function() {
-                audio.set('status', 'loading');
             });
 
             element.addEventListener('loadstart', function() {
@@ -75,7 +72,6 @@ define(function(require) {
             element.removeEventListener('timeupdate');
             element.removeEventListener('abort');
             element.removeEventListener('error');
-            element.removeEventListener('stalled');
             element.removeEventListener('loadstart');
             element.removeEventListener('canplay');
             element.removeEventListener('waiting');
