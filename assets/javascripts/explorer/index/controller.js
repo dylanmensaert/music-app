@@ -202,31 +202,33 @@ define(function(require) {
 
                         }, function(error) {
                             // TODO: show error?
-                            this.get('cache').showMessage('download aborted');
+                            cache.showMessage('download aborted');
                         });
                     } else {
                         snippet.get('labels').pushObject('download-later');
                     }
                 } else {
-                    this.get('cache').showMessage('already downloaded');
+                    cache.showMessage('already downloaded');
                 }
             },
             pushToQueue: function(snippet) {
-                var queue = this.get('fileSystem.queue');
+                var queue = this.get('fileSystem.queue'),
+                    cache = this.get('cache');
 
                 if (!queue.contains(snippet.get('id'))) {
                     if (!snippet.get('isDownloaded')) {
                         snippet.download().then(function() {}, function(error) {
                             // TODO: show error?
-                            this.get('cache').showMessage('Download aborted');
+                            cache.showMessage('Download aborted');
                         }.bind(this));
                     }
 
                     this.get('fileSystem.queue').pushObject(snippet.get('id'));
 
-                    this.get('cache').showMessage('Added to queue');
+                    cache.showMessage('Added to queue');
+                } else {
+                    cache.showMessage('Already in queue');
                 }
-                // TODO: write else { message: already in queue } ?
             }
         }
     });

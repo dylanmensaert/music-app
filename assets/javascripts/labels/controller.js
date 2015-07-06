@@ -87,6 +87,7 @@ define(function(require) {
             toggle: function(label) {
                 var selectedSnippets = this.get('cache.selectedSnippets'),
                     snippets = this.get('fileSystem.snippets'),
+                    cache = this.get('cache'),
                     labels;
 
                 selectedSnippets.forEach(function(snippet) {
@@ -99,11 +100,11 @@ define(function(require) {
                             snippets.pushObject(snippet);
                         }
 
-                        this.get('cache').showMessage('Added to label <strong>' + label.get('name') + '</strong>');
+                        cache.showMessage('Added to label <strong>' + label.get('name') + '</strong>');
                     } else {
                         labels.removeObject(label.get('name'));
 
-                        this.get('cache').showMessage('Removed from label <strong>' + label.get('name') + '</strong>');
+                        cache.showMessage('Removed from label <strong>' + label.get('name') + '</strong>');
                     }
                 }.bind(this));
 

@@ -22,11 +22,11 @@ define(function(require) {
             }.bind(this));
         },
         show: function(message) {
-            this.set('message', message);
-
             if (this.get('fading')) {
                 this.$().stop(true, true).fadeOut();
             }
+
+            this.set('message', message);
 
             if (!this.get('visible')) {
                 this.$().show();
