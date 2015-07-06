@@ -11,6 +11,7 @@ define(function(require) {
         buffered: null,
         status: null,
         didEnd: null,
+        startPlay: false,
         isLoading: function() {
             return this.get('status') === 'loading';
         }.property('status'),
@@ -29,9 +30,9 @@ define(function(require) {
             if (Ember.isEmpty(snippet)) {
                 element.play();
             } else {
-                this.load(snippet).then(function() {
-                    element.play();
-                });
+                this.set('startPlay', true);
+
+                this.load(snippet);
             }
         },
         pause: function() {
@@ -43,24 +44,19 @@ define(function(require) {
             this.set('status', 'loading');
             this.set('snippet', snippet);
 
-            return new Ember.RSVP.Promise(function(resolve) {
-                if (Ember.isEmpty(audio)) {
-                    snippet.fetchDownload().then(function(url) {
-                        this.loadSource(url);
-
-                        resolve();
-                    }.bind(this));
-                } else {
-                    this.loadSource(audio);
-
-                    resolve();
-                }
-            }.bind(this));
+            if (Ember.isEmpty(audio)) {
+                snippet.fetchDownload().then(function(url) {
+                    this.loadSource(url);
+                }.bind(this));
+            } else {
+                this.loadSource(audio);
+            }
         },
         loadSource: function(source) {
             var element = this.get('element');
 
             element.src = source;
+
             element.load();
         }
     });

@@ -43,6 +43,12 @@ define(function(require) {
 
             element.addEventListener('canplay', function() {
                 audio.set('status', 'idle');
+
+                if (audio.get('startPlay')) {
+                    audio.play();
+
+                    audio.set('startPlay', false);
+                }
             });
 
             element.addEventListener('waiting', function() {
