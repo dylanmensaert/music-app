@@ -1,26 +1,26 @@
 {
-  "name": "music-app",
-  "private": true,
-  "version": "0.0.1",
-  "dependencies": {
-    "requirejs-bower": "2.1.17",
-    "ember": "1.11.1",
-    "jquery": "2.1.3",
-    "bootstrap": "3.3.4",
-    "nouislider": "7.0.10",
-    "handlebars": "2.0.0",
-    "fontawesome": "4.3.0",
-    "momentjs": "2.10.2",
-    "typeahead.js": "0.10.5",
-    "typeahead.js-bootstrap3.less": "0.2.3",
-    "jquery-mobile": "1.4.5",
-    "bootstrap-material-design": "0.3.0"
-  },
-  "devDependencies": {
-    "almond": "0.3.1"
-  },
-  "resolutions": {
-    "jquery": "2.1.3",
-    "bootstrap": "3.3.4"
-  }
+    "name": "music-app",
+    "private": true,
+    "version": "0.0.1",
+    "dependencies": {
+        "requirejs-bower": "2.1.17",
+        "ember": "1.11.1",
+        "jquery": "2.1.3",
+        "bootstrap": "3.3.4",
+        "nouislider": "7.0.10",
+        "handlebars": "2.0.0",
+        "fontawesome": "4.3.0",
+        "momentjs": "2.10.2",
+        "typeahead.js": "0.10.5",
+        "typeahead.js-bootstrap3.less": "0.2.3",
+        "jquery-mobile": "1.4.5",
+        "bootstrap-material-design": "0.3.0"
+    },
+    "devDependencies": {
+        "almond": "0.3.1"
+    },
+    "resolutions": {
+        "jquery": "2.1.3",
+        "bootstrap": "3.3.4"
+    }
 }
