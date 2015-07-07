@@ -14,7 +14,8 @@ define(function(require) {
         audio: null,
         didInsertElement: function() {
             var element = this.get('element'),
-                audio = this.get('audio');
+                audio = this.get('audio'),
+                snippet = audio.get('snippet');
 
             element.addEventListener('durationchange', function(event) {
                 audio.set('duration', event.target.duration);
@@ -64,6 +65,10 @@ define(function(require) {
             });
 
             audio.set('element', element);
+
+            if (!Ember.isEmpty(snippet)) {
+                audio.load(snippet);
+            }
         },
         willDestroyElement: function() {
             var element = this.get('element');

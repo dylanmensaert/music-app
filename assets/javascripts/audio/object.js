@@ -60,8 +60,10 @@ define(function(require) {
         loadSource: function(source) {
             var element = this.get('element');
 
-            element.src = source;
-            element.load();
+            if (!Ember.isEmpty(element)) {
+                element.src = source;
+                element.load();
+            }
         }
     });
 });

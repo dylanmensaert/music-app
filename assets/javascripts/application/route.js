@@ -13,8 +13,7 @@ define(function(require) {
     return Ember.Route.extend(require('helpers/update-title'), {
         title: 'music',
         setupController: function(controller, model) {
-            var playingSnippetId = this.get('fileSystem.playingSnippetId'),
-                audio = this.get('audio'),
+            var audio = this.get('audio'),
                 slider;
 
             slider = Slider.create({
@@ -35,9 +34,9 @@ define(function(require) {
 
             audio.set('didEnd', this.next.bind(this));
 
-            if (!Ember.isEmpty(playingSnippetId)) {
-                audio.load(this.get('fileSystem.snippets').findBy('id', playingSnippetId));
-            }
+            this.set('fileSystem.didParseJSON', function() {
+                audio.load(this.get('snippets').findBy('id', this.get('playingSnippetId')));
+            });
 
             this._super(controller, model);
         },

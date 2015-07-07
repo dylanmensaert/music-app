@@ -40,6 +40,7 @@ define(function(require) {
         queue: [],
         history: [],
         playingSnippetId: null,
+        didParseJSON: null,
         // TODO: http://stackoverflow.com/questions/30109066/html-5-file-system-how-to-increase-persistent-storage
         forge: function() {
             navigator.webkitPersistentStorage.queryUsageAndQuota(function(usage, quota) {
@@ -135,6 +136,10 @@ define(function(require) {
             }.bind(this));
 
             this.setProperties(parsedJSON);
+
+            if (!Ember.isEmpty(this.get('didParseJSON'))) {
+                this.didParseJSON();
+            }
         },
         toJSON: function() {
             var data = {
