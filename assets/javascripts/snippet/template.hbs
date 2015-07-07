@@ -11,18 +11,6 @@
 </div>
 
 <div {{bind-attr class=':media-right :media-top :snippet-part :status-icons model.isSelected:active'}}>
-    {{#if model.isDownloading}}
-        <div>
-            <i class="fa fa-spinner fa-pulse"></i>
-        </div>
-    {{/if}}
-
-    {{#if model.isDownloaded}}
-        <div>
-            <i class="fa fa-download"></i>
-        </div>
-    {{/if}}
-
     {{#if model.isPlaying}}
         <div>
             <i class="glyphicon glyphicon-headphones"></i>
@@ -33,6 +21,18 @@
                 <i class="fa fa-clock-o"></i>
             </div>
         {{/if}}
+    {{/if}}
+
+    {{#if model.isDownloading}}
+        <div>
+            <i class="fa fa-spinner fa-pulse"></i>
+        </div>
+    {{/if}}
+
+    {{#if model.isDownloaded}}
+        <div>
+            <i class="fa fa-download"></i>
+        </div>
     {{/if}}
 </div>
 
