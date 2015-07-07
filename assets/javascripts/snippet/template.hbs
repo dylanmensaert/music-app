@@ -8,17 +8,32 @@
     <div>
         {{model.name}}
     </div>
+</div>
 
-    <div>
-        {{#if model.isDownloading}}
-            <code>
-                <i>
-                    downloading..
-                </i>
-                <i class="fa fa-spinner fa-pulse"></i>
-            </code>
+<div {{bind-attr class=':media-right :media-top :snippet-part :status-icons model.isSelected:active'}}>
+    {{#if model.isDownloading}}
+        <div>
+            <i class="fa fa-spinner fa-pulse"></i>
+        </div>
+    {{/if}}
+
+    {{#if model.isDownloaded}}
+        <div>
+            <i class="fa fa-download"></i>
+        </div>
+    {{/if}}
+
+    {{#if model.isPlaying}}
+        <div>
+            <i class="glyphicon glyphicon-headphones"></i>
+        </div>
+    {{else}}
+        {{#if _showQueued}}
+            <div>
+                <i class="fa fa-clock-o"></i>
+            </div>
         {{/if}}
-    </div>
+    {{/if}}
 </div>
 
 <div {{action 'toggleSelection'}} class="media-right media-middle snippet-part">

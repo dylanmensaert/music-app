@@ -23,29 +23,27 @@ define(function(require) {
 
                 lastQuery = query;
 
-                if (this.get('searchOffline')) {
-                    this.get('fileSystem.labels').forEach(function(label) {
-                        key = label.get('name');
+                this.get('fileSystem.labels').forEach(function(label) {
+                    key = label.get('name');
 
-                        if (!label.get('isHidden') && utilities.isMatch(key, query)) {
-                            suggestions.pushObject({
-                                value: key
-                            });
-                        }
-                    });
+                    if (!label.get('isHidden') && utilities.isMatch(key, query)) {
+                        suggestions.pushObject({
+                            value: key
+                        });
+                    }
+                });
 
-                    this.get('fileSystem.snippets').forEach(function(snippet) {
-                        key = snippet.get('name');
+                this.get('fileSystem.snippets').forEach(function(snippet) {
+                    key = snippet.get('name');
 
-                        if (utilities.isMatch(key, query)) {
-                            suggestions.pushObject({
-                                value: key
-                            });
-                        }
-                    });
+                    if (utilities.isMatch(key, query)) {
+                        suggestions.pushObject({
+                            value: key
+                        });
+                    }
+                });
 
-                    callback(suggestions);
-                }
+                callback(suggestions);
 
                 if (this.get('searchOnline') && suggestions.get('length') < 10) {
                     url = meta.suggestHost + '/complete/search?client=firefox&ds=yt&q=' + query;
@@ -67,20 +65,20 @@ define(function(require) {
                     })(lastQuery);
                 }
             }.bind(this);
-        }.property('searchOffline', 'searchOnline', 'fileSystem.snippets.@each.name'),
+        }.property('searchOnline', 'fileSystem.snippets.@each.name'),
         sortedSnippets: function() {
             return Ember.ArrayProxy.createWithMixins(Ember.SortableMixin, {
                 content: this.get('snippets'),
                 sortProperties: ['name', 'id'],
                 orderBy: function(snippet, other) {
-                    var offlineSnippets = this.get('offlineSnippets'),
-                        isOffline = offlineSnippets.isAny('id', snippet.get('id')),
-                        otherIsOffline = offlineSnippets.isAny('id', other.get('id')),
-                        snippets = this.get('snippets'),
+                    var snippets = this.get('snippets'),
                         result = -1;
 
-                    if ((!isOffline && otherIsOffline) || (isOffline && otherIsOffline && snippet.get('name') > other.get(
-                            'name')) || (!isOffline && !otherIsOffline && snippets.indexOf(snippet) > snippets.indexOf(other))) {
+                    if (this.get('searchOnline')) {
+                        if (snippets.indexOf(snippet) > snippets.indexOf(other)) {
+                            result = 1
+                        }
+                    } else if (snippet.get('name') > other.get('name')) {
                         result = 1;
                     }
 
@@ -90,18 +88,21 @@ define(function(require) {
         }.property('snippets.@each', 'offlineSnippets.@each.id'),
         // TODO: save label state in fileSystem someway
         searchOnline: true,
-        searchOffline: true,
         snippets: function() {
-            var snippets = [];
+            var snippets = this.get('offlineSnippets'),
+                id;
 
-            snippets.pushObjects(this.get('offlineSnippets'));
+            if (this.get('searchOnline')) {
+                snippets = this.get('onlineSnippets').map(function(snippet) {
+                    id = snippet.get('id');
 
-            this.get('onlineSnippets').forEach(function(snippet) {
-                if (!snippets.isAny('id', snippet.get('id'))) {
-                    snippets.pushObject(snippet);
-                }
-            });
+                    if (snippets.isAny('id', id)) {
+                        snippet = snippets.findBy('id', id);
+                    }
 
+                    return snippet;
+                });
+            }
             return snippets;
         }.property('offlineSnippets.@each', 'onlineSnippets.@each'),
         // TODO: Implement - avoid triggering on init?
@@ -115,20 +116,18 @@ define(function(require) {
                 query,
                 matchAnyLabel;
 
-            if (this.get('searchOffline')) {
-                query = this.get('query');
+            query = this.get('query');
 
-                snippets = this.get('fileSystem.snippets').filter(function(snippet) {
-                    matchAnyLabel = snippet.get('labels').any(function(label) {
-                        return utilities.isMatch(label, query);
-                    });
-
-                    return matchAnyLabel || utilities.isMatch(snippet.get('name'), query);
+            snippets = this.get('fileSystem.snippets').filter(function(snippet) {
+                matchAnyLabel = snippet.get('labels').any(function(label) {
+                    return utilities.isMatch(label, query);
                 });
-            }
+
+                return matchAnyLabel || utilities.isMatch(snippet.get('name'), query);
+            });
 
             return snippets;
-        }.property('query', 'fileSystem.snippets.@each.name', 'searchOffline'),
+        }.property('query', 'fileSystem.snippets.@each.name'),
         nextPageToken: null,
         isLoading: false,
         onlineSnippets: [],

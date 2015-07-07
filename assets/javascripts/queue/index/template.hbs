@@ -26,7 +26,7 @@
 
 <div class="list-group">
     {{#each snippet in sortedSnippets}}
-        {{app-snippet model=snippet action='play' swipeleft='removeFromQueue' param=snippet}}
+        {{app-snippet model=snippet action='play' swipeleft='removeFromQueue' param=snippet showQueued=false}}
 
         <div class="list-group-separator snippet-separator" />
     {{/each}}

@@ -48,8 +48,8 @@ define(function(require) {
             return this.get('status') === 'downloading';
         }.property('status'),
         isPlaying: function() {
-            return this.get('status') === 'playing';
-        }.property('status'),
+            return this.get('fileSystem.playingSnippetId') === this.get('id');
+        }.property('fileSystem.playingSnippetId', 'id'),
         isDownloaded: function() {
             return this.get('labels').contains('downloaded');
         }.property('labels.@each'),
