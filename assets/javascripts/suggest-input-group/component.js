@@ -11,7 +11,10 @@ define(function(require) {
         fetchSuggestions: null,
         isEditMode: false,
         actions: {
+            // TODO: Clearing input does not work. Seems like bug regarding material design.
             clear: function() {
+                this.$('input').focus();
+
                 this.set('liveQuery', '');
             },
             saveEdit: function() {
