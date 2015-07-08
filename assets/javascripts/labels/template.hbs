@@ -51,7 +51,7 @@
 </div>
 
 <div class="container">
-    {{#each label as |sortedLabels|}}
+    {{#each label in sortedLabels}}
         {{app-label model=label action='toggle' param=label}}
     {{/each}}
 </div>

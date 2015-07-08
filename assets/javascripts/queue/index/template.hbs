@@ -25,7 +25,7 @@
 {{suggest-input-group liveQuery=liveQuery editPlaceholder=editPlaceholder fetchSuggestions=fetchSuggestions isEditMode=isEditMode saveEdit='saveEdit' search='search'}}
 
 <div class="list-group">
-    {{#each snippet as |sortedSnippets|}}
+    {{#each snippet in sortedSnippets}}
         {{app-snippet model=snippet action='play' swipeleft='removeFromQueue' param=snippet}}
 
         <div class="list-group-separator snippet-separator" />
