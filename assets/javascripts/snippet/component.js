@@ -22,7 +22,7 @@ define(function(require) {
                 this.sendAction('swiperight', this.get('model'));
             }.bind(this));
         },
-        didDestroyElement: function() {
+        willDestroyElement: function() {
             this.$().off('swipeleft');
             this.$().off('swiperight');
         },
