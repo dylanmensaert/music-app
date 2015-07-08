@@ -11,8 +11,13 @@ define(function(require) {
         return meta.imageHost + new URL(url).pathname;
     };
 
-    /*TODO: lot of duplication with queue controller. Maybe implement via mixin*/
     return Ember.Controller.extend(require('helpers/actions-mixin'), require('snippet/actions-mixin'), {
+        'app-component': require('explorer/index/component'),
+        didScrollToBottom: function() {
+            return function() {
+                this.updateOnlineSnippets(this.get('nextPageToken'));
+            }.bind(this);
+        }.property('nextPageToken'),
         fetchSuggestions: function() {
             var url,
                 lastQuery;
@@ -67,7 +72,7 @@ define(function(require) {
             }.bind(this);
         }.property('searchOnline', 'fileSystem.snippets.@each.name'),
         sortedSnippets: function() {
-            return Ember.ArrayProxy.createWithMixins(Ember.SortableMixin, {
+            return Ember.ArrayProxy.extend(Ember.SortableMixin, {
                 content: this.get('snippets'),
                 sortProperties: ['name', 'id'],
                 orderBy: function(snippet, other) {
@@ -84,7 +89,7 @@ define(function(require) {
 
                     return result;
                 }.bind(this)
-            });
+            }).create();
         }.property('snippets.@each', 'offlineSnippets.@each.id'),
         // TODO: save label state in fileSystem someway
         searchOnline: true,

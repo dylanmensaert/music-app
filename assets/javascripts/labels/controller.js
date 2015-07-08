@@ -25,10 +25,10 @@ define(function(require) {
             }.bind(this);
         }.property('fileSystem.labels.@each'),
         sortedLabels: function() {
-            return Ember.ArrayProxy.createWithMixins(Ember.SortableMixin, {
+            return Ember.ArrayProxy.extend(Ember.SortableMixin, {
                 content: this.get('labels'),
                 sortProperties: ['name']
-            });
+            }).create();
         }.property('labels'),
         labels: function() {
             var selectedSnippets = this.get('cache.selectedSnippets'),

@@ -12,34 +12,6 @@ define(function(require) {
 
     return Ember.Route.extend(require('helpers/update-title'), {
         title: 'music',
-        setupController: function(controller, model) {
-            var audio = this.get('audio'),
-                slider;
-
-            slider = Slider.create({
-                onSlideStop: function(value) {
-                    audio.setCurrentTime(value);
-                }
-            });
-
-            audio.addObserver('currentTime', audio, function() {
-                slider.setValue(this.get('currentTime'));
-            });
-
-            audio.addObserver('duration', audio, function() {
-                slider.set('max', this.get('duration'));
-            });
-
-            this.set('cache.slider', slider);
-
-            audio.set('didEnd', this.next.bind(this));
-
-            this.set('fileSystem.didParseJSON', function() {
-                audio.load(this.get('snippets').findBy('id', this.get('playingSnippetId')));
-            });
-
-            this._super(controller, model);
-        },
         previous: function() {
             var history = this.get('fileSystem.history'),
                 queue,
@@ -173,6 +145,32 @@ define(function(require) {
             },
             next: function() {
                 this.next();
+            },
+            didTransition: function() {
+                var audio = this.get('audio'),
+                    slider;
+
+                slider = Slider.create({
+                    onSlideStop: function(value) {
+                        audio.setCurrentTime(value);
+                    }
+                });
+
+                audio.addObserver('currentTime', audio, function() {
+                    slider.setValue(this.get('currentTime'));
+                });
+
+                audio.addObserver('duration', audio, function() {
+                    slider.set('max', this.get('duration'));
+                });
+
+                this.set('cache.slider', slider);
+
+                audio.set('didEnd', this.next.bind(this));
+
+                this.set('fileSystem.didParseJSON', function() {
+                    audio.load(this.get('snippets').findBy('id', this.get('playingSnippetId')));
+                });
             }
         }
     });

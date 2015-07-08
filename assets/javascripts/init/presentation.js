@@ -18,7 +18,7 @@ define(function(require) {
 
     Ember.$.event.special.swipe.horizontalDistanceThreshold = 100;
 
-    Ember.LinkView.reopen({
+    Ember.LinkComponent.reopen({
         //TODO: init only needed because classNameBindings are execute in controller context instead of this
         init: function() {
             this.setProperties(this.get('properties'));

@@ -1,36 +1,38 @@
-{{#if cache.selectedSnippets}}
-    {{snippet-action-bar snippets=cache.selectedSnippets isEditMode=isEditMode download='download' remove='remove' setupEdit='setupEdit' exitEdit='exitEdit'}}
-{{/if}}
+{{#view app-component didScrollToBottom=didScrollToBottom}}
+    {{#if cache.selectedSnippets}}
+        {{snippet-action-bar snippets=cache.selectedSnippets isEditMode=isEditMode download='download' remove='remove' setupEdit='setupEdit' exitEdit='exitEdit'}}
+    {{/if}}
 
-{{suggest-input-group liveQuery=liveQuery editPlaceholder=editPlaceholder fetchSuggestions=fetchSuggestions isEditMode=isEditMode saveEdit='saveEdit' search='search'}}
+    {{suggest-input-group liveQuery=liveQuery editPlaceholder=editPlaceholder fetchSuggestions=fetchSuggestions isEditMode=isEditMode saveEdit='saveEdit' search='search'}}
 
-<div class="container">
-    <div class="text-center">
-        <div class="checkbox checkbox-material-orange-200">
-            <label>
-                {{input type='checkbox' checked=searchOnline}}
+    <div class="container">
+        <div class="text-center">
+            <div class="checkbox checkbox-material-orange-200">
+                <label>
+                    {{input type='checkbox' checked=searchOnline}}
 
-                Online
-            </label>
+                    Online
+                </label>
+            </div>
         </div>
+
+        <button class="btn btn-default btn-file btn-raised">
+            Import audio
+            {{file-input}}
+        </button>
     </div>
 
-    <button class="btn btn-default btn-file btn-raised">
-        Import audio
-        {{file-input}}
-    </button>
-</div>
+    <div class="list-group spaced-top">
+        {{#each snippet as |sortedSnippets|}}
+            {{app-snippet model=snippet action='play' swipeleft='pushToDownload' swiperight='pushToQueue' param=snippet showQueued=snippet.isQueued}}
 
-<div class="list-group spaced-top">
-    {{#each snippet in sortedSnippets}}
-        {{app-snippet model=snippet action='play' swipeleft='pushToDownload' swiperight='pushToQueue' param=snippet showQueued=snippet.isQueued}}
-
-        <div class="list-group-separator snippet-separator" />
-    {{/each}}
-</div>
-
-{{#if isLoading}}
-    <div class="text-center audio-icon-large">
-        <i class="fa fa-spinner fa-pulse"></i>
+            <div class="list-group-separator snippet-separator" />
+        {{/each}}
     </div>
-{{/if}}
+
+    {{#if isLoading}}
+        <div class="text-center audio-icon-large">
+            <i class="fa fa-spinner fa-pulse"></i>
+        </div>
+    {{/if}}
+{{/view}}

@@ -36,7 +36,7 @@ define(function(require) {
             }.bind(this);
         }.property('fileSystem.snippets.@each.name', 'fileSystem.queue.@each'),
         sortedSnippets: function() {
-            return Ember.ArrayProxy.createWithMixins(Ember.SortableMixin, {
+            return Ember.ArrayProxy.extend(Ember.SortableMixin, {
                 content: this.get('snippets'),
                 sortProperties: ['name', 'id'],
                 orderBy: function(snippet, other) {
@@ -49,7 +49,7 @@ define(function(require) {
 
                     return result;
                 }.bind(this)
-            });
+            }).create();
         }.property('snippets.@each', 'fileSystem.queue.@each'),
         snippets: function() {
             var snippets = [],

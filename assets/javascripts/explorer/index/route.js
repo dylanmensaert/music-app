@@ -5,12 +5,18 @@ define(function(require) {
 
     return Ember.Route.extend(require('helpers/update-title'), {
         title: 'Index',
-        setupController: function(controller, model) {
-            if (this.get('cache').isMobileConnection()) {
-                controller.set('searchOnline', false);
-            }
+        actions: {
+            didTransition: function() {
+                if (this.get('cache').isMobileConnection()) {
+                    this.controller.set('searchOnline', false);
+                }
 
-            this._super(controller, model);
+                if (this.controller.get('searchOnline')) {
+                    this.controller.scheduleUpdateOnlineSnippets();
+                }
+
+                return true;
+            }
         }
     });
 });

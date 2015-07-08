@@ -5,6 +5,11 @@ define(function(require) {
         debouncer;
 
     return Ember.Component.extend({
+        init: function() {
+            this._super();
+
+            this.set('showMessage', this.show.bind(this));
+        },
         layoutName: 'message_bar',
         classNames: ['message-bar'],
         showMessage: null,
@@ -44,8 +49,6 @@ define(function(require) {
         },
         didInsertElement: function() {
             this.$().hide();
-
-            this.set('showMessage', this.show.bind(this));
         }
     });
 });

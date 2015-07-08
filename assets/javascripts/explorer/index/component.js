@@ -4,11 +4,11 @@ define(function(require) {
 
     var Ember = require('ember');
 
-    return Ember.View.extend({
-        /*TODO: Delete endless scroll functionality?*/
+    /*TODO: Delete endless scroll functionality?*/
+    return Ember.Component.extend({
+        didScrollToBottom: null,
         didInsertElement: function() {
             var viewport = Ember.$(window),
-                controller = this.get('controller'),
                 position,
                 maxPosition;
 
@@ -17,15 +17,11 @@ define(function(require) {
                 maxPosition = this.$().offset().top + this.$().outerHeight(true) - viewport.height();
 
                 if (position > maxPosition) {
-                    controller.updateOnlineSnippets(controller.get('nextPageToken'));
+                    this.didScrollToBottom();
                 }
             }.bind(this));
 
             Ember.$.material.checkbox();
-
-            if (controller.get('searchOnline')) {
-                controller.scheduleUpdateOnlineSnippets();
-            }
         },
         willDestroyElement: function() {
             Ember.$(window).unbind('scroll');

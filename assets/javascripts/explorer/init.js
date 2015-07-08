@@ -8,5 +8,4 @@ define(function(require) {
 
     App.ExplorerIndexRoute = require('explorer/index/route');
     App.ExplorerIndexController = require('explorer/index/controller');
-    App.ExplorerIndexView = require('explorer/index/view');
 });
