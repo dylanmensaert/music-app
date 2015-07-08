@@ -7,7 +7,7 @@ define(function(require) {
         actions: {
             download: function() {
                 this.get('cache.selectedSnippets').forEach(function(snippet) {
-                    if (!snippet.get('isDownloaded')) {
+                    if (!snippet.get('isDownloaded') && !snippet.get('isDownloading')) {
                         snippet.download();
                     }
                 });

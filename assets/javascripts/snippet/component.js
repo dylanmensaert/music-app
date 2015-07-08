@@ -12,10 +12,7 @@ define(function(require) {
         name: function() {
             return this.get('model.id');
         }.property('model.id'),
-        showQueued: true,
-        _showQueued: function() {
-            return this.get('showQueued') && this.get('model.isQueued');
-        }.property('model.isQueued'),
+        showQueued: false,
         didInsertElement: function() {
             this.$().on('swipeleft', function() {
                 this.sendAction('swipeleft', this.get('model'));

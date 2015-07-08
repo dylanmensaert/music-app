@@ -11,13 +11,17 @@ define(function(require) {
             return this.get('snippets').isEvery('isOffline');
         }.property('snippets.@each.isOffline'),
         isEveryUndownloaded: function() {
-            return this.get('snippets').isEvery('isDownloaded', false);
-        }.property('snippets.@each.isDownloaded'),
+            return !this.get('snippets').isAny(function(snippet) {
+                return snippet.get('isDownloaded') || snippet.get('isDownloading');
+            });
+        }.property('snippets.@each.isDownloaded', 'snippets.@each.isDownloading'),
         offlineSnippets: function() {
             return this.get('snippets').filterBy('isOffline');
         }.property('snippets.@each.isOffline'),
         undownloadedSnippets: function() {
-            return this.get('snippets').filterBy('isDownloaded', false);
+            return this.get('snippets').filter(function(snippet) {
+                return !snippet.get('isDownloaded') && !snippet.get('isDownloading');
+            });
         }.property('snippets.@each.isDownloaded'),
         hasSingle: function() {
             return this.get('snippets.length') === 1;
