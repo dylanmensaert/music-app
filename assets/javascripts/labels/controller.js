@@ -111,6 +111,13 @@ define(function(require) {
                 if (this.get('isEditMode')) {
                     this.send('exitEdit');
                 }
+            },
+            explore: function() {
+                this.transitionToRoute('explorer.index', {
+                    queryParams: {
+                        query: this.get('selected.firstObject.name')
+                    }
+                });
             }
         }
     });

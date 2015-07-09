@@ -13,8 +13,18 @@
 {{else}}
     {{#if selected}}
         {{#action-bar models=selected deselect='exitEdit'}}
-            <div class="col-xs-4">
+            <div class="col-xs-2">
                 &nbsp;
+            </div>
+
+            <div class="col-xs-2 outer-label">
+                {{#if hasSingle}}
+                    <div {{action 'explore'}} class="inner-label">
+                        <i class="mdi-action-search"></i>
+                    </div>
+                {{else}}
+                    &nbsp;
+                {{/if}}
             </div>
 
             <div class="col-xs-2 outer-label">
