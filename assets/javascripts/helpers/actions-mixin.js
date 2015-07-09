@@ -4,6 +4,10 @@ define(function(require) {
     var Ember = require('ember');
 
     return Ember.Mixin.create({
+        queryParams: ['query'],
+        updateLiveQuery: function() {
+            this.set('liveQuery', this.get('query'));
+        }.observes('query'),
         liveQuery: '',
         query: '',
         selected: null,

@@ -12,7 +12,6 @@ define(function(require) {
     };
 
     return Ember.Controller.extend(require('helpers/actions-mixin'), require('snippet/actions-mixin'), {
-        queryParams: ['query'],
         'app-component': require('explorer/index/component'),
         didScrollToBottom: function() {
             return function() {
@@ -186,9 +185,6 @@ define(function(require) {
                 this.set('onlineSnippets', snippets);
             }
         },
-        updateLiveQuery: function() {
-            this.set('liveQuery', this.get('query'));
-        }.observes('query'),
         scheduleUpdateOnlineSnippets: function() {
             Ember.run.once(this, this.updateOnlineSnippets);
         }.observes('query', 'searchOnline'),
