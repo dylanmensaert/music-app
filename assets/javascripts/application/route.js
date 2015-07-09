@@ -13,21 +13,25 @@ define(function(require) {
     return Ember.Route.extend(require('helpers/update-title'), {
         title: 'music',
         previous: function() {
-            var history = this.get('fileSystem.history'),
-                audio = this.get('audio'),
-                currentIndex = history.indexOf(audio.get('snippet.id')),
+            var queue,
+                currentIndex,
+                previousIndex,
                 snippetId,
                 previousSnippet;
 
+            queue = this.get('fileSystem.queue');
+            currentIndex = queue.indexOf(this.get('audio.snippet.id'));
+
             if (currentIndex > 0) {
-                snippetId = history.objectAt(currentIndex - 1);
-
-                previousSnippet = this.get('fileSystem.snippets').findBy('id', snippetId);
-
-                audio.play(previousSnippet);
+                previousIndex = currentIndex - 1;
             } else {
-                this.get('cache').showMessage('No previous audio');
+                previousIndex = queue.get('length');
             }
+
+            snippetId = queue.objectAt(previousIndex);
+            previousSnippet = this.get('fileSystem.snippets').findBy('id', snippetId);
+
+            this.play(previousSnippet);
         },
         next: function() {
             var queue = this.get('fileSystem.queue'),
