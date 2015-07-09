@@ -5,7 +5,7 @@ define(function(require) {
         Label = require('label/object'),
         utilities = require('helpers/utilities');
 
-    return Ember.Controller.extend(require('helpers/actions-mixin'), {
+    return Ember.Controller.extend(require('helpers/controller-mixin'), {
         fetchSuggestions: function() {
             return function(query, callback) {
                 var suggestions = [],

@@ -11,7 +11,7 @@ define(function(require) {
         return meta.imageHost + new URL(url).pathname;
     };
 
-    return Ember.Controller.extend(require('helpers/actions-mixin'), require('snippet/actions-mixin'), {
+    return Ember.Controller.extend(require('helpers/controller-mixin'), require('snippet/actions-mixin'), {
         'app-component': require('explorer/index/component'),
         didScrollToBottom: function() {
             return function() {
