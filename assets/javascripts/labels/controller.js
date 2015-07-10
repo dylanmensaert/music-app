@@ -78,7 +78,7 @@ define(function(require) {
                             name: liveQuery
                         }));
                     } else {
-                        this.get('cache').showMessage('Label <strong>' + liveQuery + '</strong> already exists');
+                        this.get('cache').showMessage('Label already exists');
                     }
                 }
 
@@ -100,11 +100,11 @@ define(function(require) {
                             snippets.pushObject(snippet);
                         }
 
-                        cache.showMessage('Added to label <strong>' + label.get('name') + '</strong>');
+                        cache.showMessage('Added to label');
                     } else {
                         labels.removeObject(label.get('name'));
 
-                        cache.showMessage('Removed from label <strong>' + label.get('name') + '</strong>');
+                        cache.showMessage('Removed from label');
                     }
                 }.bind(this));
 
